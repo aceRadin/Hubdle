@@ -22,7 +22,6 @@
 /* Bits: botão com largura natural e um único contador alinhado ao cartão. */
 #bitsGame #backGame{justify-self:start;align-self:center;width:auto;flex:none;padding:8px 12px}
 #bitsGame{--bits-card-width:780px}
-[data-hud="focus"] #bitsGame{--bits-card-width:620px}
 [data-hud="studio"] #bitsGame{--bits-card-width:1000px}
 [data-hud="terminal"] #bitsGame{--bits-card-width:850px}
 [data-hud="panel"] #bitsGame{--bits-card-width:1080px}
@@ -31,14 +30,6 @@
 /* Musical e Streakal mantêm os mesmos elementos de pergunta, áudio e resultado. */
 #home #summary{max-width:520px;margin:8px auto 0;text-align:right}
 #play>#gameCatalogCount{margin:8px auto 0;text-align:right}
-[data-hud="focus"] #play>#gameCatalogCount{max-width:860px}
-[data-hud="focus"] #play>.panel{max-width:860px;margin-inline:auto;padding:30px;border:0;border-radius:28px;box-shadow:0 12px 44px #0001}
-[data-hud="focus"] #play .musical-audio-row{flex-direction:column-reverse;gap:18px}
-[data-hud="focus"] #play .musical-audio-row .clip{width:100%;flex-direction:column}
-[data-hud="focus"] #play #playBtn{min-height:80px;min-width:220px;border-radius:50px}
-[data-hud="focus"] #play .musical-audio-row .clip .bar{flex:0 0 8px;width:100%;height:8px}
-[data-hud="focus"] #play .qhead{justify-content:center;gap:24px;margin-bottom:22px}
-[data-hud="focus"] #play #qhint{text-align:center}
 [data-hud="studio"] #play>.panel{border-radius:22px;padding:28px}
 [data-hud="studio"] #play #quiz,[data-hud="panel"] #play #quiz{display:grid;grid-template-columns:minmax(230px,.8fr) minmax(0,1.6fr);grid-template-areas:"limit limit" "progress progress" "audio choices" "hint choices" "next next" "upgrade upgrade";gap:14px 28px}
 :is([data-hud="studio"],[data-hud="panel"]) #play .qhead{grid-area:progress}
@@ -69,11 +60,6 @@
 [data-hud="panel"] #play #quiz{grid-template-columns:minmax(0,1.6fr) minmax(230px,.8fr);grid-template-areas:"limit limit" "progress progress" "choices audio" "choices hint" "next next" "upgrade upgrade"}
 [data-hud="panel"] #play .qhead,[data-hud="panel"] #play .musical-audio-row,[data-hud="panel"] #play #opts,[data-hud="panel"] #play #result{background:var(--card);padding:20px;border:1px solid var(--line);border-radius:18px}
 /* Wording: o tabuleiro, as letras e o teclado continuam sendo os mesmos nós. */
-[data-hud="focus"] #wgame .w-boards{gap:24px}
-[data-hud="focus"] #wgame .w-board{padding:14px;border-radius:24px;background:var(--card)}
-[data-hud="focus"] #wgame .w-tile{border-radius:12px}
-[data-hud="focus"] #wgame .w-kb{padding:18px;border-radius:24px;background:var(--card)}
-[data-hud="focus"] #wgame .w-key{border-radius:14px}
 [data-hud="studio"] #wgame .w-board{padding:16px;background:var(--card);border:1px solid var(--line);border-radius:20px}
 [data-hud="studio"] #wgame .w-kb{padding:22px;background:var(--card);border-left:3px solid var(--accent);border-radius:18px}
 :is([data-hud="studio"],[data-hud="panel"]) #wgame:has(.w-boards[data-n="1"]){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);grid-template-areas:"header header" "boards message" "boards keyboard" "boards result" "note note";gap:10px 30px;max-width:1100px;margin:auto;align-items:start}
@@ -99,15 +85,61 @@
  :is([data-hud="studio"],[data-hud="panel"]) #wgame:has(.w-boards[data-n="1"]){display:block}
 }
 @media(max-width:620px){
- [data-hud="focus"] #play>.panel{padding:18px}
  [data-hud="panel"] #play #opts{padding:10px}
  [data-hud="terminal"] #play .musical-option{flex-direction:column;text-align:center;gap:6px}
  [data-hud="terminal"] #play .musical-cover{width:100%;max-width:80px}
- :is([data-hud="focus"],[data-hud="studio"],[data-hud="arcade"],[data-hud="terminal"],[data-hud="panel"]) #wgame .w-board{padding:5px}
- :is([data-hud="focus"],[data-hud="studio"],[data-hud="panel"]) #wgame .w-kb{padding:8px}
+ :is([data-hud="studio"],[data-hud="arcade"],[data-hud="terminal"],[data-hud="panel"]) #wgame .w-board{padding:5px}
+ :is([data-hud="studio"],[data-hud="panel"]) #wgame .w-kb{padding:8px}
 }
 @media(max-width:420px){
  .huba-language{max-width:100%;flex-wrap:wrap;justify-content:flex-end;row-gap:6px}
  .bits-hud-menu>summary{padding-inline:5px}
  .huba-language .huba-mode>summary{padding-inline:5px}
+}
+/* Novos HUDs: os mesmos nós da partida, com cores herdadas do tema. */
+/* Editorial: divisórias de revista, títulos serifados e respostas em lista. */
+[data-hud="editorial"] :is(.bits-play-card,#play>.panel,#wgame .w-board){border:0;border-block:2px solid var(--fg);border-radius:0;padding:24px 18px;background:var(--card);box-shadow:none}
+[data-hud="editorial"] :is(.bits-instruction,#play .qhead,#wgame .w-msg){font-family:Georgia,serif;letter-spacing:.02em;border-bottom:1px solid var(--line);padding-bottom:12px}
+[data-hud="editorial"] #play #opts{grid-template-columns:repeat(2,minmax(0,1fr));max-width:none}
+[data-hud="editorial"] #play .musical-option{flex-direction:row;align-items:center;text-align:left;border-radius:0;gap:12px}
+[data-hud="editorial"] #play .musical-cover{width:58px;flex:none;border-radius:0}
+[data-hud="editorial"] .bits-history-line{border:0;border-bottom:1px solid var(--line);border-radius:0}
+[data-hud="editorial"] #wgame .w-tile{border-radius:0;border-width:0 0 2px}
+[data-hud="editorial"] #wgame .w-kb{border-top:1px solid var(--fg);padding-top:18px}
+/* Órbita: cápsulas, capas circulares e superfícies com contornos suaves. */
+[data-hud="orbit"] :is(.bits-play-card,#play>.panel,#wgame .w-board){border:1px solid var(--line);border-radius:36px;padding:30px;background:radial-gradient(ellipse at top,color-mix(in srgb,var(--accent) 10%,var(--card)),var(--card) 65%);box-shadow:inset 0 0 0 6px color-mix(in srgb,var(--accent) 6%,transparent)}
+[data-hud="orbit"] :is(.bits-player,#play .musical-audio-row){border:1px solid var(--line);border-radius:32px;padding:16px;gap:14px}
+[data-hud="orbit"] :is(#playAudio,#playBtn,#wgame .w-key){border-radius:30px}
+[data-hud="orbit"] #play .musical-cover{border-radius:50%}
+[data-hud="orbit"] #wgame .w-tile{border-radius:50%}
+[data-hud="orbit"] .bits-history-line{border-radius:24px;padding:14px 18px}
+/* Blueprint: grade técnica discreta e cantos chanfrados por bordas duplas. */
+[data-hud="blueprint"] :is(.bits-play-card,#play>.panel,#wgame .w-board){border:3px double var(--accent);border-radius:12px;padding:22px;background-color:var(--card);background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:28px 28px;box-shadow:none}
+[data-hud="blueprint"] :is(.bits-player,#play .musical-audio-row,#wgame .w-kb){background:var(--card);padding:12px;border:1px solid var(--accent);border-radius:6px}
+[data-hud="blueprint"] :is(.bits-instruction,#play .qhead){background:var(--card);padding:10px;border-inline:3px solid var(--accent)}
+[data-hud="blueprint"] #wgame .w-tile{border-radius:3px}
+[data-hud="blueprint"] .bits-history-line{border-style:dashed;border-radius:6px}
+/* Mosaico: blocos destacados, cartões assimétricos e histórico em grade. */
+[data-hud="mosaic"] :is(.bits-play-card,#play>.panel,#wgame .w-board){border:1px solid var(--line);border-radius:24px 6px 24px 6px;padding:20px;background:color-mix(in srgb,var(--accent) 5%,var(--card));box-shadow:inset 0 5px 0 var(--accent)}
+[data-hud="mosaic"] :is(.bits-player,#play .musical-audio-row,#wgame .w-kb){padding:16px;background:var(--card);border:1px solid var(--line);border-radius:6px 20px 6px 20px}
+[data-hud="mosaic"] #play .musical-option{border-radius:18px 4px 18px 4px;border-width:1px 1px 3px}
+[data-hud="mosaic"] .bits-history{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+[data-hud="mosaic"] .bits-history-line{border-radius:14px 4px 14px 4px;background:var(--card)}
+[data-hud="mosaic"] #wgame .w-tile{border-radius:12px 2px 12px 2px}
+/* Faixa: marcador vertical e áudio em uma faixa horizontal independente. */
+[data-hud="ribbon"] :is(.bits-play-card,#play>.panel,#wgame .w-board){border:1px solid var(--line);border-left:6px solid var(--accent);border-radius:4px 20px 20px 4px;padding:26px;background:var(--card);box-shadow:0 10px 24px #0001}
+[data-hud="ribbon"] :is(.bits-player,#play .musical-audio-row){padding:16px;background:color-mix(in srgb,var(--accent) 9%,var(--card));border-block:1px solid var(--line);border-radius:0}
+[data-hud="ribbon"] :is(.bits-instruction,#play .qhead){text-align:left;border-left:3px solid var(--accent);padding-left:12px}
+[data-hud="ribbon"] #wgame .w-kb{border-bottom:4px solid var(--accent);padding-bottom:14px}
+[data-hud="ribbon"] #wgame .w-tile{border-radius:4px 10px 10px 4px}
+[data-hud="ribbon"] .bits-history-line{border-left:4px solid var(--accent);border-radius:4px 14px 14px 4px}
+/* Conserva o espaço das letras e controles em celulares e tabuleiros múltiplos. */
+@media(max-width:620px){
+ :is([data-hud="editorial"],[data-hud="orbit"],[data-hud="blueprint"],[data-hud="mosaic"],[data-hud="ribbon"]) :is(.bits-play-card,#play>.panel){padding:16px 10px}
+ :is([data-hud="editorial"],[data-hud="orbit"],[data-hud="blueprint"],[data-hud="mosaic"],[data-hud="ribbon"]) #wgame .w-board{padding:5px}
+ :is([data-hud="orbit"],[data-hud="blueprint"],[data-hud="mosaic"]) #wgame .w-kb{padding:6px}
+ :is([data-hud="orbit"],[data-hud="blueprint"],[data-hud="mosaic"],[data-hud="ribbon"]) :is(.bits-player,#play .musical-audio-row){padding:8px;gap:8px}
+ [data-hud="editorial"] #play .musical-option{flex-direction:column;text-align:center;gap:6px}
+ [data-hud="editorial"] #play .musical-cover{width:100%;max-width:80px}
+ [data-hud="mosaic"] .bits-history{grid-template-columns:minmax(0,1fr)}
 }

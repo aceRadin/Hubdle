@@ -1,16 +1,5 @@
 /* HUDs exclusivos do Bits. As cores continuam vindo do tema selecionado. */
 html[data-bits-hud]:not([data-bits-hud="original"]) .bits-play-card{box-sizing:border-box}
-/* 1. Foco: uma coluna estreita, comando de áudio grande e controles centrados. */
-[data-bits-hud="focus"] .bits-play-card{max-width:620px;border:0;border-radius:28px;padding:32px;box-shadow:0 12px 44px #0001}
-[data-bits-hud="focus"] .bits-instruction{font-size:1.7rem;margin-bottom:24px}
-[data-bits-hud="focus"] .bits-player{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px}
-[data-bits-hud="focus"] #playAudio{grid-column:1/-1;justify-self:center;min-height:100px;width:min(100%,290px);border-radius:60px;font-size:1.15rem}
-[data-bits-hud="focus"] #replaceAudio{grid-column:1/-1}
-[data-bits-hud="focus"] .bits-timeline{height:8px;width:100%}
-[data-bits-hud="focus"] .bits-volume{justify-content:center;margin-top:20px}
-[data-bits-hud="focus"] #guessArea{margin-top:28px}
-[data-bits-hud="focus"] .bits-actions{justify-content:center;gap:12px}
-[data-bits-hud="focus"] .bits-history-line{border-width:0 0 1px;border-radius:0;padding:12px 0}
 /* 2. Estúdio: reprodutor à esquerda e pesquisa à direita. */
 [data-bits-hud="studio"] .bits-play-card{max-width:1000px;display:grid;grid-template-columns:minmax(230px,.9fr) minmax(0,1.3fr);grid-template-areas:"intro guess" "player guess" "volume guess" "status guess" "history history" "finish finish";column-gap:32px;border-radius:22px}
 [data-bits-hud="studio"] .bits-instruction{grid-area:intro;text-align:left;font-size:1.5rem}
@@ -66,7 +55,6 @@ html[data-bits-hud]:not([data-bits-hud="original"]) .bits-play-card{box-sizing:b
  [data-bits-hud="studio"] .bits-status,[data-bits-hud="panel"] .bits-status{margin:0}
  [data-bits-hud="panel"] #guessArea{padding:18px}
  [data-bits-hud="panel"] .bits-player{padding:18px}
- [data-bits-hud="focus"] .bits-play-card{padding:22px 18px}
  [data-bits-hud="arcade"] .bits-instruction{font-size:1.3rem}
  [data-bits-hud="studio"] .bits-history,[data-bits-hud="arcade"] .bits-history,[data-bits-hud="panel"] .bits-history{grid-template-columns:minmax(0,1fr)}
 }

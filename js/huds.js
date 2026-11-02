@@ -2,8 +2,8 @@
 (function(){
 'use strict';
 var key='huba:hud:v1',selected='original';
-var choices=[['original','Original','Original'],['focus','Foco','Focus'],['studio','Estúdio','Studio'],['arcade','Arcade','Arcade'],['terminal','Terminal','Terminal'],['panel','Painel','Dashboard']];
-try{var saved=localStorage.getItem(key)||localStorage.getItem('huba:bits:hud:v1');if(choices.some(function(c){return c[0]===saved}))selected=saved}catch(e){}
+var choices=[['original','Original','Original'],['studio','Estúdio','Studio'],['arcade','Arcade','Arcade'],['terminal','Terminal','Terminal'],['panel','Painel','Dashboard'],['editorial','Editorial','Editorial'],['orbit','Órbita','Orbit'],['blueprint','Blueprint','Blueprint'],['mosaic','Mosaico','Mosaic'],['ribbon','Faixa','Ribbon']];
+try{var saved=localStorage.getItem(key)||localStorage.getItem('huba:bits:hud:v1');if(saved==='focus'){localStorage.setItem(key,'original')}else if(choices.some(function(c){return c[0]===saved}))selected=saved}catch(e){}
 document.documentElement.dataset.hud=selected;
 document.documentElement.dataset.bitsHud=selected;
 function build(){
