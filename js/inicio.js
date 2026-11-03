@@ -2,8 +2,8 @@
  var games=[
   {name:'Musical',path:'jogos/musicle/index.html',cardClass:'gcard-musical',streaks:[{id:'musicle',label:''}]},
   {name:'Wording',path:'jogos/wording/index.html',cardClass:'gcard-wording',streaks:[{id:'word',label:''}]},
-  {name:'Bits',path:'jogos/bits/index.html',streaks:[{id:'bits',label:''}]},
-  {name:'Streakal',path:'jogos/streakal/index.html',streaks:[{id:'streakal',label:''}]}
+  {name:'Bits',path:'jogos/bits/index.html',cardClass:'gcard-bits',streaks:[{id:'bits',label:''}]},
+  {name:'Streakal',path:'jogos/streakal/index.html',cardClass:'gcard-streakal',streaks:[{id:'streakal',label:''}]}
  ];
  var grid=document.getElementById('landingGrid');
  while(games.length<9)games.push({empty:true});
