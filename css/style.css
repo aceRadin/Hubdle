@@ -193,10 +193,15 @@ button.gcard:hover{border-color:var(--accent);transform:translateY(-1px)}
 .gcard .gtop{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:6px 8px;min-width:0}
 .gcard .gname{font:800 1.35rem/1.1 "Bricolage Grotesque","Segoe UI",system-ui,sans-serif;letter-spacing:-.01em}
 .gcard .gsoon{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 8px;white-space:nowrap}
-.gcard .gstreak{display:flex;align-items:baseline;gap:7px}
+.gcard .gstreak{display:flex;align-items:center;gap:3px;width:fit-content}
 .gcard .gstreak strong{font:800 2rem/1 "Bricolage Grotesque","Segoe UI",system-ui,sans-serif}
-.gcard .gstreak small{color:var(--muted);font-size:.8rem}
+.gcard .gstreak-fire{font-size:1rem;line-height:1}
 .gcard.on .gstreak strong{color:var(--accent)}
+/* O idioma da página seleciona a imagem, inclusive ao trocar sem recarregar. */
+.gcard.gcard-wording{background-color:#24282d;background-image:linear-gradient(90deg,#11151be6,#11151b55),url("images/wording-pt.png?v=2");background-size:cover;background-position:center;color:#fff}
+html:lang(en) .gcard.gcard-wording{background-image:linear-gradient(90deg,#11151be6,#11151b55),url("images/wording-en.png")}
+.gcard.gcard-wording .gname,.gcard.gcard-wording .gstreak{padding:5px 9px;background:#11151be6;border-radius:8px;box-shadow:0 2px 8px #0005}
+.gcard.gcard-wording .gstreak strong{color:#fff}
 .gcard.soon{border-style:dashed;background:transparent}
 .gcard.soon .gname,.gcard.soon .gstreak{opacity:.6}
 .gcard.empty .gname{color:var(--muted);font-weight:700;font-size:1.05rem}

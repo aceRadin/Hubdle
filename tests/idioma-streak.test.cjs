@@ -73,7 +73,8 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  assert.ok(Math.max(...streakCenters)-Math.min(...streakCenters)<1,'número e texto do streak alinhados');
  for(const width of [320,390]){await page.setViewportSize({width,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true)}
  assert.equal(await page.locator('.gcard').filter({hasText:'Musical'}).locator('.gstreak').count(),1);
- assert.equal(await page.locator('.gcard').filter({hasText:'Streakal'}).locator('small').count(),1);
+ assert.equal(await page.locator('.gcard .gstreak small').count(),0);
+ assert.deepEqual(await page.locator('.gcard .gstreak-fire').allTextContents(),['🔥','🔥','🔥','🔥']);
  for(const game of ['bits','musicle','streakal','wording']){
   await page.goto(base+'/jogos/'+game+'/');assert.equal(await page.locator('html').getAttribute('lang'),'en');
   for(const selector of ['.huba-settings>details','.bits-hud-menu','.huba-mode']){

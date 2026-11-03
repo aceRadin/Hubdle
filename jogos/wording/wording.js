@@ -185,7 +185,7 @@ function wKey(k){
   else if(k==='space'){if(!w.slots[w.pos])w.slots[w.pos]=' '; if(w.pos<4)w.pos++}
   else if(k==='left'){if(w.pos>0)w.pos--}
   else if(k==='right'){if(w.pos<4)w.pos++}
-  else{w.slots[w.pos]=k; w.pos=(w.pos+1)%5}
+  else{w.slots[w.pos]=k; if(w.pos<4)w.pos++}
   renderWord();
 }
 function wShake(){var b=$('#wBoards'); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake')}
