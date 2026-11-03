@@ -1,8 +1,8 @@
 # HUDs compartilhados
 
-O botão **🖥️** está junto aos seletores de tema, modo e idioma, na página inicial e nos quatro jogos. As opções são **Original, Estúdio, Arcade, Terminal, Painel, Editorial, Órbita, Blueprint, Mosaico e Faixa**. Tema controla as cores; HUD controla a apresentação dos elementos da partida.
+O botão **🖥️** está junto aos seletores de tema, modo e idioma, na página inicial e nos quatro jogos. As opções são **Original, Estúdio, Arcade, Terminal, Painel, Editorial, Órbita e Blueprint**. Tema controla as cores; HUD controla a apresentação dos elementos da partida.
 
-A escolha fica em `localStorage`, na chave `huba:hud:v1`, e acompanha a navegação entre os jogos. A seleção antiga do Bits continua sendo reconhecida. A opção Foco foi removida; quem a tinha salva passa para Original. Escolher **Original** restaura a organização anterior. Trocar HUD não recria os controles, não sorteia outra música e não apaga palpites ou letras.
+A escolha fica em `localStorage`, na chave `huba:hud:v1`, e acompanha a navegação entre os jogos. A seleção antiga do Bits continua sendo reconhecida. As opções Foco, Mosaico e Faixa foram removidas; quem as tinha salvas passa para Original. Escolher **Original** restaura a organização anterior. Trocar HUD não recria os controles, não sorteia outra música e não apaga palpites ou letras.
 
 - `js/huds.js` é o seletor único; substitui o antigo `jogos/bits/bits-huds.js`.
 - `css/huds.css` contém o seletor, as adaptações do Musical, Streakal e Wording, e os ajustes do botão Voltar e contador do Bits.
@@ -15,12 +15,10 @@ No Bits, o botão Voltar tem largura natural, em vez de preencher a coluna do ca
 
 `tests/huds-compartilhados.test.cjs` verifica persistência entre páginas, seleção antiga, layouts nos quatro jogos, telas de 320 px, teclado e letras preservadas, tabuleiros múltiplos, botão Voltar e alinhamento do contador. Os testes do Bits também verificam troca durante um palpite e tela de resultado. As capturas de tela dos testes são salvas na pasta temporária do computador, fora do site.
 
-Os cinco novos HUDs estão em `css/huds.css` e atendem aos quatro jogos:
+Os três novos HUDs estão em `css/huds.css` e atendem aos quatro jogos:
 
 - **Editorial:** títulos serifados, divisórias e alternativas em lista de duas colunas.
 - **Órbita:** cápsulas, contornos suaves e capas/letras circulares.
 - **Blueprint:** grade técnica discreta, bordas duplas e módulos delineados.
-- **Mosaico:** blocos com cantos assimétricos e histórico em grade.
-- **Faixa:** marcador vertical e faixa horizontal destacando o áudio.
 
-Os testes percorrem os nove HUDs personalizados, preservando palpites/letras, áudio e resultados; verificam também a migração do Foco para Original.
+Os testes percorrem os sete HUDs personalizados, preservando palpites/letras, áudio e resultados; verificam também a migração do Foco para Original.

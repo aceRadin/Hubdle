@@ -43,7 +43,7 @@ test('HUD compartilhado nos quatro jogos, Bits alinhado e Wording com letras pre
    const delta=await page.evaluate(()=>{const a=document.querySelector('#play>.panel').getBoundingClientRect(),b=document.querySelector('#gameCatalogCount').getBoundingClientRect();return Math.max(Math.abs(a.left-b.left),Math.abs(a.right-b.right))});
    assert.ok(delta<1,'contador acompanha as duas bordas do quadro');
  }
- await page.goto(base+'/index.html');assert.equal(await page.locator('html').getAttribute('data-hud'),'original','Foco removido volta ao Original');assert.equal(await page.locator('[data-bits-hud-choice="focus"]').count(),0);assert.equal(await page.locator('[data-bits-hud-choice]').count(),10);assert.equal(await page.evaluate(()=>localStorage.getItem('huba:hud:v1')),'original');await select('panel');
+ await page.goto(base+'/index.html');assert.equal(await page.locator('html').getAttribute('data-hud'),'original','Foco removido volta ao Original');assert.equal(await page.locator('[data-bits-hud-choice="focus"]').count(),0);assert.equal(await page.locator('[data-bits-hud-choice]').count(),8);assert.equal(await page.evaluate(()=>localStorage.getItem('huba:hud:v1')),'original');await select('panel');
  for(const game of ['bits','musicle','streakal','wording']){
    await page.goto(base+'/jogos/'+game+'/index.html');assert.equal(await page.locator('html').getAttribute('data-hud'),'panel');
    if(game==='musicle'||game==='streakal'){
@@ -60,7 +60,7 @@ test('HUD compartilhado nos quatro jogos, Bits alinhado e Wording com letras pre
    if(game==='musicle'||game==='streakal')assert.equal(await page.locator('#summary').isVisible(),false,'sem aviso de seleção flutuando sobre a partida');
    if(game==='wording'){await page.locator('#wTitle').click();await page.keyboard.type('ab')}
    const layouts=[];
-   for(const hud of ['studio','arcade','terminal','panel','editorial','orbit','blueprint','mosaic','ribbon']){
+   for(const hud of ['studio','arcade','terminal','panel','editorial','orbit','blueprint']){
      await select(hud);assert.equal(await page.locator('html').getAttribute('data-hud'),hud);
      const card=game==='bits'?'.bits-play-card':game==='wording'?'.w-board':'#play>.panel';
      layouts.push(await page.locator(card).first().evaluate(el=>{const s=getComputedStyle(el);return [s.borderRadius,s.backgroundColor,s.borderTopWidth,s.padding,s.fontFamily,s.boxShadow].join('|')}));
@@ -80,7 +80,7 @@ test('HUD compartilhado nos quatro jogos, Bits alinhado e Wording com letras pre
      await page.screenshot({path:path.join(output,game+'-'+hud+'-mobile.png'),fullPage:true});
      await page.setViewportSize({width:1280,height:1000});
    }
-   assert.equal(new Set(layouts).size,9,'estilos distintos em '+game);
+   assert.equal(new Set(layouts).size,7,'estilos distintos em '+game);
    await select('panel');
    if(game==='musicle'||game==='streakal'){await select('original');await checkMusicCounter();await select('panel')}
    if(game==='wording'){
@@ -88,7 +88,7 @@ test('HUD compartilhado nos quatro jogos, Bits alinhado e Wording com letras pre
      await page.locator('#wBack').click();
      for(const n of [1,2]){
        await page.locator('#wTilesDaily button').nth(n).click();assert.equal(await page.locator('.w-board').count(),n===1?2:4);
-       for(const hud of ['studio','panel','editorial','orbit','blueprint','mosaic','ribbon']){await select(hud);await page.setViewportSize({width:320,height:900});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.setViewportSize({width:1280,height:1000})}
+       for(const hud of ['studio','panel','editorial','orbit','blueprint']){await select(hud);await page.setViewportSize({width:320,height:900});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.setViewportSize({width:1280,height:1000})}
        await page.locator('#wBack').click();
      }
    }else{
@@ -96,5 +96,5 @@ test('HUD compartilhado nos quatro jogos, Bits alinhado e Wording com letras pre
      if(game==='streakal'&&await page.locator('#upgradePanel').isVisible())await page.locator('#extraOption').click();
    }
  }
- await page.reload();assert.equal(await page.locator('html').getAttribute('data-hud'),'ribbon');assert.deepEqual(errors,[]);console.log('SHARED HUD SCREENSHOTS '+output);
+ await page.reload();assert.equal(await page.locator('html').getAttribute('data-hud'),'blueprint');assert.deepEqual(errors,[]);console.log('SHARED HUD SCREENSHOTS '+output);
 });

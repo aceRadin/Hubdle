@@ -6,7 +6,7 @@ const {tmpdir}=require('node:os');
 const {pathToFileURL}=require('node:url');
 const {chromium}=require(process.env.HUBA_PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(__dirname,'..');
-test('nove HUDs do Bits preservam partida, controles, idioma e escolha salva em desktop e celular',{timeout:120000},async t=>{
+test('sete HUDs do Bits preservam partida, controles, idioma e escolha salva em desktop e celular',{timeout:120000},async t=>{
  const browser=await chromium.launch({headless:true,...(process.env.HUBA_CHROME?{executablePath:process.env.HUBA_CHROME}:{})});t.after(()=>browser.close());
  const context=await browser.newContext({viewport:{width:1280,height:1000}});t.after(()=>context.close());
  const errors=[];
@@ -24,7 +24,7 @@ test('nove HUDs do Bits preservam partida, controles, idioma e escolha salva em 
  const originalSrc=await page.evaluate(()=>testAudio[0].src),layouts={};
  const output=path.join(tmpdir(),'huba-bits-huds');await fs.mkdir(output,{recursive:true});
  async function select(hud){await page.locator('.bits-hud-menu>summary').click();await page.locator('[data-bits-hud-choice="'+hud+'"]').click();assert.equal(await page.locator('html').getAttribute('data-bits-hud'),hud)}
- for(const hud of ['studio','arcade','terminal','panel','editorial','orbit','blueprint','mosaic','ribbon']){
+ for(const hud of ['studio','arcade','terminal','panel','editorial','orbit','blueprint']){
    await page.locator('#guessInput').fill('Faixa');await page.getByRole('option').first().click();
    const guess=await page.locator('#guessInput').inputValue();await select(hud);
    assert.equal(await page.locator('#guessInput').inputValue(),guess);assert.equal(await page.locator('#submitGuess').isEnabled(),true);
@@ -46,7 +46,7 @@ test('nove HUDs do Bits preservam partida, controles, idioma e escolha salva em 
    await page.screenshot({path:path.join(output,hud+'-mobile.png'),fullPage:true});
    await page.setViewportSize({width:1280,height:1000});
  }
- assert.equal(new Set(Object.values(layouts).map(v=>JSON.stringify(v))).size,9,'layouts têm estruturas visuais diferentes');
+ assert.equal(new Set(Object.values(layouts).map(v=>JSON.stringify(v))).size,7,'layouts têm estruturas visuais diferentes');
  await page.evaluate(()=>HUBA_I18N.setLanguage('en'));await page.locator('.bits-hud-menu>summary').click();
  assert.equal(await page.locator('[data-bits-hud-choice="orbit"]').textContent(),'Orbit');assert.equal(await page.locator('[data-bits-hud-choice="panel"]').textContent(),'Dashboard');await page.keyboard.press('Escape');
  await page.evaluate(()=>document.documentElement.dataset.theme='dark');await select('panel');
@@ -58,6 +58,6 @@ test('nove HUDs do Bits preservam partida, controles, idioma e escolha salva em 
  const id=await page.evaluate(()=>Number(testAudio[0].src.split('/').pop())%100);
  await page.locator('#guessInput').fill('Faixa '+id);await page.getByRole('option',{name:'Artist - Faixa '+id,exact:true}).click();await select('studio');await page.locator('#submitGuess').click();
  assert.equal(await page.locator('#finish').isVisible(),true);assert.equal(await page.locator('#guessArea').isVisible(),false);
- for(const hud of ['editorial','orbit','blueprint','mosaic','ribbon','arcade','terminal','panel','original']){await select(hud);assert.equal(await page.locator('#finish').isVisible(),true);assert.equal(await page.locator('#guessArea').isVisible(),false)}
+ for(const hud of ['editorial','orbit','blueprint','arcade','terminal','panel','original']){await select(hud);assert.equal(await page.locator('#finish').isVisible(),true);assert.equal(await page.locator('#guessArea').isVisible(),false)}
  assert.deepEqual(errors,[]);console.log('HUD SCREENSHOTS '+output);
 });

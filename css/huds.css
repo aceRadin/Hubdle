@@ -119,27 +119,12 @@
 [data-hud="blueprint"] :is(.bits-instruction,#play .qhead){background:var(--card);padding:10px;border-inline:3px solid var(--accent)}
 [data-hud="blueprint"] #wgame .w-tile{border-radius:3px}
 [data-hud="blueprint"] .bits-history-line{border-style:dashed;border-radius:6px}
-/* Mosaico: blocos destacados, cartões assimétricos e histórico em grade. */
-[data-hud="mosaic"] :is(.bits-play-card,#play>.panel,#wgame .w-board){border:1px solid var(--line);border-radius:24px 6px 24px 6px;padding:20px;background:color-mix(in srgb,var(--accent) 5%,var(--card));box-shadow:inset 0 5px 0 var(--accent)}
-[data-hud="mosaic"] :is(.bits-player,#play .musical-audio-row,#wgame .w-kb){padding:16px;background:var(--card);border:1px solid var(--line);border-radius:6px 20px 6px 20px}
-[data-hud="mosaic"] #play .musical-option{border-radius:18px 4px 18px 4px;border-width:1px 1px 3px}
-[data-hud="mosaic"] .bits-history{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-[data-hud="mosaic"] .bits-history-line{border-radius:14px 4px 14px 4px;background:var(--card)}
-[data-hud="mosaic"] #wgame .w-tile{border-radius:12px 2px 12px 2px}
-/* Faixa: marcador vertical e áudio em uma faixa horizontal independente. */
-[data-hud="ribbon"] :is(.bits-play-card,#play>.panel,#wgame .w-board){border:1px solid var(--line);border-left:6px solid var(--accent);border-radius:4px 20px 20px 4px;padding:26px;background:var(--card);box-shadow:0 10px 24px #0001}
-[data-hud="ribbon"] :is(.bits-player,#play .musical-audio-row){padding:16px;background:color-mix(in srgb,var(--accent) 9%,var(--card));border-block:1px solid var(--line);border-radius:0}
-[data-hud="ribbon"] :is(.bits-instruction,#play .qhead){text-align:left;border-left:3px solid var(--accent);padding-left:12px}
-[data-hud="ribbon"] #wgame .w-kb{border-bottom:4px solid var(--accent);padding-bottom:14px}
-[data-hud="ribbon"] #wgame .w-tile{border-radius:4px 10px 10px 4px}
-[data-hud="ribbon"] .bits-history-line{border-left:4px solid var(--accent);border-radius:4px 14px 14px 4px}
 /* Conserva o espaço das letras e controles em celulares e tabuleiros múltiplos. */
 @media(max-width:620px){
- :is([data-hud="editorial"],[data-hud="orbit"],[data-hud="blueprint"],[data-hud="mosaic"],[data-hud="ribbon"]) :is(.bits-play-card,#play>.panel){padding:16px 10px}
- :is([data-hud="editorial"],[data-hud="orbit"],[data-hud="blueprint"],[data-hud="mosaic"],[data-hud="ribbon"]) #wgame .w-board{padding:5px}
- :is([data-hud="orbit"],[data-hud="blueprint"],[data-hud="mosaic"]) #wgame .w-kb{padding:6px}
- :is([data-hud="orbit"],[data-hud="blueprint"],[data-hud="mosaic"],[data-hud="ribbon"]) :is(.bits-player,#play .musical-audio-row){padding:8px;gap:8px}
+ :is([data-hud="editorial"],[data-hud="orbit"],[data-hud="blueprint"]) :is(.bits-play-card,#play>.panel){padding:16px 10px}
+ :is([data-hud="editorial"],[data-hud="orbit"],[data-hud="blueprint"]) #wgame .w-board{padding:5px}
+ :is([data-hud="orbit"],[data-hud="blueprint"]) #wgame .w-kb{padding:6px}
+ :is([data-hud="orbit"],[data-hud="blueprint"]) :is(.bits-player,#play .musical-audio-row){padding:8px;gap:8px}
  [data-hud="editorial"] #play .musical-option{flex-direction:column;text-align:center;gap:6px}
  [data-hud="editorial"] #play .musical-cover{width:100%;max-width:80px}
- [data-hud="mosaic"] .bits-history{grid-template-columns:minmax(0,1fr)}
 }
