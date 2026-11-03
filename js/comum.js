@@ -41,9 +41,9 @@ window.HUBA = (function(){
 /* Preferência visual compartilhada, disponível em todas as telas. */
 (function(){
   'use strict';
-  var themes={system:'Automático',light:'Claro',dark:'Escuro',ocean:'Oceano',forest:'Floresta',sunset:'Pôr do sol',rose:'Rosa',coffee:'Café',midnight:'Meia-noite',emerald:'Esmeralda',amethyst:'Ametista',graphite:'Grafite',gpt:'Carvão',discord:'Discord'};
+  var themes={system:'Automático',light:'Claro',dark:'Escuro',ocean:'Oceano',forest:'Floresta',sunset:'Pôr do sol',rose:'Rosa',sand:'Areia',coffee:'Café',midnight:'Meia-noite',amethyst:'Ametista',graphite:'Grafite',discord:'Discord'};
   var selected='system',key='huba:theme:v1';
-  try{var saved=localStorage.getItem(key);if(Object.prototype.hasOwnProperty.call(themes,saved))selected=saved}catch(e){}
+  try{var saved=localStorage.getItem(key);if(saved==='gpt'||saved==='emerald'){localStorage.setItem(key,'system')}else if(Object.prototype.hasOwnProperty.call(themes,saved))selected=saved}catch(e){}
   function apply(theme){
     selected=theme;
     if(theme==='system')document.documentElement.removeAttribute('data-theme');
@@ -67,8 +67,8 @@ window.HUBA = (function(){
     }
     addTheme('system',options);
     options.firstChild.className='huba-theme-auto';
-    [{type:'dark',label:'Temas escuros',themes:['dark','coffee','midnight','emerald','amethyst','graphite','gpt','discord']},
-     {type:'light',label:'Temas claros',themes:['light','ocean','forest','sunset','rose']}].forEach(function(group){
+    [{type:'dark',label:'Temas escuros',themes:['dark','coffee','midnight','amethyst','graphite','discord']},
+     {type:'light',label:'Temas claros',themes:['light','ocean','forest','sunset','rose','sand']}].forEach(function(group){
       var column=document.createElement('div');column.className='huba-theme-column';column.dataset.themeGroup=group.type;
       var heading=document.createElement('h3');heading.textContent=group.label;column.appendChild(heading);
       group.themes.forEach(function(theme){addTheme(theme,column)});

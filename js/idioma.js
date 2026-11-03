@@ -6,7 +6,7 @@ var lang='pt', originals=new WeakMap(),attributes=new WeakMap();
 try{if(localStorage.getItem('huba:language:v1')==='en')lang='en'}catch(e){}
 var phrases={
  'Jogos':'Games','Streak diário do Hubdle':'Hubdle daily streak','dias de streak diário':'daily streak days','dias seguidos':'days in a row','dia seguido':'day in a row',
- 'Configurações do Hubdle':'Hubdle settings','Configurações':'Settings','Tema do site':'Site theme','Tema':'Theme','Automático':'Automatic','Claro':'Light','Escuro':'Dark','Oceano':'Ocean','Floresta':'Forest','Pôr do sol':'Sunset','Rosa':'Rose','Café':'Coffee','Meia-noite':'Midnight','Esmeralda':'Emerald','Ametista':'Amethyst','Grafite':'Graphite',
+ 'Configurações do Hubdle':'Hubdle settings','Configurações':'Settings','Tema do site':'Site theme','Tema':'Theme','Automático':'Automatic','Claro':'Light','Escuro':'Dark','Oceano':'Ocean','Floresta':'Forest','Pôr do sol':'Sunset','Rosa':'Rose','Café':'Coffee','Meia-noite':'Midnight','Ametista':'Amethyst','Grafite':'Graphite',
  'Diário':'Daily','Aleatório':'Random','Desafiador':'Challenging','Dificuldade do Musical':'Musical difficulty','Dificuldade':'Difficulty','Desafio do dia':'Daily challenge','Jogue quantas vezes quiser':'Play as often as you like','Uma música por categoria a cada dia.':'One song per category each day.',
  'Voltar à tela inicial':'Back to the home page','Voltar aos jogos':'Back to games','Voltar':'Back','Nova rodada':'New round','Outra música':'Another song','Jogar de novo':'Play again','Próxima':'Next','Ver resultado':'See results',
  'Gostou do Hubdle?':'Enjoying Hubdle?','Ajude a manter os jogos gratuitos e a criar novidades!':'Help keep the games free and support new ones!','Apoio opcional · Todos os jogos continuam gratuitos.':'Optional support · All games remain free.','Apoie o desenvolvimento do Hubdle':'Support Hubdle development','Apoiar Hubdle':'Support Hubdle','Configure o endereço em js/apoio-config.js':'Set the address in js/apoio-config.js','Mostrar apoio ao Hubdle':'Show Hubdle support','Recolher apoio ao Hubdle':'Collapse Hubdle support','Mostrar doações':'Show donations','Recolher doações':'Collapse donations',
@@ -43,7 +43,7 @@ phrases['Nenhuma lista carregada. Coloque words.json e palavra.json na pasta dad
 phrases['Configurar as fontes em jogos/bits/playlists.js.']='Configure sources in jogos/bits/playlists.js.';
 phrases['Trecho 5% menor na próxima rodada']='Clip 5% shorter next round';
 phrases['Português']='Portuguese';
-phrases['Carvão']='Charcoal';
+phrases['Areia']='Sand';
 phrases['Temas escuros']='Dark themes';phrases['Temas claros']='Light themes';
 phrases['Treino']='Training';phrases['Modo de jogo']='Game mode';phrases['Rodada de treino.']='Training round.';
 phrases['Você pode tentar outra música no modo Treino.']='You can try another song in Training mode.';
