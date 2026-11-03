@@ -1,6 +1,6 @@
 (function(){
  var games=[
-  {name:'Musical',path:'jogos/musicle/index.html',streaks:[{id:'musicle',label:''}]},
+  {name:'Musical',path:'jogos/musicle/index.html',cardClass:'gcard-musical',streaks:[{id:'musicle',label:''}]},
   {name:'Wording',path:'jogos/wording/index.html',cardClass:'gcard-wording',streaks:[{id:'word',label:''}]},
   {name:'Bits',path:'jogos/bits/index.html',streaks:[{id:'bits',label:''}]},
   {name:'Streakal',path:'jogos/streakal/index.html',streaks:[{id:'streakal',label:''}]}

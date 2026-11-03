@@ -200,8 +200,10 @@ button.gcard:hover{border-color:var(--accent);transform:translateY(-1px)}
 /* O idioma da página seleciona a imagem, inclusive ao trocar sem recarregar. */
 .gcard.gcard-wording{background-color:#24282d;background-image:linear-gradient(90deg,#11151be6,#11151b55),url("images/wording-pt.png?v=2");background-size:cover;background-position:center;color:#fff}
 html:lang(en) .gcard.gcard-wording{background-image:linear-gradient(90deg,#11151be6,#11151b55),url("images/wording-en.png")}
-.gcard.gcard-wording .gname,.gcard.gcard-wording .gstreak{padding:5px 9px;background:#11151be6;border-radius:8px;box-shadow:0 2px 8px #0005}
-.gcard.gcard-wording .gstreak strong{color:#fff}
+.gcard.gcard-musical{background-color:#24282d;background-image:linear-gradient(90deg,#11151b99,#11151b33),url("images/musical-pt.png");background-size:cover;background-position:center;color:#fff}
+html:lang(en) .gcard.gcard-musical{background-image:linear-gradient(90deg,#11151b99,#11151b33),url("images/musical-en.png")}
+.gcard:is(.gcard-wording,.gcard-musical) .gname,.gcard:is(.gcard-wording,.gcard-musical) .gstreak{padding:5px 9px;background:#11151be6;border-radius:8px;box-shadow:0 2px 8px #0005}
+.gcard:is(.gcard-wording,.gcard-musical) .gstreak strong{color:#fff}
 .gcard.soon{border-style:dashed;background:transparent}
 .gcard.soon .gname,.gcard.soon .gstreak{opacity:.6}
 .gcard.empty .gname{color:var(--muted);font-weight:700;font-size:1.05rem}
