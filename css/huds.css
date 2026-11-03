@@ -1,5 +1,6 @@
 /* Seletor compartilhado. Os layouts usam as cores do tema, sem alterar regras. */
-.bits-hud-menu{font-size:.76rem;flex:none}
+.bits-hud-menu{display:none;font-size:.76rem;flex:none}
+:is(#play,#bitsGame,#wgame) .bits-hud-menu{display:block}
 .bits-hud-menu>summary{list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:9px;padding:6px 8px;white-space:nowrap}
 .bits-hud-menu>summary::-webkit-details-marker{display:none}
 .bits-hud-menu>summary:focus-visible,.bits-hud-options button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}

@@ -19,6 +19,7 @@ test('sete HUDs do Bits preservam partida, controles, idioma e escolha salva em 
  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
  await page.goto(pathToFileURL(path.join(root,'jogos/bits/index.html')).href);
  assert.equal(await page.locator('.bits-top .bits-hud-menu').count(),1,'seletor acompanha os outros controles');
+ assert.equal(await page.locator('.bits-hud-menu').isVisible(),false,'HUD oculto na seleção');
  await page.locator('#dailyTiles button').filter({hasText:'Rock'}).click();await page.waitForSelector('#guessInput:visible');
  assert.equal(await page.locator('.bits-game-head .bits-hud-menu').count(),1);
  const originalSrc=await page.evaluate(()=>testAudio[0].src),layouts={};

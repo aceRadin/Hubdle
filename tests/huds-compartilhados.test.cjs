@@ -43,9 +43,9 @@ test('HUD compartilhado nos quatro jogos, Bits alinhado e Wording com letras pre
    const delta=await page.evaluate(()=>{const a=document.querySelector('#play>.panel').getBoundingClientRect(),b=document.querySelector('#gameCatalogCount').getBoundingClientRect();return Math.max(Math.abs(a.left-b.left),Math.abs(a.right-b.right))});
    assert.ok(delta<1,'contador acompanha as duas bordas do quadro');
  }
- await page.goto(base+'/index.html');assert.equal(await page.locator('html').getAttribute('data-hud'),'original','Foco removido volta ao Original');assert.equal(await page.locator('[data-bits-hud-choice="focus"]').count(),0);assert.equal(await page.locator('[data-bits-hud-choice]').count(),8);assert.equal(await page.evaluate(()=>localStorage.getItem('huba:hud:v1')),'original');await select('panel');
+ await page.goto(base+'/index.html');assert.equal(await page.locator('html').getAttribute('data-hud'),'original','Foco removido volta ao Original');assert.equal(await page.locator('[data-bits-hud-choice="focus"]').count(),0);assert.equal(await page.locator('[data-bits-hud-choice]').count(),8);assert.equal(await page.evaluate(()=>localStorage.getItem('huba:hud:v1')),'original');assert.equal(await page.locator('.bits-hud-menu').isVisible(),false);await page.evaluate(()=>localStorage.setItem('huba:hud:v1','panel'));
  for(const game of ['bits','musicle','streakal','wording']){
-   await page.goto(base+'/jogos/'+game+'/index.html');assert.equal(await page.locator('html').getAttribute('data-hud'),'panel');
+   await page.goto(base+'/jogos/'+game+'/index.html');assert.equal(await page.locator('html').getAttribute('data-hud'),'panel');assert.equal(await page.locator('.bits-hud-menu').isVisible(),false,'oculto na seleção de '+game);
    if(game==='musicle'||game==='streakal'){
      for(const width of [1280,320]){
        await page.setViewportSize({width,height:1000});
@@ -58,6 +58,7 @@ test('HUD compartilhado nos quatro jogos, Bits alinhado e Wording com letras pre
    if(game==='wording')await page.waitForFunction(()=>!document.querySelector('#wTilesDaily button').disabled);
    await page.locator(tiles+' button').first().click();await page.locator(game==='bits'?'#bitsGame':game==='wording'?'#wgame':'#play').waitFor({state:'visible'});
    if(game==='musicle'||game==='streakal')assert.equal(await page.locator('#summary').isVisible(),false,'sem aviso de seleção flutuando sobre a partida');
+   assert.equal(await page.locator('.bits-hud-menu').isVisible(),true,'visível na partida de '+game);
    if(game==='wording'){await page.locator('#wTitle').click();await page.keyboard.type('ab')}
    const layouts=[];
    for(const hud of ['studio','arcade','terminal','panel','editorial','orbit','blueprint']){
@@ -85,15 +86,17 @@ test('HUD compartilhado nos quatro jogos, Bits alinhado e Wording com letras pre
    if(game==='musicle'||game==='streakal'){await select('original');await checkMusicCounter();await select('panel')}
    if(game==='wording'){
      await page.locator('#wGameStats').click();assert.equal(await page.locator('#wStats').evaluate(el=>el.open),true);await page.locator('#wStatsClose').click();
-     await page.locator('#wBack').click();
+     await page.locator('#wBack').click();assert.equal(await page.locator('.bits-hud-menu').isVisible(),false);
      for(const n of [1,2]){
        await page.locator('#wTilesDaily button').nth(n).click();assert.equal(await page.locator('.w-board').count(),n===1?2:4);
        for(const hud of ['studio','panel','editorial','orbit','blueprint']){await select(hud);await page.setViewportSize({width:320,height:900});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.setViewportSize({width:1280,height:1000})}
-       await page.locator('#wBack').click();
+       await page.locator('#wBack').click();assert.equal(await page.locator('.bits-hud-menu').isVisible(),false);
      }
    }else{
      await page.locator(game==='bits'?'#skipGuess':'#opts button').first().click();
      if(game==='streakal'&&await page.locator('#upgradePanel').isVisible())await page.locator('#extraOption').click();
+     await page.locator(game==='bits'?'#backGame':'#backBtn').click();
+     assert.equal(await page.locator('.bits-hud-menu').isVisible(),false,'oculto ao sair de '+game);
    }
  }
  await page.reload();assert.equal(await page.locator('html').getAttribute('data-hud'),'blueprint');assert.deepEqual(errors,[]);console.log('SHARED HUD SCREENSHOTS '+output);

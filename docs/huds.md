@@ -1,6 +1,6 @@
 # HUDs compartilhados
 
-O botão **🖥️** está junto aos seletores de tema, modo e idioma, na página inicial e nos quatro jogos. As opções são **Original, Estúdio, Arcade, Terminal, Painel, Editorial, Órbita e Blueprint**. Tema controla as cores; HUD controla a apresentação dos elementos da partida.
+O botão **🖥️** está junto aos seletores de tema, modo e idioma, apenas durante as partidas dos quatro jogos. Ele fica oculto na página inicial e nas telas de seleção. As opções são **Original, Estúdio, Arcade, Terminal, Painel, Editorial, Órbita e Blueprint**. Tema controla as cores; HUD controla a apresentação dos elementos da partida.
 
 A escolha fica em `localStorage`, na chave `huba:hud:v1`, e acompanha a navegação entre os jogos. A seleção antiga do Bits continua sendo reconhecida. As opções Foco, Mosaico e Faixa foram removidas; quem as tinha salvas passa para Original. Escolher **Original** restaura a organização anterior. Trocar HUD não recria os controles, não sorteia outra música e não apaga palpites ou letras.
 
