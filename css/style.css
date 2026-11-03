@@ -296,6 +296,9 @@ body.home-header-language{padding-top:0}
 .huba-settings-content>details{margin-top:12px}
 .huba-settings-content summary{cursor:pointer;font-weight:700;padding:6px 0}
 .huba-theme-options{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.huba-theme-auto{grid-column:1/-1}
+.huba-theme-column{display:flex;flex-direction:column;gap:6px;min-width:0}
+.huba-theme-column h3{font:600 .75rem/1.4 "Segoe UI",system-ui,sans-serif;color:var(--muted);text-align:center;margin:4px 0 2px;letter-spacing:0}
 .huba-theme-options button{font-size:.8rem;padding:8px}
 .huba-theme-options button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
 body.wording-support-ready{padding-bottom:70px}

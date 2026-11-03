@@ -95,6 +95,10 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
   await page.locator('.huba-settings>details>summary').click();await page.waitForFunction(()=>document.querySelector('.huba-settings>details').open&&document.querySelector('.huba-settings-content').style.position==='fixed');
   assert.equal(await page.locator('.huba-settings-content details,.huba-settings-content summary,.huba-settings-content>strong').count(),0,'temas sem título duplicado ou dropdown interno');
   assert.equal(await page.locator('.huba-theme-options button').count(),14);
+  assert.deepEqual(await page.locator('.huba-theme-column h3').allTextContents(),['Dark themes','Light themes']);
+  assert.deepEqual(await page.locator('[data-theme-group="dark"] button').evaluateAll(bs=>bs.map(b=>b.dataset.theme)),['dark','coffee','midnight','emerald','amethyst','graphite','gpt','discord']);
+  assert.deepEqual(await page.locator('[data-theme-group="light"] button').evaluateAll(bs=>bs.map(b=>b.dataset.theme)),['light','ocean','forest','sunset','rose']);
+  const columns=await page.locator('.huba-theme-column').evaluateAll(cs=>cs.map(c=>c.getBoundingClientRect().x));assert.ok(columns[0]<columns[1],'escuros à esquerda e claros à direita');
   await page.locator('button[data-theme="ocean"]').click();assert.equal(await page.locator('html').getAttribute('data-theme'),'ocean');
   const menu=await page.locator('.huba-settings-content').boundingBox();assert.ok(menu.x>=0&&menu.x+menu.width<=390,JSON.stringify({game,menu}));
   await page.locator('.huba-settings>details>summary').click();

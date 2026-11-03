@@ -44,6 +44,7 @@ phrases['Configurar as fontes em jogos/bits/playlists.js.']='Configure sources i
 phrases['Trecho 5% menor na próxima rodada']='Clip 5% shorter next round';
 phrases['Português']='Portuguese';
 phrases['Carvão']='Charcoal';
+phrases['Temas escuros']='Dark themes';phrases['Temas claros']='Light themes';
 phrases['Treino']='Training';phrases['Modo de jogo']='Game mode';phrases['Rodada de treino.']='Training round.';
 phrases['Você pode tentar outra música no modo Treino.']='You can try another song in Training mode.';
 phrases['Não foi possível carregar a lista de palavras deste idioma. Atualize a página para tentar novamente.']='Could not load the word list for this language. Refresh the page to try again.';

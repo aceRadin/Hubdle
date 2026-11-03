@@ -56,14 +56,23 @@ window.HUBA = (function(){
     summary.textContent='⚙';summary.title='Configurações';summary.setAttribute('aria-label','Configurações');menu.appendChild(summary);
     var content=document.createElement('div');content.className='huba-settings-content';
     var options=document.createElement('div');options.className='huba-theme-options';options.setAttribute('role','group');options.setAttribute('aria-label','Tema do site');
-    Object.keys(themes).forEach(function(theme){
+    function addTheme(theme,parent){
       var button=document.createElement('button');button.type='button';button.textContent=themes[theme];button.dataset.theme=theme;
       button.setAttribute('aria-pressed',String(selected===theme));
       button.onclick=function(){
         apply(theme);try{localStorage.setItem(key,theme)}catch(e){}
         options.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.theme===theme))});
       };
-      options.appendChild(button);
+      parent.appendChild(button);
+    }
+    addTheme('system',options);
+    options.firstChild.className='huba-theme-auto';
+    [{type:'dark',label:'Temas escuros',themes:['dark','coffee','midnight','emerald','amethyst','graphite','gpt','discord']},
+     {type:'light',label:'Temas claros',themes:['light','ocean','forest','sunset','rose']}].forEach(function(group){
+      var column=document.createElement('div');column.className='huba-theme-column';column.dataset.themeGroup=group.type;
+      var heading=document.createElement('h3');heading.textContent=group.label;column.appendChild(heading);
+      group.themes.forEach(function(theme){addTheme(theme,column)});
+      options.appendChild(column);
     });
     content.appendChild(options);menu.appendChild(content);nav.appendChild(menu);document.body.appendChild(nav);
     nav.addEventListener('keydown',function(e){if(e.key==='Escape'){menu.open=false;summary.focus();e.preventDefault();e.stopPropagation()}});
