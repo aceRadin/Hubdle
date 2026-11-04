@@ -26,6 +26,9 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run test:browsers
+        env:
+          # Firefox exige que a pasta pessoal pertença ao usuário do contêiner.
+          HOME: /root
   deploy:
     needs: test
     runs-on: ubuntu-latest
