@@ -1,0 +1,94 @@
+.lol { max-width: 1020px; }
+.lol-top, .lol-round-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.lol-top a { color: var(--accent); font-weight: 750; text-decoration: none; }
+.lol-top span, .lol-footer { color: var(--muted); font-size: .84rem; }
+.lol-intro {
+  margin: 22px 0 14px;
+  padding: clamp(22px, 5vw, 46px);
+  background: linear-gradient(120deg, color-mix(in srgb, var(--accent) 16%, var(--card)), var(--card));
+  border: 1px solid var(--line);
+  border-radius: 20px;
+}
+.lol-intro h1 { font-size: clamp(2.5rem, 8vw, 4.2rem); }
+.lol-intro .sub { margin-bottom: 0; }
+.lol-kicker {
+  margin: 0 0 8px;
+  font-size: .73rem;
+  font-weight: 800;
+  letter-spacing: .13em;
+  color: var(--muted);
+}
+.lol-modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.lol-modes button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-color: var(--accent);
+}
+.lol-round-head { margin: 20px 0 10px; }
+.lol-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.lol-history { grid-column: 1 / -1; min-width: 0; }
+.lol-puzzle, .lol-controls { min-width: 0; }
+.lol-puzzle p:first-child { margin: 0; }
+.lol-clue { text-align: center; margin-top: 14px; }
+.lol-clue blockquote { font-size: clamp(1.15rem, 4vw, 1.6rem); font-weight: 700; margin: 8px 0 16px; }
+.lol-clue audio { max-width: 100%; }
+.lol-media { margin: 0 auto; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; }
+.lol-media img { display: block; width: 100%; }
+.lol-ability { width: 106px; }
+.lol-splash { max-width: 540px; aspect-ratio: 1215 / 717; background: var(--bg); }
+.lol-splash img { height: 100%; object-fit: cover; transition: filter .3s; }
+.lol-result { margin: 14px 0 0; font-weight: 750; color: var(--ok); }
+.lol-controls label { display: block; margin-bottom: 6px; font-weight: 700; }
+.lol-input-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.lol-input-row input {
+  flex: 1 1 170px;
+  min-width: 0;
+  font: inherit;
+  padding: 10px;
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.lol-legend { margin: 0 0 8px; }
+.lol-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.lol-scroll table { width: 100%; border-collapse: separate; border-spacing: 3px; }
+.lol-scroll th, .lol-scroll td { padding: 8px; text-align: center; font-size: .84rem; }
+.lol-scroll tbody th { min-width: 92px; }
+.lol-scroll tbody img { display: block; border-radius: 6px; margin: 0 auto 4px; }
+.lol-scroll td { border-radius: 6px; min-width: 69px; }
+.lol-match { background: color-mix(in srgb, var(--ok) 28%, var(--card)); }
+.lol-partial { background: color-mix(in srgb, #de9b18 33%, var(--card)); }
+.lol-miss { background: color-mix(in srgb, var(--bad) 24%, var(--card)); }
+.lol-footer { margin: 25px 0 18px; }
+.lol-footer a { color: inherit; }
+
+@media (min-width: 740px) {
+  [data-hud="studio"] .lol-layout { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+  [data-hud="panel"] .lol-layout { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
+  [data-hud="panel"] .lol-puzzle { grid-column: 2; grid-row: 1; }
+  [data-hud="panel"] .lol-controls { grid-column: 1; grid-row: 1; }
+}
+[data-hud="arcade"] .lol .panel { border: 2px solid var(--accent); box-shadow: 0 4px 0 var(--line); }
+[data-hud="terminal"] .lol-layout { font-family: Consolas, monospace; }
+[data-hud="terminal"] .lol .panel { border-radius: 0; border-left: 4px solid var(--accent); }
+[data-hud="editorial"] .lol-round-head h2 { font-family: Georgia, serif; font-size: 1.8rem; }
+[data-hud="editorial"] .lol .panel { border-radius: 0; border-width: 1px 0; }
+[data-hud="orbit"] .lol .panel, [data-hud="orbit"] .lol-modes button { border-radius: 28px; }
+[data-hud="orbit"] .lol-ability { border-radius: 50%; }
+[data-hud="blueprint"] .lol .panel {
+  border: 3px double var(--line);
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+@media (max-width: 540px) {
+  .lol-modes { grid-template-columns: repeat(2, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lol-splash img { transition: none; }
+}

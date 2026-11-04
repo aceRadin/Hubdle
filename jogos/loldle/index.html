@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quatro desafios diários sobre os campeões de League of Legends.">
+  <title>Hubdle — LoLdle</title>
+  <link rel="icon" href="../../favicon.svg">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/huds.css">
+  <link rel="stylesheet" href="loldle.css">
+  <script defer src="../../js/comum.js"></script>
+  <script defer src="../../js/huds.js"></script>
+  <script defer src="loldle.js"></script>
+</head>
+<body>
+<main class="lol">
+  <header class="lol-top">
+    <a href="../../index.html">‹ Hubdle</a>
+    <span id="date"></span>
+  </header>
+  <section class="lol-intro">
+    <p class="lol-kicker">LEAGUE OF LEGENDS · DESAFIO DIÁRIO</p>
+    <h1>LoLdle</h1>
+    <p class="sub">Descubra quem é o campeão de hoje.</p>
+  </section>
+  <nav class="lol-modes" aria-label="Modos de jogo">
+    <button type="button" data-mode="classic" aria-pressed="true">Clássico</button>
+    <button type="button" data-mode="quote" aria-pressed="false">Falas</button>
+    <button type="button" data-mode="ability" aria-pressed="false">Habilidade</button>
+    <button type="button" data-mode="splash" aria-pressed="false">Splash art</button>
+  </nav>
+  <p id="loading" class="note" role="status">Carregando campeões…</p>
+  <section id="play" class="hidden">
+    <header class="lol-round-head">
+      <h2 id="mode-title">Clássico</h2>
+      <div class="huba-language"></div>
+    </header>
+    <div class="lol-layout">
+      <div class="panel lol-puzzle">
+        <p id="prompt"></p>
+        <div id="clue" class="lol-clue" hidden></div>
+        <p id="result" class="lol-result" hidden></p>
+      </div>
+      <div class="panel lol-controls">
+        <form id="guess-form" autocomplete="off">
+          <label for="guess">Seu palpite</label>
+          <div class="lol-input-row">
+            <input id="guess" list="champions" placeholder="Digite o nome do campeão" required>
+            <datalist id="champions"></datalist>
+            <button class="primary" type="submit">Enviar</button>
+          </div>
+        </form>
+        <p id="feedback" class="note" role="status"></p>
+        <p id="count" class="note"></p>
+      </div>
+      <section class="lol-history" aria-label="Histórico de palpites">
+        <div id="classic-history" hidden>
+          <p class="note lol-legend">✓ Igual · ◐ Parcial · × Diferente · ↑ Ano posterior · ↓ Ano anterior</p>
+          <div class="lol-scroll" tabindex="0" aria-label="Tabela de comparação dos campeões">
+            <table>
+              <thead><tr><th scope="col">Campeão</th><th scope="col">Gênero</th><th scope="col">Posição</th><th scope="col">Espécie</th><th scope="col">Recurso</th><th scope="col">Alcance</th><th scope="col">Região</th><th scope="col">Ano</th></tr></thead>
+              <tbody id="comparison"></tbody>
+            </table>
+          </div>
+        </div>
+        <ul id="guess-history" class="recap" hidden></ul>
+      </section>
+    </div>
+  </section>
+  <footer class="lol-footer">Projeto de fã. League of Legends e seus personagens pertencem à Riot Games.
+    <a href="https://developer.riotgames.com/docs/lol#data-dragon">Data Dragon</a> ·
+    <a href="https://www.communitydragon.org/docs/assets">CommunityDragon</a> ·
+    <a href="https://github.com/iEranDEV/loldle-data">loldle-data</a>
+  </footer>
+</main>
+</body>
+</html>
