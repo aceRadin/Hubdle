@@ -7,15 +7,6 @@
 }
 .lol-top a { color: var(--accent); font-weight: 750; text-decoration: none; }
 .lol-top span, .lol-footer { color: var(--muted); font-size: .84rem; }
-.lol-intro {
-  margin: 22px 0 14px;
-  padding: clamp(22px, 5vw, 46px);
-  background: linear-gradient(120deg, color-mix(in srgb, var(--accent) 16%, var(--card)), var(--card));
-  border: 1px solid var(--line);
-  border-radius: 20px;
-}
-.lol-intro h1 { font-size: clamp(2.5rem, 8vw, 4.2rem); }
-.lol-intro .sub { margin-bottom: 0; }
 .lol-kicker {
   margin: 0 0 8px;
   font-size: .73rem;
@@ -91,4 +82,33 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .lol-splash img { transition: none; }
+}
+
+/* Cabeçalho e navegação seguem a mesma linha dos jogos do Hubdle. */
+.lol [hidden] { display: none !important; }
+.lol-top { min-height: 86px; margin-bottom: 24px; }
+.lol-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; min-width: 0; }
+.lol-heading h1 { font-size: clamp(1.5rem, 4vw, 2.4rem); }
+.lol-top .huba-language { position: relative; inset: auto; flex: none; box-shadow: none; }
+.lol-top .huba-language .huba-settings { position: relative; inset: auto; }
+.lol-top .huba-settings-content { left: auto; right: 0; top: calc(100% + 10px); bottom: auto; }
+.lol-playing .lol-top .bits-hud-menu { display: block; }
+#mode-selection { max-width: 580px; margin: 36px auto 0; }
+#mode-selection .sub { margin: 8px 0; }
+.lol-modes { grid-template-columns: minmax(0, 1fr); margin-top: 22px; gap: 12px; }
+.lol-modes button, .lol-modes button[aria-pressed="true"] {
+  display: grid; grid-template-columns: 46px minmax(0, 1fr) 14px;
+  gap: 12px; align-items: center; text-align: left;
+  padding: 20px; background: var(--card); color: var(--fg); border: 1px solid var(--line);
+}
+.lol-modes button:hover:not(:disabled) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--card)); }
+.lol-modes strong { display: block; font-size: 1.2rem; }
+.lol-modes small { display: block; color: var(--muted); font-weight: 400; margin-top: 4px; }
+.lol-mode-icon { font-size: 2rem; color: var(--accent); text-align: center; }
+.lol-footer { margin-top: 36px; }
+@media (max-width: 540px) {
+  .lol-top { align-items: flex-start; gap: 8px; }
+  .lol-heading { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .lol-heading h1 { font-size: 1.5rem; }
+  .lol-modes button { padding: 16px 12px; gap: 8px; }
 }

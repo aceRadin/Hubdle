@@ -73,6 +73,11 @@ function pickDaily(items, key) {
 
 function selectMode(next, focus = false) {
   mode = next;
+  byId('mode-selection').hidden = true;
+  byId('play').classList.remove('hidden');
+  byId('back-modes').hidden = false;
+  byId('hub-link').hidden = true;
+  document.body.classList.add('lol-playing');
   const eligible = roster.filter(champion => {
     if (mode === 'quote') return Object.hasOwn(quoteClues, champion.id);
     if (mode === 'ability') return champion.abilities.length;
@@ -84,7 +89,7 @@ function selectMode(next, focus = false) {
   document.querySelectorAll('[data-mode]').forEach(button => {
     button.setAttribute('aria-pressed', String(button.dataset.mode === mode));
   });
-  byId('mode-title').textContent = modes[mode][0];
+  byId('page-title').textContent = 'LoLdle · ' + modes[mode][0];
   byId('prompt').textContent = modes[mode][1];
   byId('guess').value = '';
   byId('feedback').textContent = '';
@@ -251,12 +256,26 @@ async function init() {
   }).format(new Date(day + 'T12:00:00Z'));
   byId('guess-form').addEventListener('submit', submitGuess);
   document.querySelectorAll('[data-mode]').forEach(button => {
+    button.disabled = false;
     button.addEventListener('click', () => selectMode(button.dataset.mode, true));
   });
-  selectMode('classic');
+  byId('back-modes').addEventListener('click', () => {
+    document.querySelector('#clue audio')?.pause();
+    byId('play').classList.add('hidden');
+    byId('mode-selection').hidden = false;
+    byId('back-modes').hidden = true;
+    byId('hub-link').hidden = false;
+    byId('page-title').textContent = 'LoLdle';
+    document.body.classList.remove('lol-playing');
+    document.querySelector('[data-mode="' + mode + '"]').focus();
+  });
   byId('loading').hidden = true;
-  byId('play').classList.remove('hidden');
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const settings = document.querySelector('.huba-settings');
+  if (settings) document.querySelector('.huba-language').append(settings);
+});
 
 init().catch(error => {
   console.error(error);

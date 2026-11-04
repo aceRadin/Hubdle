@@ -8,34 +8,34 @@
   <link rel="icon" href="../../favicon.svg">
   <link rel="stylesheet" href="../../css/style.css">
   <link rel="stylesheet" href="../../css/huds.css">
-  <link rel="stylesheet" href="loldle.css">
+  <link rel="stylesheet" href="loldle.css?v=2">
   <script defer src="../../js/comum.js"></script>
   <script defer src="../../js/huds.js"></script>
-  <script defer src="loldle.js"></script>
+  <script defer src="loldle.js?v=2"></script>
 </head>
 <body>
 <main class="lol">
   <header class="lol-top">
-    <a href="../../index.html">‹ Hubdle</a>
-    <span id="date"></span>
+    <div class="lol-heading">
+      <a id="hub-link" href="../../index.html">‹ Hubdle</a>
+      <button id="back-modes" type="button" hidden>‹ Modos</button>
+      <h1 id="page-title">LoLdle</h1>
+    </div>
+    <div class="huba-language"></div>
   </header>
-  <section class="lol-intro">
+  <section id="mode-selection" aria-label="Escolha um modo">
     <p class="lol-kicker">LEAGUE OF LEGENDS · DESAFIO DIÁRIO</p>
-    <h1>LoLdle</h1>
-    <p class="sub">Descubra quem é o campeão de hoje.</p>
+    <p class="sub">Quatro maneiras de descobrir o campeão. Qual você vai jogar?</p>
+    <p id="date" class="note"></p>
+    <nav class="lol-modes" aria-label="Modos de jogo">
+      <button type="button" data-mode="classic" disabled><span class="lol-mode-icon" aria-hidden="true">◈</span><span><strong>Clássico</strong><small>Encontre o campeão comparando sete pistas.</small></span><span aria-hidden="true">›</span></button>
+      <button type="button" data-mode="quote" disabled><span class="lol-mode-icon" aria-hidden="true">❝</span><span><strong>Falas</strong><small>Reconheça o campeão pela frase e pela voz.</small></span><span aria-hidden="true">›</span></button>
+      <button type="button" data-mode="ability" disabled><span class="lol-mode-icon" aria-hidden="true">✦</span><span><strong>Habilidade</strong><small>Um ícone. Uma habilidade. Qual campeão?</small></span><span aria-hidden="true">›</span></button>
+      <button type="button" data-mode="splash" disabled><span class="lol-mode-icon" aria-hidden="true">▧</span><span><strong>Splash art</strong><small>Revele a arte a cada palpite.</small></span><span aria-hidden="true">›</span></button>
+    </nav>
+    <p id="loading" class="note" role="status">Carregando campeões…</p>
   </section>
-  <nav class="lol-modes" aria-label="Modos de jogo">
-    <button type="button" data-mode="classic" aria-pressed="true">Clássico</button>
-    <button type="button" data-mode="quote" aria-pressed="false">Falas</button>
-    <button type="button" data-mode="ability" aria-pressed="false">Habilidade</button>
-    <button type="button" data-mode="splash" aria-pressed="false">Splash art</button>
-  </nav>
-  <p id="loading" class="note" role="status">Carregando campeões…</p>
-  <section id="play" class="hidden">
-    <header class="lol-round-head">
-      <h2 id="mode-title">Clássico</h2>
-      <div class="huba-language"></div>
-    </header>
+  <section id="play" class="hidden" aria-labelledby="page-title">
     <div class="lol-layout">
       <div class="panel lol-puzzle">
         <p id="prompt"></p>
