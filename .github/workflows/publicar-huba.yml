@@ -13,14 +13,17 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    container:
+      # Manter alinhado com a versão fixada no package-lock.json.
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --init --ipc=host
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
       - run: npm ci
-      - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm test
       - run: npm run test:browsers
   deploy:
