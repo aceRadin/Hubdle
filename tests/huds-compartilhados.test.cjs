@@ -95,7 +95,7 @@ test('HUD compartilhado nos quatro jogos, Bits alinhado e Wording com letras pre
    }else{
      await page.locator(game==='bits'?'#skipGuess':'#opts button').first().click();
      if(game==='streakal'&&await page.locator('#upgradePanel').isVisible())await page.locator('#extraOption').click();
-     await page.locator(game==='bits'?'#backGame':'#backBtn').click();
+     await page.locator(game==='bits'?'#backGame':'#backBtn:visible, #backBtn2:visible').click();
      assert.equal(await page.locator('.bits-hud-menu').isVisible(),false,'oculto ao sair de '+game);
    }
  }

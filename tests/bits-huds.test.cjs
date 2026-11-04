@@ -3,10 +3,24 @@ const assert=require('node:assert/strict');
 const path=require('node:path');
 const fs=require('node:fs/promises');
 const {tmpdir}=require('node:os');
-const {pathToFileURL}=require('node:url');
+const http=require('node:http');
 const {chromium}=require(process.env.HUBA_PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(__dirname,'..');
 test('sete HUDs do Bits preservam partida, controles, idioma e escolha salva em desktop e celular',{timeout:120000},async t=>{
+ // Testa a persistência na mesma origem HTTP usada na publicação.
+ const server=http.createServer(async(req,res)=>{
+   try {
+     const pathname=new URL(req.url,'http://localhost').pathname;
+     const file=path.join(root,pathname);
+     const types={'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json'};
+     res.setHeader('Content-Type',types[path.extname(file)]||'application/octet-stream');
+     res.end(await fs.readFile(file));
+   } catch {
+     res.writeHead(404).end();
+   }
+ });
+ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+ t.after(()=>{server.closeAllConnections();server.close()});
  const browser=await chromium.launch({headless:true,...(process.env.HUBA_CHROME?{executablePath:process.env.HUBA_CHROME}:{})});t.after(()=>browser.close());
  const context=await browser.newContext({viewport:{width:1280,height:1000}});t.after(()=>context.close());
  const errors=[];
@@ -17,7 +31,7 @@ test('sete HUDs do Bits preservam partida, controles, idioma e escolha salva em 
  await context.route('**/jogos/bits/artistas.js*',r=>r.fulfill({contentType:'application/javascript',body:'window.HUBA_BITS_ARTISTAS={rock:[{id:1,name:"Artist"}],pop:[{id:2,name:"Pop"}],rap:[{id:3,name:"Rap"}]};'}));
  await context.route('https://api.deezer.com/**',r=>{const u=new URL(r.request().url()),id=Number(/\/artist\/(\d+)/.exec(u.pathname)[1]);return r.fulfill({contentType:'application/javascript',body:u.searchParams.get('callback')+'('+JSON.stringify({data:Array.from({length:15},(_,i)=>({id:id*100+i,title:'Faixa '+i,artist:{id,name:'Artist'},preview:'https://audio.test/'+(id*100+i)}))})+');'})});
  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
- await page.goto(pathToFileURL(path.join(root,'jogos/bits/index.html')).href);
+ await page.goto('http://127.0.0.1:'+server.address().port+'/jogos/bits/index.html');
  assert.equal(await page.locator('.bits-top .bits-hud-menu').count(),1,'seletor acompanha os outros controles');
  assert.equal(await page.locator('.bits-hud-menu').isVisible(),false,'HUD oculto na seleção');
  await page.locator('#dailyTiles button').filter({hasText:'Rock'}).click();await page.waitForSelector('#guessInput:visible');
