@@ -75,8 +75,6 @@
 .lol [hidden] { display: none !important; }
 .lol-top { margin-bottom: 24px; }
 body.has-game-header .lol-top { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
-body.has-game-header .lol-top > h1 { grid-column: 2; grid-row: 1; justify-self: center; text-align: center; font-size: clamp(1.25rem, 4vw, 2.4rem); }
-body.has-game-header .lol-top > .daily-streak { grid-column: 1 / -1; grid-row: 2; }
 body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
 .lol-top .huba-settings-content { left: auto; right: 0; top: calc(100% + 10px); bottom: auto; }
 .lol-playing .lol-top .bits-hud-menu { display: block; }
@@ -94,6 +92,7 @@ body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
 .lol-footer { margin-top: 36px; }
 @media (max-width: 540px) {
   body.has-game-header .lol-top { grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; }
+  body.has-game-header .lol-top > .daily-streak { grid-column: 1 / -1; grid-row: 2; }
   .lol-modes button { padding: 16px 12px; gap: 8px; }
 }
 

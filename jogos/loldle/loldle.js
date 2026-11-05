@@ -102,7 +102,7 @@ function selectMode(next, focus = false) {
   document.querySelectorAll('[data-mode]').forEach(button => {
     button.setAttribute('aria-pressed', String(button.dataset.mode === mode));
   });
-  byId('page-title').textContent = 'LoLdle · ' + modes[mode][0];
+  byId('play').setAttribute('aria-label', modes[mode][0]);
   byId('prompt').textContent = modes[mode][1];
   byId('guess').value = '';
   renderSuggestions();
@@ -332,7 +332,6 @@ async function init() {
     byId('mode-selection').hidden = false;
     byId('back-modes').hidden = true;
     byId('hub-link').hidden = false;
-    byId('page-title').textContent = 'LoLdle';
     document.body.classList.remove('lol-playing');
     document.querySelector('[data-mode="' + mode + '"]').focus();
   });
