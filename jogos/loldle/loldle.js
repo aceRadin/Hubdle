@@ -251,9 +251,6 @@ async function init() {
     option.value = champion.name;
     list.append(option);
   }
-  byId('date').textContent = new Intl.DateTimeFormat('pt-BR', {
-    dateStyle: 'long', timeZone: 'America/Sao_Paulo'
-  }).format(new Date(day + 'T12:00:00Z'));
   byId('guess-form').addEventListener('submit', submitGuess);
   document.querySelectorAll('[data-mode]').forEach(button => {
     button.disabled = false;

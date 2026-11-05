@@ -1,20 +1,6 @@
-body.lol-page { padding-top: 0; }
 .lol { max-width: 1020px; }
-.lol-top, .lol-round-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-}
 .lol-top a { color: var(--accent); font-weight: 750; text-decoration: none; }
-.lol-top span, .lol-footer { color: var(--muted); font-size: .84rem; }
-.lol-kicker {
-  margin: 0 0 8px;
-  font-size: .73rem;
-  font-weight: 800;
-  letter-spacing: .13em;
-  color: var(--muted);
-}
+.lol-footer { color: var(--muted); font-size: .84rem; }
 .lol-modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .lol-modes button[aria-pressed="true"] {
   background: var(--accent);
@@ -88,15 +74,13 @@ body.lol-page { padding-top: 0; }
 /* Cabeçalho e navegação seguem a mesma linha dos jogos do Hubdle. */
 .lol [hidden] { display: none !important; }
 .lol-top { margin-bottom: 24px; }
-.lol-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; min-width: 0; }
-.lol-heading h1 { font-size: clamp(1.5rem, 4vw, 2.4rem); }
-.lol-top .huba-language { position: relative; inset: auto; flex: none; box-shadow: none; }
-.lol-top .huba-language .huba-settings { position: relative; inset: auto; }
+body.has-game-header .lol-top { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+body.has-game-header .lol-top > h1 { grid-column: 2; grid-row: 1; justify-self: center; text-align: center; font-size: clamp(1.25rem, 4vw, 2.4rem); }
+body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
 .lol-top .huba-settings-content { left: auto; right: 0; top: calc(100% + 10px); bottom: auto; }
 .lol-playing .lol-top .bits-hud-menu { display: block; }
-#mode-selection { max-width: 580px; margin: 36px auto 0; }
-#mode-selection .sub { margin: 8px 0; }
-.lol-modes { grid-template-columns: minmax(0, 1fr); margin-top: 22px; gap: 12px; }
+#mode-selection { max-width: 580px; margin: 0 auto; }
+.lol-modes { grid-template-columns: minmax(0, 1fr); gap: 12px; }
 .lol-modes button, .lol-modes button[aria-pressed="true"] {
   display: grid; grid-template-columns: 46px minmax(0, 1fr) 14px;
   gap: 12px; align-items: center; text-align: left;
@@ -108,8 +92,6 @@ body.lol-page { padding-top: 0; }
 .lol-mode-icon { font-size: 2rem; color: var(--accent); text-align: center; }
 .lol-footer { margin-top: 36px; }
 @media (max-width: 540px) {
-  .lol-top { align-items: flex-start; gap: 8px; }
-  .lol-heading { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .lol-heading h1 { font-size: 1.5rem; }
+  body.has-game-header .lol-top { grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; }
   .lol-modes button { padding: 16px 12px; gap: 8px; }
 }
