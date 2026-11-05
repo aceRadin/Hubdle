@@ -5,7 +5,7 @@
   {name:'Bits',path:'jogos/bits/index.html',cardClass:'gcard-bits',streaks:[{id:'bits',label:''}]},
   {name:'Streakal',path:'jogos/streakal/index.html',cardClass:'gcard-streakal',streaks:[{id:'streakal',label:''}]},
   {name:'Pokedle'},
-  {name:'LoLdle',path:'jogos/loldle/index.html',streaks:[]}
+  {name:'LoLdle',path:'jogos/loldle/index.html',streaks:[{id:'loldle',label:''}]}
  ];
  var grid=document.getElementById('landingGrid');
  while(games.length<9)games.push({empty:true});

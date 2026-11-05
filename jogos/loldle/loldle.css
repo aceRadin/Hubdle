@@ -37,8 +37,8 @@
 .lol-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
 .lol-scroll table { width: 100%; border-collapse: separate; border-spacing: 3px; }
 .lol-scroll th, .lol-scroll td { padding: 8px; text-align: center; font-size: .84rem; }
-.lol-scroll tbody th { min-width: 92px; }
-.lol-scroll tbody img { display: block; border-radius: 6px; margin: 0 auto 4px; }
+.lol-scroll tbody th { position: relative; min-width: 155px; height: 76px; padding-left: 84px; }
+.lol-scroll tbody img { position: absolute; inset: 0 auto 0 0; width: 76px; height: 100%; object-fit: cover; border-radius: 6px; }
 .lol-scroll td { border-radius: 6px; min-width: 69px; }
 .lol-match { background: color-mix(in srgb, var(--ok) 28%, var(--card)); }
 .lol-partial { background: color-mix(in srgb, #de9b18 33%, var(--card)); }
@@ -76,6 +76,7 @@
 .lol-top { margin-bottom: 24px; }
 body.has-game-header .lol-top { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
 body.has-game-header .lol-top > h1 { grid-column: 2; grid-row: 1; justify-self: center; text-align: center; font-size: clamp(1.25rem, 4vw, 2.4rem); }
+body.has-game-header .lol-top > .daily-streak { grid-column: 1 / -1; grid-row: 2; }
 body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
 .lol-top .huba-settings-content { left: auto; right: 0; top: calc(100% + 10px); bottom: auto; }
 .lol-playing .lol-top .bits-hud-menu { display: block; }
@@ -95,3 +96,23 @@ body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
   body.has-game-header .lol-top { grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; }
   .lol-modes button { padding: 16px 12px; gap: 8px; }
 }
+
+.lol-suggestions {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.lol-suggestions button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  width: 100%;
+  padding: 5px 8px;
+  border-color: transparent;
+}
+.lol-suggestions img { object-fit: cover; border-radius: 5px; }

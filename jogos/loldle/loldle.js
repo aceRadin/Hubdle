@@ -38,6 +38,8 @@ let champions;
 let mode;
 let answer;
 let guesses = [];
+let suggestions = [];
+const lastTrainingAnswers = new Map();
 
 async function loadJson(path) {
   const response = await fetch(path);
@@ -71,6 +73,10 @@ function pickDaily(items, key) {
   return order[dayNumber % order.length];
 }
 
+function pickRandom(items) {
+  return items[Math.floor(Math.random() * items.length)];
+}
+
 function selectMode(next, focus = false) {
   mode = next;
   byId('mode-selection').hidden = true;
@@ -84,14 +90,22 @@ function selectMode(next, focus = false) {
     if (mode === 'splash') return champion.skins.length;
     return true;
   });
-  answer = pickDaily(eligible, mode);
-  guesses = restoreGuesses();
+  if (HUBA.isDaily) {
+    answer = pickDaily(eligible, mode);
+    guesses = restoreGuesses();
+  } else {
+    const available = eligible.filter(champion => champion.id !== lastTrainingAnswers.get(mode));
+    answer = pickRandom(available.length ? available : eligible);
+    lastTrainingAnswers.set(mode, answer.id);
+    guesses = [];
+  }
   document.querySelectorAll('[data-mode]').forEach(button => {
     button.setAttribute('aria-pressed', String(button.dataset.mode === mode));
   });
   byId('page-title').textContent = 'LoLdle · ' + modes[mode][0];
   byId('prompt').textContent = modes[mode][1];
   byId('guess').value = '';
+  renderSuggestions();
   byId('feedback').textContent = '';
   renderClue();
   renderRound();
@@ -122,7 +136,8 @@ function renderClue() {
     return;
   }
 
-  const asset = pickDaily(mode === 'ability' ? answer.abilities : answer.skins, mode + ':' + answer.id);
+  const assets = mode === 'ability' ? answer.abilities : answer.skins;
+  const asset = HUBA.isDaily ? pickDaily(assets, mode + ':' + answer.id) : pickRandom(assets);
   const frame = document.createElement('div');
   frame.className = 'lol-media lol-' + mode;
   const image = new Image();
@@ -157,7 +172,7 @@ function renderComparison(champion) {
   const row = document.createElement('tr');
   const name = document.createElement('th');
   name.scope = 'row';
-  const portrait = new Image(32, 32);
+  const portrait = new Image(76, 76);
   portrait.alt = '';
   portrait.src = champion.portrait;
   const label = document.createElement('span');
@@ -178,8 +193,15 @@ function renderComparison(champion) {
   return row;
 }
 
+function updateStreak() {
+  byId('statDailyStreak').textContent = HUBA.currentStreak('loldle');
+}
+
 function renderRound() {
   const won = guesses.includes(answer.id);
+  if (won && HUBA.isDaily) HUBA.recordDailyStreak('loldle', day);
+  byId('next-round').hidden = !won || HUBA.isDaily;
+  updateStreak();
   byId('result').hidden = !won;
   byId('result').textContent = won ? 'Acertou! O campeão é ' + answer.name + '.' : '';
   byId('result').setAttribute('role', 'status');
@@ -209,28 +231,67 @@ function renderRound() {
   }
 }
 
+function closeSuggestions() {
+  byId('champions').hidden = true;
+}
+
+function renderSuggestions() {
+  const query = normalize(byId('guess').value);
+  const list = byId('champions');
+  list.replaceChildren();
+  const matches = query ? roster.filter(entry => !guesses.includes(entry.id) &&
+    (normalize(entry.name).includes(query) || normalize(entry.id).includes(query)))
+    .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR')) : [];
+  suggestions = matches.filter(entry => normalize(entry.name).startsWith(query))
+    .concat(matches.filter(entry => !normalize(entry.name).startsWith(query))).slice(0, 8);
+  for (const champion of suggestions) {
+    const item = document.createElement('li');
+    const button = document.createElement('button');
+    button.type = 'button';
+    const portrait = new Image(36, 36);
+    portrait.src = champion.portrait;
+    portrait.alt = '';
+    button.append(portrait, champion.name);
+    button.addEventListener('click', () => {
+      byId('guess').value = champion.name;
+      closeSuggestions();
+      byId('guess').focus();
+    });
+    item.append(button);
+    list.append(item);
+  }
+  list.hidden = !suggestions.length;
+}
+
 function submitGuess(event) {
   event.preventDefault();
   if (guesses.includes(answer.id)) return;
   const input = byId('guess');
   const value = normalize(input.value);
-  const champion = value && roster.find(entry =>
+  const exact = value && roster.find(entry =>
     normalize(entry.name) === value || normalize(entry.id) === value
   );
+  const champion = exact || (mode === 'classic' && !byId('champions').hidden && suggestions[0]);
   if (!champion || guesses.includes(champion.id)) {
     byId('feedback').textContent = champion ? 'Você já tentou este campeão.' : 'Escolha um campeão da lista.';
     input.focus();
     return;
   }
   guesses.push(champion.id);
-  try { localStorage.setItem(storageKey(), JSON.stringify({ answer: answer.id, guesses })); } catch {}
+  if (HUBA.isDaily) {
+    try { localStorage.setItem(storageKey(), JSON.stringify({ answer: answer.id, guesses })); } catch {}
+  }
   input.value = '';
+  renderSuggestions();
   byId('feedback').textContent = champion.id === answer.id ? '' : champion.name + ' não é a resposta.';
   renderRound();
   if (!input.disabled) input.focus();
 }
 
 async function init() {
+  updateStreak();
+  window.addEventListener('pageshow', updateStreak);
+  window.addEventListener('storage', updateStreak);
   const [source, dragon] = await Promise.all([loadJson('output.json'), loadJson('champion.json')]);
   roster = source.map(entry => {
     const official = dragon.data[entry.id];
@@ -245,12 +306,21 @@ async function init() {
     };
   });
   champions = new Map(roster.map(champion => [champion.id, champion]));
-  const list = byId('champions');
-  for (const champion of roster.slice().sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))) {
-    const option = document.createElement('option');
-    option.value = champion.name;
-    list.append(option);
-  }
+  const form = byId('guess-form');
+  byId('guess').addEventListener('input', renderSuggestions);
+  form.addEventListener('focusout', event => {
+    if (!form.contains(event.relatedTarget)) closeSuggestions();
+  });
+  form.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      closeSuggestions();
+      byId('guess').focus();
+    }
+  });
+  byId('next-round').addEventListener('click', () => selectMode(mode, true));
+  document.addEventListener('huba:mode', () => {
+    if (!byId('play').classList.contains('hidden')) selectMode(mode);
+  });
   byId('guess-form').addEventListener('submit', submitGuess);
   document.querySelectorAll('[data-mode]').forEach(button => {
     button.disabled = false;
@@ -268,11 +338,6 @@ async function init() {
   });
   byId('loading').hidden = true;
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  const settings = document.querySelector('.huba-settings');
-  if (settings) document.querySelector('.huba-language').append(settings);
-});
 
 init().catch(error => {
   console.error(error);

@@ -9,10 +9,11 @@
   <link rel="stylesheet" href="../../css/style.css">
   <link rel="stylesheet" href="../../css/huds.css">
   <link rel="stylesheet" href="../../css/cabecalhos.css?v=5">
-  <link rel="stylesheet" href="loldle.css?v=4">
+  <link rel="stylesheet" href="loldle.css?v=6">
   <script defer src="../../js/comum.js"></script>
+  <script defer src="../../js/idioma.js?v=18"></script>
   <script defer src="../../js/huds.js"></script>
-  <script defer src="loldle.js?v=3"></script>
+  <script defer src="loldle.js?v=5"></script>
 </head>
 <body class="has-game-header">
 <main class="lol">
@@ -22,7 +23,7 @@
       <button id="back-modes" type="button" hidden>‹ Modos</button>
     </div>
     <h1 id="page-title">LoLdle</h1>
-    <div class="huba-language"></div>
+    <div class="daily-streak" aria-live="polite"><strong id="statDailyStreak">0</strong><span>dias de streak diário</span></div>
   </header>
   <section id="mode-selection" aria-label="Escolha um modo">
     <nav class="lol-modes" aria-label="Modos de jogo">
@@ -44,11 +45,12 @@
         <form id="guess-form" autocomplete="off">
           <label for="guess">Seu palpite</label>
           <div class="lol-input-row">
-            <input id="guess" list="champions" placeholder="Digite o nome do campeão" required>
-            <datalist id="champions"></datalist>
+            <input id="guess" aria-controls="champions" placeholder="Digite o nome do campeão" required>
             <button class="primary" type="submit">Enviar</button>
           </div>
+          <ul id="champions" class="lol-suggestions" aria-label="Sugestões de campeões" hidden></ul>
         </form>
+        <button id="next-round" class="primary" type="button" hidden>Jogar de novo</button>
         <p id="feedback" class="note" role="status"></p>
         <p id="count" class="note"></p>
       </div>

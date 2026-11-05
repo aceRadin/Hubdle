@@ -74,7 +74,7 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  for(const width of [320,390]){await page.setViewportSize({width,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true)}
  assert.equal(await page.locator('.gcard').filter({hasText:'Musical'}).locator('.gstreak').count(),1);
  assert.equal(await page.locator('.gcard .gstreak small').count(),0);
- assert.deepEqual(await page.locator('.gcard .gstreak-fire').allTextContents(),['🔥','🔥','🔥','🔥']);
+ assert.deepEqual(await page.locator('.gcard .gstreak-fire').allTextContents(),['🔥','🔥','🔥','🔥','🔥']);
  for(const game of ['bits','musicle','streakal','wording']){
   await page.goto(base+'/jogos/'+game+'/');assert.equal(await page.locator('html').getAttribute('lang'),'en');
   for(const selector of ['.huba-settings>details','.huba-mode']){

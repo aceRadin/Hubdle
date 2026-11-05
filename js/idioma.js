@@ -169,7 +169,7 @@ function build(){
  });
  var header=document.querySelector('.landing-top');
  if(header){header.appendChild(nav);document.body.classList.add('home-header-language')}else{
-   var headers=document.querySelectorAll('.hub-top,.w-top,.bits-top,.musical-play-header,.w-gtop,.bits-game-head');
+   var headers=document.querySelectorAll('.hub-top,.w-top,.bits-top,.musical-play-header,.w-gtop,.bits-game-head,.lol-top');
    headers.forEach(function(el){el.classList.add('huba-game-header')});
    function alignLanguage(){
      var visible=Array.from(headers).find(function(el){return !el.closest('.hidden')});
