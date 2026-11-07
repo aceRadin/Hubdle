@@ -28,8 +28,16 @@
 .lol-media { margin: 0 auto; overflow: hidden; border: 1px solid var(--line); border-radius: var(--lol-radius, 12px); }
 .lol-media img { display: block; width: 100%; }
 .lol-ability { width: 106px; }
-.lol-splash { max-width: 540px; aspect-ratio: 1215 / 717; background: var(--bg); }
-.lol-splash img { height: 100%; object-fit: cover; transition: filter .3s; }
+.lol-splash {
+  position: relative;
+  box-sizing: content-box;
+  max-width: 540px;
+  aspect-ratio: 1215 / 717;
+  background: var(--bg);
+}
+.lol-splash img { position: absolute; inset: 0; height: 100%; object-fit: cover; }
+.lol-splash img:first-child { filter: blur(var(--splash-blur, 32px)); transition: filter .3s; }
+.lol-splash-reveal { clip-path: inset(50%); transition: clip-path .3s; }
 .lol-result { margin: 14px 0 0; font-weight: 750; color: var(--ok); }
 .lol-controls label { display: block; margin-bottom: 6px; font-weight: 700; }
 .lol-input-row { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -78,7 +86,7 @@
   .lol-modes { grid-template-columns: repeat(2, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .lol-splash img { transition: none; }
+  .lol-splash img:first-child, .lol-splash-reveal { transition: none; }
 }
 
 /* Cabeçalho e navegação seguem a mesma linha dos jogos do Hubdle. */

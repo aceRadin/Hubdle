@@ -45,6 +45,7 @@ const labels = {
 };
 const fields = ['gender', 'positions', 'species', 'resource', 'attackType', 'regions', 'releaseYear'];
 const audioBase = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/';
+const splashAspectRatio = 1215 / 717;
 const day = HUBA.dayKey();
 let roster;
 let champions;
@@ -52,6 +53,7 @@ let mode;
 let answer;
 let guesses = [];
 let suggestions = [];
+let splashCenter;
 const lastTrainingAnswers = new Map();
 
 async function loadJson(path) {
@@ -164,6 +166,16 @@ function renderClue() {
     frame.textContent = 'Imagem indisponível. Tente recarregar a página.';
   });
   frame.append(image);
+  if (mode === 'splash') {
+    const random = HUBA.isDaily
+      ? HUBA.mulberry(HUBA.hash(storageKey() + ':reveal:' + answer.id))
+      : Math.random;
+    splashCenter = { x: random() * 100, y: random() * 100 };
+    const reveal = image.cloneNode();
+    reveal.alt = '';
+    reveal.className = 'lol-splash-reveal';
+    frame.append(reveal);
+  }
   clue.append(frame);
   const caption = document.createElement('p');
   caption.className = 'note';
@@ -214,6 +226,26 @@ function updateStreak() {
   byId('statDailyStreak').textContent = HUBA.currentStreak('loldle');
 }
 
+function renderSplash(won) {
+  const reveal = document.querySelector('.lol-splash-reveal');
+  if (!reveal) return;
+
+  const blur = won ? 0 : Math.max(0, 32 - guesses.length * 4);
+  reveal.parentElement.style.setProperty('--splash-blur', blur + 'px');
+  if (!blur) {
+    reveal.style.clipPath = 'inset(0)';
+    return;
+  }
+
+  const height = 12 + guesses.length * 10;
+  const width = height / splashAspectRatio;
+  const left = Math.max(0, Math.min(splashCenter.x - width / 2, 100 - width));
+  const top = Math.max(0, Math.min(splashCenter.y - height / 2, 100 - height));
+  const right = 100 - left - width;
+  const bottom = 100 - top - height;
+  reveal.style.clipPath = `inset(${top}% ${right}% ${bottom}% ${left}%)`;
+}
+
 function renderRound() {
   const won = guesses.includes(answer.id);
   if (won && HUBA.isDaily) HUBA.recordDailyStreak('loldle', day);
@@ -227,8 +259,7 @@ function renderRound() {
   byId('count').textContent = guesses.length === 1 ? '1 palpite' : guesses.length + ' palpites';
   const assetName = byId('asset-name');
   if (assetName) assetName.textContent = won ? assetName.dataset.name : '';
-  const splash = document.querySelector('.lol-splash img');
-  if (splash) splash.style.filter = 'blur(' + (won ? 0 : Math.max(0, 32 - guesses.length * 4)) + 'px)';
+  if (mode === 'splash') renderSplash(won);
 
   const classic = mode === 'classic';
   byId('classic-history').hidden = !classic;
