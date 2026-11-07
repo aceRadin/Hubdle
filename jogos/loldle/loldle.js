@@ -21,6 +21,19 @@ const quoteClues = {
   Braum: 'Nenhum músculo é mais forte que o coração.',
   Caitlyn: 'Deixe esse caso comigo.'
 };
+const englishQuoteClues = {
+  Aatrox: 'Now, hear the silence of annihilation!',
+  Ahri: 'A clever fox is never caught.',
+  Akali: 'Fear the assassin with no master.',
+  Alistar: 'Nothing can hold me back!',
+  Ambessa: 'A wolf has no mercy.',
+  Amumu: 'I thought you’d never pick me.',
+  Anivia: 'On my wings.',
+  Azir: 'Shurima! Your emperor has returned!',
+  Blitzcrank: 'Fired up and ready to serve.',
+  Braum: 'The heart is the strongest muscle.',
+  Caitlyn: 'I’m on the case.'
+};
 const positionOverrides = { Nunu: ['JUNGLE'], Talon: ['MID', 'JUNGLE'] };
 const labels = {
   FEMALE: 'Feminino', MALE: 'Masculino', OTHER: 'Outro',
@@ -122,7 +135,9 @@ function renderClue() {
     const inPortuguese = window.HUBA_I18N?.language !== 'en';
     const audioLocale = inPortuguese ? 'pt_br' : 'default';
     const quote = document.createElement('blockquote');
-    quote.textContent = '“' + quoteClues[answer.id] + '”';
+    quote.dataset.noTranslate = '';
+    const quotes = inPortuguese ? quoteClues : englishQuoteClues;
+    quote.textContent = '“' + quotes[answer.id] + '”';
     const audio = document.createElement('audio');
     audio.controls = true;
     audio.preload = 'none';
@@ -130,7 +145,7 @@ function renderClue() {
     audio.src = audioBase + audioLocale + '/v1/champion-choose-vo/' + answer.numericId + '.ogg';
     const caption = document.createElement('p');
     caption.className = 'note';
-    caption.textContent = inPortuguese ? 'Áudio em português do Brasil' : 'Áudio em inglês · Texto adaptado em português';
+    caption.textContent = inPortuguese ? 'Áudio em português do Brasil' : 'Áudio em inglês';
     audio.addEventListener('error', () => {
       caption.textContent = 'Áudio indisponível. Use a frase acima como pista.';
     });
