@@ -206,8 +206,9 @@ html:lang(en) .gcard.gcard-musical{background-image:linear-gradient(90deg,#11151
 html:lang(en) .gcard.gcard-bits{background-image:linear-gradient(90deg,#11151b99,#11151b33),url("images/bits-en.png")}
 .gcard.gcard-streakal{background-color:#24282d;background-image:linear-gradient(90deg,#11151b99,#11151b33),url("images/streakal-pt.png");background-size:cover;background-position:center;color:#fff}
 html:lang(en) .gcard.gcard-streakal{background-image:linear-gradient(90deg,#11151b99,#11151b33),url("images/streakal-en.png")}
-.gcard:is(.gcard-wording,.gcard-musical,.gcard-bits,.gcard-streakal) .gname,.gcard:is(.gcard-wording,.gcard-musical,.gcard-bits,.gcard-streakal) .gstreak{padding:5px 9px;background:#11151be6;border-radius:8px;box-shadow:0 2px 8px #0005}
-.gcard:is(.gcard-wording,.gcard-musical,.gcard-bits,.gcard-streakal) .gstreak strong{color:#fff}
+.gcard.gcard-loldle{background-color:#24282d;background-image:linear-gradient(90deg,#11151b99,#11151b33),url("images/loldle-card.webp");background-size:cover;background-position:center;color:#fff}
+.gcard:is(.gcard-wording,.gcard-musical,.gcard-bits,.gcard-streakal,.gcard-loldle) :is(.gname,.gstreak){padding:5px 9px;background:#11151be6;border-radius:8px;box-shadow:0 2px 8px #0005}
+.gcard:is(.gcard-wording,.gcard-musical,.gcard-bits,.gcard-streakal,.gcard-loldle) .gstreak strong{color:#fff}
 .gcard.soon{border-style:dashed;background:transparent}
 .gcard.soon .gname,.gcard.soon .gstreak{opacity:.6}
 .gcard.empty .gname{color:var(--muted);font-weight:700;font-size:1.05rem}
