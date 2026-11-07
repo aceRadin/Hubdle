@@ -1,5 +1,12 @@
 .lol { max-width: 1020px; }
 .lol-top a { color: var(--accent); font-weight: 750; text-decoration: none; }
+.lol-top #hub-link {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #171b24;
+  color: #fff;
+}
 .lol-footer { color: var(--muted); font-size: .84rem; }
 .lol-modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .lol-modes button[aria-pressed="true"] {
@@ -141,8 +148,8 @@ body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
   .lol-page .lol-modes button { padding: var(--lol-padding, 16px 12px); }
 }
 
-/* Aparência escolhida para o menu. */
-body.lol-page:not(.lol-playing) {
+/* Aparência escolhida para o menu e todas as partidas do LoLdle. */
+body.lol-page {
   --lol-width: 831px;
   --lol-menu-width: 800px;
   --lol-gap: 19px;
