@@ -126,9 +126,13 @@ body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
 
 /* Ajustes visuais do LoLdle. */
 .lol-page {
-  background-image: linear-gradient(rgb(0 0 0 / var(--lol-shade, .35)), rgb(0 0 0 / var(--lol-shade, .35))), var(--lol-photo);
-  background-size: cover, var(--lol-fit, cover);
-  background-position: center, var(--lol-position, center);
+  /* A sombra extra termina acima do logo na parte inferior da imagem. */
+  background-image:
+    radial-gradient(ellipse closest-side, #0009 0%, #0006 65%, transparent 100%),
+    linear-gradient(rgb(0 0 0 / var(--lol-shade, .35)), rgb(0 0 0 / var(--lol-shade, .35))),
+    var(--lol-photo);
+  background-size: min(100%, 950px) 70%, cover, var(--lol-fit, cover);
+  background-position: center top, center, var(--lol-position, center);
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
