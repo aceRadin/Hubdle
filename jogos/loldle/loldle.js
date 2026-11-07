@@ -9,13 +9,13 @@ const modes = {
 };
 
 const quoteClues = {
-  Aatrox: 'Escute o silêncio que vem com a aniquilação.',
-  Ahri: 'Ninguém põe as mãos numa raposa esperta.',
+  Aatrox: 'Ouçam, o silêncio depois da aniquilação!',
+  Ahri: 'Uma raposa esperta nunca é apanhada.',
   Akali: 'Tema quem mata e não serve a mestre algum.',
-  Alistar: 'Não há nada capaz de me deter.',
+  Alistar: 'Nada pode me impedir.',
   Ambessa: 'Um lobo não conhece piedade.',
-  Amumu: 'Achei que você jamais fosse me escolher.',
-  Anivia: 'Venha sob minhas asas.',
+  Amumu: 'Achei que nunca fosse me escolher.',
+  Anivia: 'Em minhas asas.',
   Azir: 'Shurima, seu imperador está de volta!',
   Blitzcrank: 'Já estou ligado e pronto para servir.',
   Braum: 'Nenhum músculo é mais forte que o coração.',
@@ -31,7 +31,7 @@ const labels = {
   Bilgewater: 'Águas de Sentina', 'The Void': 'Vazio'
 };
 const fields = ['gender', 'positions', 'species', 'resource', 'attackType', 'regions', 'releaseYear'];
-const audioBase = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-choose-vo/';
+const audioBase = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/';
 const day = HUBA.dayKey();
 let roster;
 let champions;
@@ -119,16 +119,18 @@ function renderClue() {
   if (mode === 'classic') return;
 
   if (mode === 'quote') {
+    const inPortuguese = window.HUBA_I18N?.language !== 'en';
+    const audioLocale = inPortuguese ? 'pt_br' : 'default';
     const quote = document.createElement('blockquote');
     quote.textContent = '“' + quoteClues[answer.id] + '”';
     const audio = document.createElement('audio');
     audio.controls = true;
     audio.preload = 'none';
     audio.setAttribute('aria-label', 'Fala de seleção do campeão');
-    audio.src = audioBase + answer.numericId + '.ogg';
+    audio.src = audioBase + audioLocale + '/v1/champion-choose-vo/' + answer.numericId + '.ogg';
     const caption = document.createElement('p');
     caption.className = 'note';
-    caption.textContent = 'Áudio em inglês · Texto adaptado em português';
+    caption.textContent = inPortuguese ? 'Áudio em português do Brasil' : 'Áudio em inglês · Texto adaptado em português';
     audio.addEventListener('error', () => {
       caption.textContent = 'Áudio indisponível. Use a frase acima como pista.';
     });
@@ -318,6 +320,12 @@ async function init() {
     }
   });
   byId('next-round').addEventListener('click', () => selectMode(mode, true));
+  document.addEventListener('huba:language', () => {
+    if (mode === 'quote' && !byId('play').classList.contains('hidden')) {
+      byId('clue').querySelector('audio')?.pause();
+      renderClue();
+    }
+  });
   document.addEventListener('huba:mode', () => {
     if (!byId('play').classList.contains('hidden')) selectMode(mode);
   });

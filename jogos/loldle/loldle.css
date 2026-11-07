@@ -15,7 +15,7 @@
 .lol-clue { text-align: center; margin-top: 14px; }
 .lol-clue blockquote { font-size: clamp(1.15rem, 4vw, 1.6rem); font-weight: 700; margin: 8px 0 16px; }
 .lol-clue audio { max-width: 100%; }
-.lol-media { margin: 0 auto; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; }
+.lol-media { margin: 0 auto; overflow: hidden; border: 1px solid var(--line); border-radius: var(--lol-radius, 12px); }
 .lol-media img { display: block; width: 100%; }
 .lol-ability { width: 106px; }
 .lol-splash { max-width: 540px; aspect-ratio: 1215 / 717; background: var(--bg); }
@@ -31,10 +31,10 @@
   background: var(--bg);
   color: var(--fg);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--lol-radius, 10px);
 }
 .lol-legend { margin: 0 0 8px; }
-.lol-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.lol-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--lol-radius, 12px); background: var(--card); }
 .lol-scroll table { width: 100%; border-collapse: separate; border-spacing: 3px; }
 .lol-scroll th, .lol-scroll td { padding: 8px; text-align: center; font-size: .84rem; }
 .lol-scroll tbody th { position: relative; min-width: 155px; height: 76px; padding-left: 84px; }
@@ -54,11 +54,11 @@
 }
 [data-hud="arcade"] .lol .panel { border: 2px solid var(--accent); box-shadow: 0 4px 0 var(--line); }
 [data-hud="terminal"] .lol-layout { font-family: Consolas, monospace; }
-[data-hud="terminal"] .lol .panel { border-radius: 0; border-left: 4px solid var(--accent); }
+[data-hud="terminal"] .lol .panel { border-radius: var(--lol-radius, 0px); border-left: 4px solid var(--accent); }
 [data-hud="editorial"] .lol-round-head h2 { font-family: Georgia, serif; font-size: 1.8rem; }
-[data-hud="editorial"] .lol .panel { border-radius: 0; border-width: 1px 0; }
-[data-hud="orbit"] .lol .panel, [data-hud="orbit"] .lol-modes button { border-radius: 28px; }
-[data-hud="orbit"] .lol-ability { border-radius: 50%; }
+[data-hud="editorial"] .lol .panel { border-radius: var(--lol-radius, 0px); border-width: 1px 0; }
+[data-hud="orbit"] .lol .panel, [data-hud="orbit"] .lol-modes button { border-radius: var(--lol-radius, 28px); }
+[data-hud="orbit"] .lol-ability { border-radius: var(--lol-radius, 50%); }
 [data-hud="blueprint"] .lol .panel {
   border: 3px double var(--line);
   background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
@@ -84,6 +84,7 @@ body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
   display: grid; grid-template-columns: 46px minmax(0, 1fr) 14px;
   gap: 12px; align-items: center; text-align: left;
   padding: 20px; background: var(--card); color: var(--fg); border: 1px solid var(--line);
+  border-radius: var(--lol-radius, 10px);
 }
 .lol-modes button:hover:not(:disabled) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--card)); }
 .lol-modes strong { display: block; font-size: 1.2rem; }
@@ -103,7 +104,7 @@ body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
   max-height: 240px;
   overflow-y: auto;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--lol-radius, 10px);
 }
 .lol-suggestions button {
   display: flex;
@@ -115,3 +116,48 @@ body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
   border-color: transparent;
 }
 .lol-suggestions img { object-fit: cover; border-radius: 5px; }
+
+/* As variáveis do editor só existem no LoLdle e podem variar por tela. */
+.lol-page {
+  background-image: linear-gradient(rgb(0 0 0 / var(--lol-shade, .35)), rgb(0 0 0 / var(--lol-shade, .35))), var(--lol-photo);
+  background-size: cover, var(--lol-fit, cover);
+  background-position: center, var(--lol-position, center);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.lol-page .lol { max-width: var(--lol-width, 1020px); font-size: var(--lol-text, 16px); }
+.lol-page #mode-selection { max-width: var(--lol-menu-width, 580px); }
+.lol-page :is(.lol-modes, .lol-layout) { gap: var(--lol-gap, 12px); }
+.lol-page .lol-modes button { padding: var(--lol-padding, 20px); }
+.lol-page .lol-layout .panel { padding: var(--lol-padding, 18px); }
+.lol-page .lol-modes strong { font-size: var(--lol-title, 1.2rem); }
+.lol-page .lol-clue blockquote { font-size: var(--lol-title, clamp(1.15rem, 4vw, 1.6rem)); }
+.lol-page .lol-ability { width: var(--lol-icon, 106px); max-width: 100%; }
+.lol-page .lol-splash { max-width: var(--lol-splash, 540px); }
+.lol-page .lol-scroll :is(th, td) { padding-block: var(--lol-cell, 8px); }
+.lol-page .lol-suggestions { max-height: var(--lol-suggestions, 240px); }
+.lol .panel { border-radius: var(--lol-radius, 14px); }
+@media (max-width: 540px) {
+  .lol-page .lol-modes button { padding: var(--lol-padding, 16px 12px); }
+}
+.lol-appearance > summary {
+  display: grid; place-items: center; box-sizing: border-box; width: 36px; height: 36px; list-style: none;
+  cursor: pointer; border: 1px solid var(--line); border-radius: 10px;
+}
+.lol-appearance > summary::-webkit-details-marker { display: none; }
+.lol-appearance-panel {
+  position: fixed; z-index: 75; right: 8px; box-sizing: border-box; width: min(340px, calc(100vw - 16px));
+  overflow: auto; overscroll-behavior: contain; padding: 14px; border-radius: 12px;
+  background: #24252b; color: #fafafa; border: 1px solid #666a78; box-shadow: 0 12px 28px #0007;
+  font: 14px/1.4 system-ui, sans-serif; color-scheme: dark;
+}
+.lol-appearance-panel h2 { font-size: 1.1rem; }
+.lol-appearance-panel fieldset { margin: 10px 0; min-width: 0; border: 1px solid #666a78; border-radius: 8px; }
+.lol-appearance-panel label { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-block: 6px; }
+.lol-appearance-panel input[type="range"] { width: min(110px, 35%); }
+.lol-appearance-panel output { min-width: 3ch; text-align: right; font-variant-numeric: tabular-nums; }
+.lol-appearance-panel input[type="file"] { width: 100%; }
+.lol-appearance-panel textarea { box-sizing: border-box; width: 100%; }
+.lol-appearance-panel button { background: #343743; color: #fafafa; border-color: #666a78; }
+.lol-appearance-panel .lol-appearance-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.lol-appearance-panel [role="status"]:empty { display: none; }
