@@ -239,11 +239,10 @@ function renderSuggestions() {
   const query = normalize(byId('guess').value);
   const list = byId('champions');
   list.replaceChildren();
-  const matches = query ? roster.filter(entry => !guesses.includes(entry.id) &&
-    (normalize(entry.name).includes(query) || normalize(entry.id).includes(query)))
-    .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR')) : [];
-  suggestions = matches.filter(entry => normalize(entry.name).startsWith(query))
-    .concat(matches.filter(entry => !normalize(entry.name).startsWith(query))).slice(0, 8);
+  suggestions = query ? roster
+    .filter(entry => !guesses.includes(entry.id) && normalize(entry.name).startsWith(query))
+    .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+    .slice(0, 8) : [];
   for (const champion of suggestions) {
     const item = document.createElement('li');
     const button = document.createElement('button');
@@ -271,7 +270,8 @@ function submitGuess(event) {
   const exact = value && roster.find(entry =>
     normalize(entry.name) === value || normalize(entry.id) === value
   );
-  const champion = exact || (mode === 'classic' && !byId('champions').hidden && suggestions[0]);
+  const firstSuggestion = byId('champions').hidden ? null : suggestions[0];
+  const champion = firstSuggestion || exact;
   if (!champion || guesses.includes(champion.id)) {
     byId('feedback').textContent = champion ? 'Você já tentou este campeão.' : 'Escolha um campeão da lista.';
     input.focus();
