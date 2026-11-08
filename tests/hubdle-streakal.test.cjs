@@ -32,7 +32,8 @@ test('Hubdle em PT/EN mantém dados antigos; Streakal limita a dez e só reseta 
    for(const lang of ['pt','en']){
      await page.evaluate(lang=>HUBA_I18N.setLanguage(lang),lang);
      assert.ok(!/\bHUBA\b/.test(await page.locator('body').innerText()),'marca antiga não aparece em '+file+' '+lang);
-     assert.equal(await page.locator('.huba-support-coffee').getAttribute('href'),'https://buymeacoffee.com/aceradin');
+     const support=file==='index.html'?'#landingSupport a':'.huba-support-coffee';
+     assert.equal(await page.locator(support).getAttribute('href'),'https://buymeacoffee.com/aceradin');
    }
    if(file==='index.html')assert.equal(await page.locator('#globalStreak').textContent(),'7');
  }

@@ -186,17 +186,13 @@ code{background:var(--bg);padding:1px 6px;border-radius:6px;font-size:.88em}
 /* Tela inicial HUBA */
 .landing-top{max-width:920px;margin:0 auto 22px;padding:8px 0 12px;border-bottom:1px solid var(--line);text-align:center}
 .landing-top h1{font-size:1.6rem;line-height:1;letter-spacing:.14em;margin:0}
-.landing-grid{max-width:920px;margin:0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.gcard{display:flex;flex-direction:column;justify-content:space-between;gap:14px;min-height:132px;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--fg);text-align:left;font:inherit;font-weight:400}
-button.gcard{cursor:pointer}
-button.gcard:hover{border-color:var(--accent);transform:translateY(-1px)}
+.landing-grid{--landing-gap:14px;max-width:920px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;gap:var(--landing-gap)}
+.gcard{display:flex;flex:0 0 calc((100% - 2 * var(--landing-gap)) / 3);min-width:0;flex-direction:column;justify-content:space-between;gap:10px;min-height:112px;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--fg);text-align:left;font:inherit;font-weight:400}
 .gcard .gtop{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:6px 8px;min-width:0}
 .gcard .gname{font:800 1.35rem/1.1 "Bricolage Grotesque","Segoe UI",system-ui,sans-serif;letter-spacing:-.01em}
-.gcard .gsoon{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 8px;white-space:nowrap}
 .gcard .gstreak{display:flex;align-items:center;gap:3px;width:fit-content}
 .gcard .gstreak strong{font:800 2rem/1 "Bricolage Grotesque","Segoe UI",system-ui,sans-serif}
 .gcard .gstreak-fire{font-size:1rem;line-height:1}
-.gcard.on .gstreak strong{color:var(--accent)}
 /* O idioma da página seleciona a imagem, inclusive ao trocar sem recarregar. */
 .gcard.gcard-wording{background-color:#24282d;background-image:linear-gradient(90deg,#11151be6,#11151b55),url("images/wording-pt.png?v=2");background-size:cover;background-position:center;color:#fff}
 html:lang(en) .gcard.gcard-wording{background-image:linear-gradient(90deg,#11151be6,#11151b55),url("images/wording-en.png")}
@@ -209,11 +205,10 @@ html:lang(en) .gcard.gcard-streakal{background-image:linear-gradient(90deg,#1115
 .gcard.gcard-loldle{background-color:#24282d;background-image:linear-gradient(90deg,#11151b99,#11151b33),url("images/loldle-card.webp");background-size:cover;background-position:center;color:#fff}
 .gcard:is(.gcard-wording,.gcard-musical,.gcard-bits,.gcard-streakal,.gcard-loldle) :is(.gname,.gstreak){padding:5px 9px;background:#11151be6;border-radius:8px;box-shadow:0 2px 8px #0005}
 .gcard:is(.gcard-wording,.gcard-musical,.gcard-bits,.gcard-streakal,.gcard-loldle) .gstreak strong{color:#fff}
-.gcard.soon{border-style:dashed;background:transparent}
-.gcard.soon .gname,.gcard.soon .gstreak{opacity:.6}
-.gcard.empty .gname{color:var(--muted);font-weight:700;font-size:1.05rem}
-@media(max-width:640px){.landing-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gcard{min-height:112px;padding:13px 14px}}
-@media(max-width:360px){.landing-grid{grid-template-columns:1fr}}
+.landing-support{max-width:920px;margin:20px auto 0;border-top:1px solid var(--line);text-align:center}
+.landing-support a{display:inline-flex;align-items:center;gap:5px;min-height:44px;color:var(--muted);font-size:.875rem;text-underline-offset:3px}
+.landing-support a:hover{color:var(--fg)}
+@media(max-width:640px){.landing-grid{--landing-gap:10px}.gcard{flex-basis:calc((100% - var(--landing-gap)) / 2);min-height:90px;padding:8px}}
 /* Nome do site no cabeçalho do hub vira botão de voltar */
 #home .hub-top h1 .brand-back{font:inherit;letter-spacing:.06em;color:inherit;background:none;border:0;padding:0;cursor:pointer;border-radius:6px}
 #home .hub-top h1 .brand-back:hover{color:var(--accent)}

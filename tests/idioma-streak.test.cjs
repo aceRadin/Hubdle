@@ -71,7 +71,29 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  assert.ok(Math.max(...centers)-Math.min(...centers)<2,'nome, streak e idioma alinhados no computador');
  const streakCenters=await page.locator('.global-streak').evaluate(el=>Array.from(el.children).map(n=>{const r=n.getBoundingClientRect();return r.y+r.height/2}));
  assert.ok(Math.max(...streakCenters)-Math.min(...streakCenters)<1,'número e texto do streak alinhados');
- for(const width of [320,390]){await page.setViewportSize({width,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true)}
+ assert.deepEqual(await page.locator('#landingGrid > a .gname').allTextContents(),['Musical','Wording','Bits','Streakal','LoLdle']);
+ assert.equal(await page.locator('#landingGrid > :not(a), .huba-support').count(),0);
+ for(const [width,columns] of [[1280,3],[320,2],[390,2]]){
+  await page.setViewportSize({width,height:844});
+  const layout=await page.locator('#landingGrid').evaluate(grid=>{
+   const cards=Array.from(grid.children,card=>({
+    top:card.offsetTop,
+    left:card.getBoundingClientRect().left,
+    right:card.getBoundingClientRect().right
+   }));
+   const lastRow=cards.filter(card=>card.top===cards.at(-1).top);
+   const center=(lastRow[0].left+lastRow.at(-1).right)/2;
+   const bounds=grid.getBoundingClientRect();
+   return {
+    columns:cards.filter(card=>card.top===cards[0].top).length,
+    offset:Math.abs(center-(bounds.left+bounds.right)/2),
+    footerBelow:document.getElementById('landingSupport').getBoundingClientRect().top>bounds.bottom,
+    fits:document.documentElement.scrollWidth<=innerWidth
+   };
+  });
+  assert.equal(layout.columns,columns);
+  assert.ok(layout.offset<1&&layout.footerBelow&&layout.fits,'grade centralizada com rodapé abaixo em '+width+'px');
+ }
  assert.equal(await page.locator('.gcard').filter({hasText:'Musical'}).locator('.gstreak').count(),1);
  assert.equal(await page.locator('.gcard .gstreak small').count(),0);
  assert.deepEqual(await page.locator('.gcard .gstreak-fire').allTextContents(),['🔥','🔥','🔥','🔥','🔥']);
@@ -160,7 +182,11 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
   await checkHeader();
  }
  await page.goto(base);assert.equal(await page.locator('#globalStreak').textContent(),'1');assert.equal(await page.locator('.gcard').filter({hasText:'Musical'}).locator('.gstreak strong').textContent(),'1');
- assert.equal(await page.locator('.huba-support-coffee').getAttribute('href'),'https://buymeacoffee.com/aceradin');
+ const support=page.getByRole('link',{name:'Support Hubdle'});
+ assert.equal(await support.getAttribute('href'),'https://buymeacoffee.com/aceradin');
+ await language('pt');
+ assert.equal(await page.getByRole('link',{name:'Apoiar o Hubdle'}).isVisible(),true);
+ await language('en');
  await page.goto(base+'/jogos/wording/');
  assert.equal(await page.locator('#wLoadJson,#wResetJson,#wJsonInput,input[type="file"]').count(),0);
  await page.evaluate(text=>{localStorage.setItem('playhub:word:files:v2',JSON.stringify({'words.json':text}));HUBA_I18N.setLanguage('en')},await fs.readFile(path.join(root,'dados/words.json'),'utf8'));

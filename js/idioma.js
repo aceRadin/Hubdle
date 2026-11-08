@@ -35,7 +35,7 @@ var phrases={
  'Verde: posição certa · Amarelo: letra em outro lugar · Apagada: não está em nenhuma palavra · Espaço: deixa uma casa em branco (·) para preencher depois':'Green: correct position · Yellow: letter in another position · Dimmed: absent from all words · Space: leaves a blank (·) to fill later',
  'jogos':'games','vitórias':'wins','sequência':'streak','melhor':'best','jogar':'play','carregando':'loading','sem lista':'no list','venceu':'won','não foi dessa vez':'not this time','em andamento':'in progress','Fechar':'Close',
  'palpites validados':'validated guesses','palpites livres':'unrestricted guesses','lidas de ':'read from ',' salvo neste navegador':' saved in this browser','arquivo inválido: ':'invalid file: ','português':'Portuguese','inglês':'English','palavras':'words','palavra':'word','tentativas':'guesses','tentativa':'guess',
- 'Em breve':'Coming soon','Artista não informado':'Artist unavailable','precisão ':'accuracy ',
+ 'Em breve':'Coming soon','Apoiar o Hubdle':'Support Hubdle','Artista não informado':'Artist unavailable','precisão ':'accuracy ',
  'Falha de rede ao consultar o Deezer':'Network error contacting Deezer','O Deezer demorou para responder':'Deezer took too long to respond','Resposta de músicas inválida':'Invalid song response','Página do Deezer não autorizada':'Unauthorized Deezer page','Paginação repetida no Deezer':'Repeated Deezer pagination','Nenhuma playlist configurada para ':'No playlist configured for ',
  'Carregamento cancelado':'Loading cancelled','Prévia indisponível':'Preview unavailable'
 };

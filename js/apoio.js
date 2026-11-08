@@ -1,7 +1,19 @@
-/* Painel de apoio compartilhado: aparece na página inicial e nos jogos. */
+/* Link de apoio na página inicial e painel nos jogos. */
 (function(){
 'use strict';
 var config=window.HUBA_APOIO||{};
+function isSupportUrl(url){return typeof url==='string' && /^https:\/\/[^\s]+$/i.test(url)}
+
+var footer=document.getElementById('landingSupport');
+if(footer){
+ var url=[config.buymeacoffee,config.patreon].find(isSupportUrl);
+ if(url){
+  footer.querySelector('a').href=url;
+  footer.hidden=false;
+ }
+ return;
+}
+
 var panel=document.createElement('footer');
 panel.className='huba-support';
 panel.setAttribute('aria-label','Apoie o desenvolvimento do Hubdle');
@@ -18,7 +30,7 @@ var links=document.createElement('div');links.className='huba-support-links';
 function supportLink(name,url,variant){
  var link=document.createElement('a');link.className='huba-support-button '+variant;
  link.textContent=name;
- if(typeof url==='string' && /^https:\/\/[^\s]+$/i.test(url)){
+ if(isSupportUrl(url)){
    link.href=url;link.target='_blank';link.rel='noopener noreferrer';
  }else{
    link.classList.add('huba-support-disabled');link.removeAttribute('href');
