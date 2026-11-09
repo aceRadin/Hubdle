@@ -26,14 +26,14 @@ test('Hubdle em PT/EN mantém dados antigos; Streakal limita a dez e só reseta 
    return r.fulfill({contentType:'application/javascript',body:u.searchParams.get('callback')+'('+JSON.stringify(id?song(Number(id)):{data:Array.from({length:30},(_,i)=>song(i+1))})+');'});
  });
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
- for(const file of ['index.html','jogos/bits/index.html','jogos/musicle/index.html','jogos/wording/index.html','jogos/streakal/index.html']){
+ for(const file of ['index.html','jogos/bits/index.html','jogos/musicle/index.html','jogos/wording/index.html','jogos/loldle/index.html','jogos/streakal/index.html']){
    await page.goto(pathToFileURL(path.join(root,file)).href);
    assert.ok((await page.title()).startsWith('Hubdle'));
    for(const lang of ['pt','en']){
      await page.evaluate(lang=>HUBA_I18N.setLanguage(lang),lang);
      assert.ok(!/\bHUBA\b/.test(await page.locator('body').innerText()),'marca antiga não aparece em '+file+' '+lang);
-     const support=file==='index.html'?'#landingSupport a':'.huba-support-coffee';
-     assert.equal(await page.locator(support).getAttribute('href'),'https://buymeacoffee.com/aceradin');
+     const support=page.locator('main > .huba-support-footer').getByRole('link',{name:lang==='pt'?'Apoiar o Hubdle':'Support Hubdle'});
+     assert.equal(await support.getAttribute('href'),'https://buymeacoffee.com/aceradin');
    }
    if(file==='index.html')assert.equal(await page.locator('#globalStreak').textContent(),'7');
  }

@@ -71,25 +71,6 @@ function chooseSong(cat,daily){
  }
  var last=active&&active.song&&active.song.id;var options=list.filter(function(s){return s.id!==last});return (options.length?options:list)[Math.floor(Math.random()*(options.length?options:list).length)];
 }
-/* Controle de apoio exclusivo do Bits; não altera o rodapé dos outros jogos. */
-var supportToggle=null;
-function bitsSupportCollapsed(collapse){
- var panel=document.querySelector('.huba-support');
- if(!panel)return;
- if(!supportToggle){
-   supportToggle=document.createElement('button');
-   supportToggle.type='button';supportToggle.className='bits-support-toggle';
-   supportToggle.setAttribute('aria-controls','bits-support-panel');
-   panel.id='bits-support-panel';
-   supportToggle.onclick=function(){bitsSupportCollapsed(!document.body.classList.contains('bits-support-collapsed'))};
-   document.body.appendChild(supportToggle);
- }
- document.body.classList.toggle('bits-support-collapsed',collapse);
- supportToggle.hidden=!collapse && (!active || active.guesses.length<3);
- supportToggle.textContent=collapse?'⌃':'⌄';
- supportToggle.setAttribute('aria-expanded',String(!collapse));
- supportToggle.setAttribute('aria-label',collapse?'Mostrar apoio ao Hubdle':'Recolher apoio ao Hubdle');
-}
 function start(cat,daily){
  var list=byCat[cat]||[];if(!list.length){setStatus('Carregue músicas antes de jogar.');return}
  stopAudio();unavailableSongs={};var song=chooseSong(cat,daily);if(!song)return;
@@ -102,7 +83,6 @@ function start(cat,daily){
  $('playAgain').classList.toggle('hidden',daily);$('guessInput').value='';selected=null;
  $('finish').classList.toggle('hidden',!active.finished);$('guessArea').classList.toggle('hidden',active.finished);
  $('replaceAudio').classList.add('hidden');prepareAudio(song);renderRound();
- bitsSupportCollapsed(active.guesses.length>=3);
  dailySave();
  if(active.finished)showFinish();else $('guessInput').focus();
 }
@@ -251,7 +231,6 @@ function submit(skip){
    message('Você já tentou essa música. Escolha outra.');return;
  }
  active.guesses.push(id);
- if(active.guesses.length===3)bitsSupportCollapsed(true);
  // Um pulo ou palpite incorreto amplia o trecho sem reiniciar o áudio.
  // Se o trecho anterior já terminou, a próxima reprodução começa do início.
  if(!skip)pauseAudio();
@@ -269,7 +248,7 @@ function showFinish(){$('replaceAudio').classList.add('hidden');stopAudio();$('g
  $('finishDetail').textContent=active.won?'Acertou em '+active.guesses.length+' de '+maxAttempts+' tentativas.':'Você pode tentar outra música no modo Treino.';
  $('playAgain').classList.toggle('hidden',active.daily);
 }
-function back(){pauseCatalog();audioToken++;bitsSupportCollapsed(false);$('replaceAudio').classList.add('hidden');stopAudio();if(audioUrl){URL.revokeObjectURL(audioUrl);audioUrl=null}roundId++;active=null;$('bitsGame').classList.add('hidden');$('bitsHome').classList.remove('hidden');if(supportToggle)supportToggle.hidden=true;drawTiles();renderStats()}
+function back(){pauseCatalog();audioToken++;$('replaceAudio').classList.add('hidden');stopAudio();if(audioUrl){URL.revokeObjectURL(audioUrl);audioUrl=null}roundId++;active=null;$('bitsGame').classList.add('hidden');$('bitsHome').classList.remove('hidden');drawTiles();renderStats()}
 document.addEventListener('keydown',function(e){
  if(e.key!=='Escape')return;
  if($('bitsGame').classList.contains('hidden')){

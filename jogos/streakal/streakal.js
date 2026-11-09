@@ -77,34 +77,12 @@ function pauseCatalog(){selectionToken++;musicLoader.pause();musicLoading=false;
 window.addEventListener('pagehide',pauseCatalog);
 
 function newRun(daily,g){return {genre:g,daily:daily,date:dayKey(),replacements:0,pool:daily?musicLoader.snapshot(g):poolOf(g),score:0,optionCount:2,clip:MAX_CLIP,consecutiveShorter:0,penaltyNotice:'',used:[],round:0,pending:false,ended:false,locked:false,answer:null,options:[],rng:daily?mulberry(hash(dayKey()+'|streakal|'+g+'|'+poolOf(g).length)):Math.random}}
-/* Painel de apoio recolhível exclusivo do Streakal, a partir da 4ª rodada. */
-var streakalSupportToggle=null;
-function streakalSupportSetCollapsed(collapsed){
-  var panel=document.querySelector('.huba-support');
-  if(!panel)return;
-  if(!streakalSupportToggle){
-    streakalSupportToggle=document.createElement('button');
-    streakalSupportToggle.type='button';
-    streakalSupportToggle.className='streakal-support-toggle';
-    streakalSupportToggle.setAttribute('aria-controls','streakal-support-panel');
-    panel.id='streakal-support-panel';
-    streakalSupportToggle.onclick=function(){streakalSupportSetCollapsed(!document.body.classList.contains('streakal-support-collapsed'))};
-    document.body.appendChild(streakalSupportToggle);
-  }
-  document.body.classList.toggle('streakal-support-collapsed',collapsed);
-  var eligible=!!cur&&cur.round>=4&&!$('#play').classList.contains('hidden');
-  streakalSupportToggle.hidden=!eligible;
-  streakalSupportToggle.textContent=collapsed?'⌃':'⌄';
-  streakalSupportToggle.setAttribute('aria-expanded',String(!collapsed));
-  streakalSupportToggle.setAttribute('aria-label',collapsed?'Mostrar apoio ao Hubdle':'Recolher apoio ao Hubdle');
-  streakalSupportToggle.title=collapsed?'Mostrar doações':'Recolher doações';
-}
 function openGame(daily,g){
   musicLoader.select(g,2,daily).catch(function(){});waitingCatalog=false;
   $('#gameCatalogCount').textContent=poolOf(g).length.toLocaleString('pt-BR')+' músicas carregadas neste gênero';
   $('#home').classList.add('hidden');$('#play').classList.remove('hidden');$('#play').classList.remove('is-result');
   $('#playTitle').textContent='Streakal · '+gName(g);$('#playSub').textContent=(daily?'Desafio diário':'Treino')+' · Acerte até errar. Cada acerto exige uma escolha de dificuldade permanente.';
-  cur=newRun(daily,g);invalidSongs={};audioFailures=0;streakalSupportSetCollapsed(false);updateLimitDisplay();
+  cur=newRun(daily,g);invalidSongs={};audioFailures=0;updateLimitDisplay();
   // Desafios diários concluídos não podem reiniciar o placar nesse dia.
   var prev=daily?readJSON(dailyKey(g),null):null;
   if(prev&&prev.done){cur.score=prev.score;cur.replacements=prev.replacements||0;cur.ended=true;showResult(true);return}
@@ -113,7 +91,7 @@ function openGame(daily,g){
       var saved=prev.run,byId=new Map(cur.pool.map(function(song){return [song.id,song]}));
       var pool=saved.poolIds.map(function(id){var song=byId.get(id);if(!song)throw Error('Catálogo da partida salva indisponível.');return song});
       Object.assign(cur,saved,{pool:pool,rng:mulberry(saved.randomState)});invalidSongs=saved.invalidSongs||{};
-      renderQuestion();if(cur.pending)renderUpgrade();streakalSupportSetCollapsed(cur.round>=4);return;
+      renderQuestion();if(cur.pending)renderUpgrade();return;
     }catch(e){goHome();$('#dzStatus').textContent='Não foi possível retomar a partida salva. Atualize a página para tentar novamente.';return}
   }
   nextQuestion();
@@ -275,7 +253,6 @@ function nextQuestion(replacement){
     $('#opts').textContent='';$('#replaceSong').classList.remove('hidden');invalidSongs={};cur.locked=true;return;
   }cur.answer=answer;
   if(!replacement)cur.round++;
-  if(cur.round===4&&!replacement)streakalSupportSetCollapsed(true);
   var others=shuffle(cur.pool.map(function(_,i){return i}).filter(function(i){return i!==answer&&!invalidSongs[i]}),rng).slice(0,Math.max(1,cur.optionCount-1));
   cur.options=shuffle([answer].concat(others),rng);
   saveRun();renderQuestion();
@@ -402,7 +379,7 @@ function showResult(revisit,exhausted){stop();$('#quiz').classList.add('hidden')
   var box=$('#lastSong');box.innerHTML='';if(!revisit&&cur.answer!==null){var card=makeCard(cur.pool[cur.answer]);card.disabled=true;box.appendChild(card)}
   $('#again').classList.toggle('hidden',cur.daily);
 }
-function goHome(){pauseCatalog();stop();songLoadToken++;$('#play').classList.add('hidden');$('#play').classList.remove('is-result');$('#home').classList.remove('hidden');streakalSupportSetCollapsed(false);renderHome()}
+function goHome(){pauseCatalog();stop();songLoadToken++;$('#play').classList.add('hidden');$('#play').classList.remove('is-result');$('#home').classList.remove('hidden');renderHome()}
 $('#backBtn').onclick=goHome;$('#backBtn2').onclick=goHome;
 $('#again').onclick=function(){openGame(false,cur.genre)};
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#play').classList.contains('hidden')){e.preventDefault();goHome()}});

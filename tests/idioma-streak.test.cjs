@@ -87,7 +87,7 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
    return {
     columns:cards.filter(card=>card.top===cards[0].top).length,
     offset:Math.abs(center-(bounds.left+bounds.right)/2),
-    footerBelow:document.getElementById('landingSupport').getBoundingClientRect().top>bounds.bottom,
+    footerBelow:document.querySelector('.huba-support-footer').getBoundingClientRect().top>bounds.bottom,
     fits:document.documentElement.scrollWidth<=innerWidth
    };
   });

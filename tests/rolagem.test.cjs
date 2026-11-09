@@ -18,18 +18,20 @@ test('rolagem natural sem reservas duplicadas e sem esconder conteúdo',{timeout
   assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight),900,game+': seleção sem rolagem desnecessária');
   await page.setViewportSize({width:390,height:500});
   await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));
-  const clearance=await page.evaluate(game=>{const tile=document.querySelector(game==='wording'?'#wTilesDaily button:last-child':'#tilesDaily button:last-child').getBoundingClientRect();const support=document.querySelector(game==='wording'?'.huba-support-dropdown':'.huba-support').getBoundingClientRect();return support.top-tile.bottom},game);
+  const clearance=await page.evaluate(game=>{const tile=document.querySelector(game==='wording'?'#wTilesDaily button:last-child':'#tilesDaily button:last-child').getBoundingClientRect();const support=document.querySelector('.huba-support-footer').getBoundingClientRect();return support.top-tile.bottom},game);
   assert.ok(clearance>=0,'última opção não fica atrás do apoio: '+game);
   await page.setViewportSize({width:1280,height:900});
  }
  await page.setViewportSize({width:1280,height:1080});
  await page.locator('#wTilesDaily button').first().click();
- await page.evaluate(()=>document.querySelector('.huba-support-dropdown').open=false);
  assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight),1080,'partida que cabe não força barra');
  await page.setViewportSize({width:390,height:500});
  assert.ok(await page.evaluate(()=>document.documentElement.scrollHeight>innerHeight),'tela pequena mantém rolagem necessária');
  await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));
- assert.ok(await page.locator('#wKb').evaluate(el=>el.getBoundingClientRect().bottom<innerHeight));
+ assert.ok(await page.locator('#wKb').evaluate(el=>{
+  const footer=document.querySelector('.huba-support-footer').getBoundingClientRect();
+  return el.getBoundingClientRect().bottom<footer.top&&footer.bottom<=innerHeight;
+ }));
  assert.notEqual(await page.locator('body').evaluate(el=>getComputedStyle(el).overflowY),'hidden');
  assert.deepEqual(errors,[]);
 });
