@@ -10,8 +10,9 @@ preferências dos outros jogos do Hubdle.
 
 - **Clássico**: compara sete pistas. As setas indicam se a resposta foi lançada
   antes ou depois do palpite.
-- **Falas**: rotação inicial de 11 falas de seleção, com áudio original em
-  inglês do CommunityDragon e texto adaptado em português.
+- **Falas**: uma fala de seleção para cada um dos 172 campeões da base.
+  O Diário percorre a lista em uma ordem fixa antes de repetir. No Treino,
+  a escolha é aleatória e evita repetir o último campeão.
 - **Habilidade**: mostra o ícone da passiva ou de uma habilidade.
 - **Splash art**: cada palpite válido reduz o desfoque até revelar a arte.
 
@@ -25,8 +26,10 @@ preferências dos outros jogos do Hubdle.
   áudios de seleção. As mídias precisam de conexão com a internet.
 - As posições ausentes de Nunu e Talon foram preenchidas na integração.
   O recurso vazio de Bel'Veth é exibido como “Sem recurso”.
-- As frases são adaptações das falas de seleção consultadas no
-  [índice de falas](https://www.nerfplz.com/lol-champion-quotes/#pick-ban).
+- `quote-transcripts.json` guarda as transcrições automáticas das gravações do
+  CommunityDragon em português do Brasil e inglês. O jogo carrega a versão de
+  áudio indicada no arquivo. Ao trocar a versão, confira as transcrições contra
+  as novas gravações.
 
 Ao atualizar as duas bases, mantenha os IDs compatíveis. Mudar a composição
 da lista pode alterar a rotação dos desafios.

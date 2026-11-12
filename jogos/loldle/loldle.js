@@ -8,32 +8,6 @@ const modes = {
   splash: ['Splash art', 'A arte fica mais nítida a cada palpite válido.']
 };
 
-const quoteClues = {
-  Aatrox: 'Ouçam, o silêncio depois da aniquilação!',
-  Ahri: 'Uma raposa esperta nunca é apanhada.',
-  Akali: 'Tema quem mata e não serve a mestre algum.',
-  Alistar: 'Nada pode me impedir.',
-  Ambessa: 'Um lobo não conhece piedade.',
-  Amumu: 'Achei que nunca fosse me escolher.',
-  Anivia: 'Em minhas asas.',
-  Azir: 'Shurima, seu imperador está de volta!',
-  Blitzcrank: 'Já estou ligado e pronto para servir.',
-  Braum: 'Nenhum músculo é mais forte que o coração.',
-  Caitlyn: 'Deixe esse caso comigo.'
-};
-const englishQuoteClues = {
-  Aatrox: 'Now, hear the silence of annihilation!',
-  Ahri: 'A clever fox is never caught.',
-  Akali: 'Fear the assassin with no master.',
-  Alistar: 'Nothing can hold me back!',
-  Ambessa: 'A wolf has no mercy.',
-  Amumu: 'I thought you’d never pick me.',
-  Anivia: 'On my wings.',
-  Azir: 'Shurima! Your emperor has returned!',
-  Blitzcrank: 'Fired up and ready to serve.',
-  Braum: 'The heart is the strongest muscle.',
-  Caitlyn: 'I’m on the case.'
-};
 const positionOverrides = { Nunu: ['JUNGLE'], Talon: ['MID', 'JUNGLE'] };
 const labels = {
   FEMALE: 'Feminino', MALE: 'Masculino', OTHER: 'Outro',
@@ -44,11 +18,12 @@ const labels = {
   Bilgewater: 'Águas de Sentina', 'The Void': 'Vazio'
 };
 const fields = ['gender', 'positions', 'species', 'resource', 'attackType', 'regions', 'releaseYear'];
-const audioBase = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/';
 const splashAspectRatio = 1215 / 717;
 const day = HUBA.dayKey();
 let roster;
 let champions;
+let quoteCatalog;
+let quoteRoster;
 let mode;
 let answer;
 let guesses = [];
@@ -99,8 +74,7 @@ function selectMode(next, focus = false) {
   byId('back-modes').hidden = false;
   byId('hub-link').hidden = true;
   document.body.classList.add('lol-playing');
-  const eligible = roster.filter(champion => {
-    if (mode === 'quote') return Object.hasOwn(quoteClues, champion.id);
+  const eligible = mode === 'quote' ? quoteRoster : roster.filter(champion => {
     if (mode === 'ability') return champion.abilities.length;
     if (mode === 'splash') return champion.skins.length;
     return true;
@@ -129,6 +103,7 @@ function selectMode(next, focus = false) {
 
 function renderClue() {
   const clue = byId('clue');
+  clue.querySelector('audio')?.pause();
   clue.replaceChildren();
   clue.hidden = mode === 'classic';
   if (mode === 'classic') return;
@@ -138,13 +113,15 @@ function renderClue() {
     const audioLocale = inPortuguese ? 'pt_br' : 'default';
     const quote = document.createElement('blockquote');
     quote.dataset.noTranslate = '';
-    const quotes = inPortuguese ? quoteClues : englishQuoteClues;
-    quote.textContent = '“' + quotes[answer.id] + '”';
+    const transcript = quoteCatalog.transcripts[answer.numericId];
+    const text = inPortuguese ? transcript.pt : transcript.en;
+    quote.textContent = text.startsWith('[') ? text : '“' + text + '”';
     const audio = document.createElement('audio');
     audio.controls = true;
     audio.preload = 'none';
     audio.setAttribute('aria-label', 'Fala de seleção do campeão');
-    audio.src = audioBase + audioLocale + '/v1/champion-choose-vo/' + answer.numericId + '.ogg';
+    audio.src = 'https://raw.communitydragon.org/' + quoteCatalog.audioVersion +
+      '/plugins/rcp-be-lol-game-data/global/' + audioLocale + '/v1/champion-choose-vo/' + answer.numericId + '.ogg';
     const caption = document.createElement('p');
     caption.className = 'note';
     caption.textContent = inPortuguese ? 'Áudio em português do Brasil' : 'Áudio em inglês';
@@ -340,7 +317,14 @@ async function init() {
   updateStreak();
   window.addEventListener('pageshow', updateStreak);
   window.addEventListener('storage', updateStreak);
-  const [source, dragon] = await Promise.all([loadJson('output.json'), loadJson('champion.json')]);
+  const [source, dragon, quotes] = await Promise.all([
+    loadJson('output.json'),
+    loadJson('champion.json'),
+    loadJson('quote-transcripts.json').catch(error => {
+      console.error('Falha ao carregar as transcrições do LoLdle.', error);
+      return null;
+    })
+  ]);
   roster = source.map(entry => {
     const official = dragon.data[entry.id];
     const resource = official.partype.trim();
@@ -354,6 +338,11 @@ async function init() {
     };
   });
   champions = new Map(roster.map(champion => [champion.id, champion]));
+  quoteCatalog = quotes;
+  quoteRoster = roster.filter(champion => {
+    const transcript = quoteCatalog?.transcripts?.[champion.numericId];
+    return transcript?.pt && transcript.en;
+  });
   const form = byId('guess-form');
   byId('guess').addEventListener('input', renderSuggestions);
   form.addEventListener('focusout', event => {
@@ -368,7 +357,6 @@ async function init() {
   byId('next-round').addEventListener('click', () => selectMode(mode, true));
   document.addEventListener('huba:language', () => {
     if (mode === 'quote' && !byId('play').classList.contains('hidden')) {
-      byId('clue').querySelector('audio')?.pause();
       renderClue();
     }
   });
@@ -377,6 +365,7 @@ async function init() {
   });
   byId('guess-form').addEventListener('submit', submitGuess);
   document.querySelectorAll('[data-mode]').forEach(button => {
+    if (button.dataset.mode === 'quote' && !quoteRoster.length) return;
     button.disabled = false;
     button.addEventListener('click', () => selectMode(button.dataset.mode, true));
   });
