@@ -31,6 +31,11 @@ test('Hubdle em PT/EN mantém dados antigos; Streakal limita a dez e só reseta 
    assert.ok((await page.title()).startsWith('Hubdle'));
    const tutorial=page.getByRole('dialog');
    await tutorial.waitFor();
+   if(file==='index.html'){
+     await page.reload();
+     assert.equal(await tutorial.isVisible(),false,'recarregar com o tutorial aberto conta como uma visita');
+     await page.locator('.huba-help').click();
+   }
    for(const lang of ['pt','en']){
      await page.evaluate(lang=>HUBA_I18N.setLanguage(lang),lang);
      assert.match(await tutorial.locator('h2').textContent(),lang==='pt'?/^(Boas-vindas|Como jogar)/:/^(Welcome|How to play)/);

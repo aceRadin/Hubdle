@@ -132,6 +132,7 @@
       if (dialog.open) return;
       render(HUBA_I18N.language);
       dialog.showModal();
+      try { localStorage.setItem(key, '1'); } catch {}
       dialog.scrollTop = 0;
     }
 
@@ -149,7 +150,6 @@
     document.addEventListener('huba:language', syncLanguage);
     dialog.addEventListener('keydown', event => event.stopPropagation());
     dialog.addEventListener('close', () => {
-      try { localStorage.setItem(key, '1'); } catch {}
       help.focus({preventScroll: true});
     });
     syncLanguage();
