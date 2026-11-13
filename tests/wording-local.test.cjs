@@ -31,6 +31,30 @@ test('Wording funciona abrindo index.html diretamente, sem fetch nem upload',asy
   await page.evaluate(()=>HUBA.setMode('training'));await page.locator('#wTilesDaily button').first().click();
   const words=JSON.parse(await fs.readFile(path.join(root,'dados/words.json'),'utf8'));const word=Array.isArray(words)?words[0]:words.en.words[0];
   await page.locator('#wTitle').click();for(let i=0;i<6&&!(await page.locator('#wResult').isVisible());i++){await page.keyboard.type(word);await page.keyboard.press('Enter')}
-  assert.equal(await page.locator('#wResult').isVisible(),true);assert.equal(await page.locator('#wSrc').textContent(),'');assert.deepEqual(jsonRequests,[]);assert.deepEqual(errors,[]);
+  assert.equal(await page.locator('#wResult').isVisible(),true);
+  assert.equal(await page.locator('#wNext').textContent(),'Next game');
+  await page.locator('#wNext').press('Enter');
+  assert.equal(await page.locator('.w-board').count(),2);
+  assert.equal(await page.locator('#wResult').isVisible(),false);
+  assert.equal(await page.evaluate(()=>HUBA.mode),'training');
+
+  await page.evaluate(target=>{
+   HUBA.setMode('daily');
+   const list=window.HUBA_WORD_LISTS['words.json'];
+   const size=(Array.isArray(list)?list:list.en.words).length;
+   for(const [mode,count,tries] of [['termo',1,6],['dueto',2,7],['quarteto',4,9]]){
+    localStorage.setItem('word2:'+HUBA.dayKey()+':en:'+mode+':'+size,JSON.stringify({
+     g:Array(tries).fill(target),targets:Array.from({length:count},()=>({n:'zzzzz',d:'zzzzz'}))
+    }));
+   }
+  },word);
+  await page.locator('#wTilesDaily button').first().click();
+  for(const count of [1,2,4]){
+   assert.equal(await page.locator('.w-board').count(),count);
+   assert.equal(await page.locator('#wResult').isVisible(),true);
+   if(count<4)await page.locator('#wNext').click();
+  }
+  assert.deepEqual(await page.locator('#wResult button:visible').evaluateAll(buttons=>buttons.map(button=>button.id)),['wBack2']);
+  assert.equal(await page.locator('#wSrc').textContent(),'');assert.deepEqual(jsonRequests,[]);assert.deepEqual(errors,[]);
  }finally{await browser.close()}
 });

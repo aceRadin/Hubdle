@@ -66,8 +66,8 @@ document.addEventListener('huba:language',function(){
   if($('#wStats').open)renderWStats();
 });
 var WMODES={
-  termo:{name:'Wording',n:1,tries:6,desc:'1 palavra · 6 tentativas'},
-  dueto:{name:'Woording',n:2,tries:7,desc:'2 palavras · 7 tentativas'},
+  termo:{name:'Wording',n:1,tries:6,desc:'1 palavra · 6 tentativas',next:'dueto'},
+  dueto:{name:'Woording',n:2,tries:7,desc:'2 palavras · 7 tentativas',next:'quarteto'},
   quarteto:{name:'Woooording',n:4,tries:9,desc:'4 palavras · 9 tentativas'}
 };
 var WKEY='playhub:word:stats:v1', w=null, wMsgT=null;
@@ -264,7 +264,8 @@ function renderWord(){
   if(w.done)$('#wKbNote').classList.add('hidden');
   var res=$('#wResult');
   res.classList.toggle('hidden',!w.done);
-  $('#wAgain').classList.toggle('hidden',w.daily);
+  $('#wNext').classList.toggle('hidden',!w.M.next);
+  $('#wAgain').classList.toggle('hidden',w.daily||!w.M.next);
   if(w.done){
     var n2=w.guesses.length;
     $('#wResTitle').textContent=w.won?(w.M.n>1?'Você acertou todas!':'Você acertou!'):'Não foi dessa vez';
@@ -276,6 +277,11 @@ function wBackToHub(){
   $('#wgame').classList.add('hidden'); $('#word').classList.remove('hidden'); renderWordHub();
 }
 $('#wBack').onclick=wBackToHub; $('#wBack2').onclick=wBackToHub;
+$('#wNext').onclick=function(){
+  if(!w?.done||!w.M.next)return;
+  startWord(w.M.next,w.daily);
+  $('#wTitle').focus();
+};
 $('#wAgain').onclick=function(){startWord(w.mode,false)};
 $('#wToLanding').onclick=function(){
   window.location.href='../../index.html';
@@ -287,7 +293,7 @@ document.addEventListener('keydown',function(e){
     // Na seleção de modos não sai automaticamente para a página principal do Hubdle.
     return;
   }
-  if(!w||$('#wgame').classList.contains('hidden')||$('#wStats').open)return;
+  if(!w||w.done||$('#wgame').classList.contains('hidden')||$('#wStats').open)return;
   if(e.ctrlKey||e.metaKey||e.altKey)return;
   if(e.target.closest&&e.target.closest('.huba-settings, .huba-support-footer, .huba-language'))return;
   if(e.target.closest&&e.target.closest('.w-key')&&(e.key==='Enter'||e.key===' '))return;

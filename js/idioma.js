@@ -61,7 +61,8 @@ Object.assign(phrases,{
  'O dia mudou. Escolha o gênero novamente.':'The day changed. Choose the genre again.',
  'Não foi possível retomar a partida salva. Atualize a página para tentar novamente.':'Could not resume the saved game. Refresh the page to try again.',
  'Palavra':'Word','Tentativa':'Guess','Posição':'Position','Posição correta':'Correct position',
- 'Presente em outra posição':'Present in another position','Ausente desta palavra':'Absent from this word','Letra digitada':'Entered letter','Casa vazia':'Empty cell'
+ 'Presente em outra posição':'Present in another position','Ausente desta palavra':'Absent from this word','Letra digitada':'Entered letter','Casa vazia':'Empty cell',
+ 'Próximo jogo':'Next game'
 });
 if(document.body?.classList.contains('lol-page')) Object.assign(phrases,{
  '‹ Modos':'‹ Modes',

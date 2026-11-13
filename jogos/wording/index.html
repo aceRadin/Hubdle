@@ -43,7 +43,7 @@
 <section id="wgame" class="hidden">
   <div class="w-gtop">
     <button class="back" id="wBack">Voltar</button>
-    <h2 id="wTitle">Wording</h2>
+    <h2 id="wTitle" tabindex="-1">Wording</h2>
     <button type="button" id="wGameStats">Estatísticas</button>
   </div>
   <p class="w-msg" id="wMsg" role="status" aria-live="polite"></p>
@@ -53,6 +53,7 @@
     <p class="note" id="wResText"></p>
     <div class="row" style="justify-content:center">
       <button class="primary" id="wBack2">Voltar</button>
+      <button type="button" id="wNext" class="hidden">Próximo jogo</button>
       <button id="wAgain" class="hidden">Jogar de novo</button>
     </div>
   </div>
@@ -65,10 +66,10 @@
 </dialog>
 </main>
 <script src="../../js/comum.js?v=8" defer></script>
-<script src="../../js/idioma.js?v=18" defer></script>
+<script src="../../js/idioma.js?v=22" defer></script>
 <script src="../../js/huds.js?v=6" defer></script>
 <script src="../../js/visual-2.js?v=2" defer></script>
-<script src="wording.js?v=11" defer></script>
+<script src="wording.js?v=12" defer></script>
 <script src="../../js/apoio-config.js" defer></script>
 <script src="../../js/apoio.js?v=4" defer></script>
 </body>
