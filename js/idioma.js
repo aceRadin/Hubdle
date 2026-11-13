@@ -65,7 +65,7 @@ Object.assign(phrases,{
  'Próximo jogo':'Next game'
 });
 if(document.body?.classList.contains('lol-page')) Object.assign(phrases,{
- '‹ Modos':'‹ Modes',
+ 'Modos':'Modes',
  'Escolha um modo':'Choose a mode',
  'Modos de jogo':'Game modes',
  'Clássico':'Classic',

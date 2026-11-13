@@ -167,24 +167,6 @@
 .lol-top { margin-bottom: 28px; }
 body.has-game-header .lol-top { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
 body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
-.lol-heading :is(a, button) {
-  display: inline-flex;
-  align-items: center;
-  min-height: 48px;
-  padding: 8px 14px;
-  border: 1px solid var(--lol-gold);
-  border-radius: var(--lol-radius);
-  background: var(--lol-surface);
-  color: var(--lol-menu-text);
-  font: 600 1rem/1.3 system-ui, sans-serif;
-  text-decoration: none;
-}
-.lol-heading :is(a, button):hover {
-  border-color: var(--lol-gold);
-  background: var(--lol-hover);
-  color: var(--lol-gold);
-}
-.lol-heading :is(a, button):focus-visible { outline-color: var(--lol-gold); }
 .lol-brand { grid-column: 2; grid-row: 1; text-align: center; }
 .lol-brand h1 {
   color: var(--lol-menu-text);

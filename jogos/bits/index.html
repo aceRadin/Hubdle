@@ -18,8 +18,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/style.css?v=30">
-<link rel="stylesheet" href="bits.css?v=5">
+<link rel="stylesheet" href="../../css/style.css?v=31">
+<link rel="stylesheet" href="bits.css?v=6">
 <script src="../../js/comum.js?v=30" defer></script>
 <script src="../../js/idioma.js?v=30" defer></script>
 <script src="artistas.js?v=1" defer></script>
@@ -27,14 +27,15 @@
 <script src="../../dados/bits-artistas/config.js" defer></script>
 <script src="../../js/bits-artistas.js?v=3" defer></script>
 <script src="bits.js?v=23" defer></script>
-<link rel="stylesheet" href="../../css/cabecalhos.css?v=30">
-<link rel="stylesheet" href="../../css/interface.css?v=1">
+<link rel="stylesheet" href="../../css/cabecalhos.css?v=31">
+<link rel="stylesheet" href="../../css/interface.css?v=2">
 </head>
 <body>
 <main>
 <section id="bitsHome">
   <header class="bits-top">
-    <h1><a class="bits-back" href="../../index.html">‹ Hubdle</a> <span class="game-brand">Bits</span></h1>
+    <a class="huba-back" href="../../index.html">Hubdle</a>
+    <h1><span class="game-brand">Bits</span></h1>
     <div class="daily-streak" aria-live="polite"><strong id="streakValue">0</strong><span>dias de streak diário</span></div>
   </header>
   <div class="bits-columns single-game-modes">
@@ -43,7 +44,7 @@
   <p class="note" id="loadStatus" role="status" aria-live="polite"></p>
 </section>
 <section id="bitsGame" class="hidden">
-  <div class="bits-game-head"><button type="button" id="backGame">‹ Voltar</button><div><h1 id="gameTitle">Bits</h1><p id="gameSubtitle" class="note"></p></div><span id="attemptLabel" class="bits-counter"></span></div>
+  <div class="bits-game-head"><button type="button" id="backGame" class="huba-back">Voltar</button><div><h1 id="gameTitle">Bits</h1><p id="gameSubtitle" class="note"></p></div><span id="attemptLabel" class="bits-counter"></span></div>
   <div class="bits-play-card">
     <p class="bits-instruction" id="instruction">Reconhece este trecho?</p>
     <div class="bits-player">
@@ -66,7 +67,7 @@
       <div class="row bits-actions"><button type="button" id="submitGuess" class="primary" disabled>Confirmar palpite</button><button type="button" id="skipGuess">Pular (+ trecho)</button></div>
     </div>
     <div id="history" class="bits-history"></div>
-    <div id="finish" class="bits-finish hidden"><h2 id="finishTitle"></h2><p id="finishSong"></p><p id="finishDetail" class="note"></p><div class="row"><button type="button" id="finishBack" class="primary">Voltar aos jogos</button><button type="button" id="playAgain" class="hidden">Outra música</button></div></div>
+    <div id="finish" class="bits-finish hidden"><h2 id="finishTitle"></h2><p id="finishSong"></p><p id="finishDetail" class="note"></p><div class="row"><button type="button" id="finishBack" class="huba-back">Voltar aos jogos</button><button type="button" id="playAgain" class="hidden">Outra música</button></div></div>
   </div>
   <p id="gameCatalogCount" class="huba-game-catalog-count" aria-live="polite">0 músicas carregadas</p>
 </section>

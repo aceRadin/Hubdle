@@ -1,4 +1,29 @@
 /* Regras comuns carregadas após os estilos de cada jogo. */
+.huba-back {
+ display:inline-flex;
+ align-items:center;
+ gap:8px;
+ min-height:52px;
+ padding:8px 14px;
+ border:1px solid var(--accent);
+ border-radius:4px;
+ background:transparent;
+ color:var(--fg);
+ font:600 1.0625rem/1.3 system-ui,sans-serif;
+ text-decoration:none;
+ white-space:nowrap;
+}
+.huba-back::before {
+ content:"";
+ width:7px;
+ height:7px;
+ border-left:2px solid currentColor;
+ border-bottom:2px solid currentColor;
+ transform:rotate(45deg);
+}
+.huba-back:hover{color:var(--accent)}
+.huba-back:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.huba-game-header>.huba-back{grid-column:1;grid-row:1;justify-self:start}
 .huba-difficulty{position:relative}
 .huba-difficulty>summary{list-style:none;display:grid;place-items:center;box-sizing:border-box;width:34px;height:34px;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-size:1rem}
 .huba-difficulty>summary::-webkit-details-marker{display:none}
@@ -25,7 +50,6 @@ body.has-game-header .w-gtop.huba-game-header>h2,
 body.has-game-header .bits-game-head.huba-game-header>div{grid-column:2;grid-row:1;text-align:center;min-width:0}
 body.has-game-header .huba-game-header>#wGameStats{grid-column:3;grid-row:2;justify-self:end}
 body.has-game-header .huba-game-header>.bits-counter{grid-column:2;grid-row:2;justify-self:center}
-#play .musical-play-header.huba-game-header #backBtn{align-self:center;margin:0}
 #play .musical-play-header.huba-game-header{grid-template-columns:minmax(240px,1fr) minmax(0,2fr) minmax(240px,1fr)}
 @media(max-width:850px){
  body.has-game-header .huba-game-header,
@@ -48,7 +72,6 @@ body.has-game-header .huba-game-header>.bits-counter{grid-column:2;grid-row:2;ju
  body.has-game-header #play .musical-play-header.huba-game-header{grid-template-columns:minmax(300px,1fr) minmax(0,2fr) minmax(300px,1fr)}
 }
 
-#bitsGame #backGame{justify-self:start;align-self:center;width:auto;flex:none;padding:8px 12px}
 #bitsGame{--bits-card-width:780px}
 #bitsGame .bits-play-card{max-width:var(--bits-card-width)}
 #bitsGame #gameCatalogCount{max-width:var(--bits-card-width);margin:8px auto 0;text-align:right}

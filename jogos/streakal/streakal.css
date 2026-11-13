@@ -14,7 +14,6 @@
 /* Organização exclusiva da tela de perguntas do Musical. */
 #play {max-width:1100px;margin-inline:auto}
 #play .musical-play-header {display:grid;grid-template-columns: minmax(90px,1fr) minmax(0,5fr) minmax(90px,1fr);align-items:start;gap:12px;margin-bottom:18px}
-#play .musical-play-header #backBtn {justify-self:start;align-self:start;margin:3px 0 0}
 #play .musical-play-heading {min-width:0;text-align:center}
 #play .musical-play-heading #playTitle {font-size:clamp(1.5rem,3.2vw,2.3rem);overflow-wrap:anywhere}
 #play .musical-play-heading #playSub {margin:8px 0 0;text-align:center}
@@ -27,7 +26,6 @@
 @media(max-width:700px){
   #play .musical-play-header {grid-template-columns:auto minmax(0,1fr) auto;gap:8px}
   #play .musical-play-header .musical-header-spacer {width:60px}
-  #play .musical-play-header #backBtn {padding:7px 9px;font-size:.82rem}
   #play .musical-audio-row {gap:9px;align-items:stretch}
   #play .musical-audio-row .vol {flex-wrap:wrap;justify-content:center;max-width:118px;gap:5px}
   #play .musical-audio-row .vol input[type=range] {width:75px}
