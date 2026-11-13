@@ -1,10 +1,23 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const path=require('node:path');
-const {pathToFileURL}=require('node:url');
+const fs=require('node:fs/promises');
+const http=require('node:http');
 const {chromium}=require(process.env.HUBA_PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(__dirname,'..');
 test('Hubdle em PT/EN mantém dados antigos; Streakal limita a dez e só reseta debuff com escolha voluntária',{timeout:30000},async t=>{
+ const server=http.createServer(async(req,res)=>{
+   try{
+     const pathname=new URL(req.url,'http://localhost').pathname;
+     const file=path.join(root,pathname);
+     const types={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css','.json':'application/json'};
+     res.setHeader('Content-Type',types[path.extname(file)]||'application/octet-stream');
+     res.end(await fs.readFile(file));
+   }catch{res.statusCode=404;res.end()}
+ });
+ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+ t.after(()=>{server.closeAllConnections();server.close()});
+ const base='http://127.0.0.1:'+server.address().port;
  const browser=await chromium.launch({headless:true,...(process.env.HUBA_CHROME?{executablePath:process.env.HUBA_CHROME}:{})});t.after(()=>browser.close());
  const context=await browser.newContext();t.after(()=>context.close());
  await context.addInitScript(()=>{
@@ -27,10 +40,11 @@ test('Hubdle em PT/EN mantém dados antigos; Streakal limita a dez e só reseta 
  });
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
  for(const file of ['index.html','jogos/bits/index.html','jogos/musicle/index.html','jogos/wording/index.html','jogos/loldle/index.html','jogos/streakal/index.html']){
-   await page.goto(pathToFileURL(path.join(root,file)).href);
+   await page.goto(base+'/'+file);
    assert.ok((await page.title()).startsWith('Hubdle'));
-   const tutorial=page.getByRole('dialog');
+   const tutorial=page.locator('#huba-tutorial');
    await tutorial.waitFor();
+   assert.equal(await page.evaluate(()=>localStorage.getItem('huba:tutorial:v1:'+document.body.dataset.tutorial)),'1','primeira visita salva em '+file);
    if(file==='index.html'){
      await page.reload();
      assert.equal(await tutorial.isVisible(),false,'recarregar com o tutorial aberto conta como uma visita');
@@ -47,9 +61,11 @@ test('Hubdle em PT/EN mantém dados antigos; Streakal limita a dez e só reseta 
    assert.equal(await tutorial.getAttribute('lang'),'pt-BR');
    assert.equal(await page.locator('html').getAttribute('lang'),'en');
    await tutorial.getByRole('button',{name:'Entendi'}).click();
+   await tutorial.waitFor({state:'hidden'});
    await page.waitForFunction(()=>document.activeElement?.classList.contains('huba-help'));
    await page.reload();
-   assert.equal(await tutorial.isVisible(),false);
+   assert.equal(await page.evaluate(()=>localStorage.getItem('huba:tutorial:v1:'+document.body.dataset.tutorial)),'1','visita preservada após recarregar '+file);
+   assert.equal(await tutorial.isVisible(),false,'tutorial permanece fechado em '+file);
    await page.getByRole('button',{name:'How to play'}).click();
    await tutorial.getByRole('button',{name:'Got it'}).press('Escape');
    await tutorial.waitFor({state:'hidden'});
