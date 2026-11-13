@@ -48,14 +48,11 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
   await page.setViewportSize({width:390,height:844});
  }
  async function audit(){return page.evaluate(()=>{const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),out=[];let n;while(n=w.nextNode()){const el=n.parentElement;if(!el||!el.getClientRects().length||el.closest('script,style,.huba-language,#wLang,.w-tile,.musical-option-title,.musical-option-artist,.bits-choice,.bits-history-line,#finishSong'))continue;const text=n.nodeValue.trim();if(/[ãçõ]|Diário|Aleatório|tentativas|Carregando|Próxima/.test(text))out.push(text)}return out})}
- await page.goto(base);await language('en');assert.equal(await page.locator('#globalStreak').textContent(),'0');
- assert.equal(await page.locator('.bits-hud-menu>summary').textContent(),'🖥️');
- assert.equal(await page.locator('.bits-hud-menu>summary').getAttribute('aria-label'),'In game hud');
- assert.equal(await page.locator('.bits-hud-description').textContent(),'In game hud');
+ await context.addInitScript(()=>{localStorage.setItem('huba:theme:v1','rose');localStorage.setItem('huba:hud:v1','panel');localStorage.setItem('huba:visual-version','1')});
+ await page.goto(base);assert.equal(await page.locator('.huba-settings,.bits-hud-menu,.huba-visual-toggle').count(),0);assert.equal(await page.locator('html').evaluate(el=>getComputedStyle(el).getPropertyValue('--bg').trim()),'#0b1420');await language('en');assert.equal(await page.locator('#globalStreak').textContent(),'0');
  assert.equal(await page.locator('.huba-mode>summary').textContent(),'📅');
  assert.equal(await page.locator('[data-game-mode="daily"]').isVisible(),false,'nomes de modo ficam no dropdown fechado');
  assert.equal(await page.locator('.landing-top .huba-language').count(),1);
- assert.equal(await page.locator('.huba-language .huba-settings').count(),1);
  await page.locator('.huba-mode>summary').click();await page.locator('[data-game-mode="training"]').click();assert.equal(await page.evaluate(()=>HUBA.mode),'training');
  assert.equal(await page.locator('.huba-mode>summary').textContent(),'🎮');
  await page.locator('.huba-mode>summary').click();await page.locator('[data-game-mode="daily"]').click();assert.equal(await page.evaluate(()=>HUBA.mode),'daily');
@@ -100,16 +97,11 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  assert.deepEqual(await page.locator('.gcard .gstreak-fire').allTextContents(),['🔥','🔥','🔥','🔥','🔥']);
  for(const game of ['bits','musicle','streakal','wording']){
   await page.goto(base+'/jogos/'+game+'/');assert.equal(await page.locator('html').getAttribute('lang'),'en');
-  for(const selector of ['.huba-settings>details','.huba-mode']){
+  for(const selector of ['.huba-locale','.huba-mode']){
    await page.locator(selector+'>summary').click();assert.equal(await page.locator(selector).evaluate(el=>el.open),true);
    await page.locator('main').click({position:{x:2,y:2}});assert.equal(await page.locator(selector).evaluate(el=>el.open),false,'clique fora fecha '+selector+' em '+game);
   }
-  await page.locator('.huba-settings>details>summary').click();await page.locator('.huba-mode>summary').click();
-  assert.equal(await page.locator('.huba-settings>details').evaluate(el=>el.open),false,'abrir modo fecha tema');
-  assert.equal(await page.locator('.bits-hud-menu').isVisible(),false,'HUD oculto fora da partida');
-  await page.locator('.huba-settings>details>summary').click();assert.equal(await page.locator('.huba-mode').evaluate(el=>el.open),false,'abrir tema fecha modo');
   await page.locator('main').click({position:{x:2,y:2}});
-  assert.equal(await page.locator('.bits-hud-menu>summary').textContent(),'🖥️');
   assert.equal(await page.locator('.huba-locale>summary').textContent(),'');
   assert.match(await page.locator('.huba-mode>summary').textContent(),/^(📅|🎮)$/);
   if(game==='musicle'||game==='streakal')assert.equal(await page.locator('#dzStatus').textContent(),'');
@@ -117,19 +109,8 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
   await checkHeader();
   assert.equal(await page.locator('.single-game-modes>*').count(),1);assert.equal(await page.locator('#randomTiles,#tilesRandom,#wTilesRandom').count(),0);
   const offset=await page.locator('.single-game-modes').evaluate(el=>{const r=el.getBoundingClientRect();return Math.abs(r.x+r.width/2-innerWidth/2)});assert.ok(offset<1,'coluna centralizada');
-  await page.locator('.huba-settings>details>summary').click();await page.waitForFunction(()=>document.querySelector('.huba-settings>details').open&&document.querySelector('.huba-settings-content').style.position==='fixed');
-  assert.equal(await page.locator('.huba-settings-content details,.huba-settings-content summary,.huba-settings-content>strong').count(),0,'temas sem título duplicado ou dropdown interno');
-  assert.equal(await page.locator('.huba-theme-options button').count(),13);
-  assert.deepEqual(await page.locator('.huba-theme-column h3').allTextContents(),['Dark themes','Light themes']);
-  assert.deepEqual(await page.locator('[data-theme-group="dark"] button').evaluateAll(bs=>bs.map(b=>b.dataset.theme)),['dark','coffee','midnight','amethyst','graphite','discord']);
-  assert.deepEqual(await page.locator('[data-theme-group="light"] button').evaluateAll(bs=>bs.map(b=>b.dataset.theme)),['light','ocean','forest','sunset','rose','sand']);
-  const columns=await page.locator('.huba-theme-column').evaluateAll(cs=>cs.map(c=>c.getBoundingClientRect().x));assert.ok(columns[0]<columns[1],'escuros à esquerda e claros à direita');
-  await page.locator('button[data-theme="sand"]').click();assert.equal(await page.locator('html').getAttribute('data-theme'),'sand');assert.equal(await page.locator('html').evaluate(el=>getComputedStyle(el).colorScheme),'light');
-  await page.locator('button[data-theme="ocean"]').click();assert.equal(await page.locator('html').getAttribute('data-theme'),'ocean');
-  const menu=await page.locator('.huba-settings-content').boundingBox();assert.ok(menu.x>=0&&menu.x+menu.width<=390,JSON.stringify({game,menu}));
-  await page.locator('.huba-settings>details>summary').click();
   assert.equal(await page.locator('h2').filter({hasText:/^Daily$/}).count(),1);
-  await language('pt');assert.equal(await page.locator('h2').filter({hasText:/^Diário$/}).count(),1);assert.equal(await page.locator('.bits-hud-description').textContent(),'Hud do jogo');await language('en');
+  await language('pt');assert.equal(await page.locator('h2').filter({hasText:/^Diário$/}).count(),1);await language('en');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
   assert.deepEqual(await audit(),[],game+': texto não traduzido');
  }
@@ -188,7 +169,6 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  await checkHeader();
  for(const mode of ['#clipHard','#clipCasual']){
   await page.goto(base+'/jogos/musicle/');
-  assert.equal(await page.locator('.huba-settings + .huba-difficulty').count(),1,'dificuldade ao lado do tema');
   assert.equal(await page.locator('#home .top-tools').count(),0,'sem controle duplicado');
   await page.locator('.huba-difficulty>summary').click();await page.waitForFunction(()=>document.querySelector('#difficultyTool').style.left!=='');
   const difficultyBox=await page.locator('#difficultyTool').boundingBox();assert.ok(difficultyBox.x>=0&&difficultyBox.x+difficultyBox.width<=390);
@@ -197,19 +177,7 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
   await page.locator('.huba-difficulty>summary').click();await page.locator(mode==='#clipHard'?'#clipCasual':'#clipHard').click();
   assert.equal(await page.locator('#home').isVisible(),true,'trocar dificuldade não altera perguntas em andamento');
   await page.locator('.huba-difficulty>summary').click();await page.locator(mode).click();await page.locator('#tilesDaily button').first().click();
-  const original = await page.locator('html').evaluate(el=>({theme:el.dataset.theme,hud:el.dataset.hud}));
-  const options = await page.locator('#opts button').evaluateAll(buttons=>buttons.map(button=>button.getAttribute('aria-label')));
-  await page.getByRole('button',{name:'Switch to Hubdle 2.0'}).click();
-  assert.equal(await page.locator('html').getAttribute('data-visual'),'2');
-  assert.equal(await page.locator('html').getAttribute('data-hud'),'original');
-  assert.equal(await page.locator('.huba-settings').isVisible(),false);
-  assert.equal(await page.locator('.bits-hud-menu').isVisible(),false);
   assert.equal(await page.locator('.huba-difficulty>summary').isVisible(),true);
-  await page.getByRole('button',{name:'Switch to Hubdle 1.0'}).click();
-  assert.deepEqual(await page.locator('html').evaluate(el=>({theme:el.dataset.theme,hud:el.dataset.hud})),original);
-  assert.equal(await page.locator('.huba-settings').isVisible(),true);
-  assert.equal(await page.locator('.bits-hud-menu').isVisible(),true);
-  assert.deepEqual(await page.locator('#opts button').evaluateAll(buttons=>buttons.map(button=>button.getAttribute('aria-label'))),options);
   await page.locator('#playBtn').click();await page.locator('#playBtn').click();assert.equal(await page.locator('#playBtn').textContent(),'Play clip');
   for(let i=0;i<5;i++){await page.locator('#opts button').first().click();await page.locator('#nextBtn').click()}
   assert.equal(await page.evaluate(()=>HUBA.currentStreak('musicle')),1);assert.equal(await page.evaluate(()=>HUBA.currentStreak('huba')),1);
@@ -221,7 +189,6 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  assert.equal(await support.getAttribute('href'),'https://buymeacoffee.com/aceradin');
  await language('pt');
  assert.equal(await page.getByRole('link',{name:'Apoiar o Hubdle'}).isVisible(),true);
- await page.getByRole('button',{name:'Mudar para Hubdle 2.0'}).click();
  for(const width of [320,390,1280]){
   await page.setViewportSize({width,height:844});
   const offset=await page.locator('.landing-top').evaluate(header=>{
@@ -232,23 +199,16 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
   assert.ok(offset,'Hubdle centralizado acima do streak em '+width+'px');
  }
  await page.locator('.gcard-musical').click();
- await page.getByRole('button',{name:'Mudar para Hubdle 1.0'}).waitFor();
- assert.equal(await page.locator('html').getAttribute('data-visual'),'2');
- assert.equal(await page.locator('.visual-2-title').isVisible(),true);
+ assert.equal(await page.locator('.game-brand').isVisible(),true);
  await page.reload();
- await page.getByRole('button',{name:'Mudar para Hubdle 1.0'}).waitFor();
- assert.equal(await page.locator('html').getAttribute('data-visual'),'2');
  await language('en');
  for(const [game,tile] of [['bits','#dailyTiles button'],['streakal','#tilesDaily button'],['wording','#wTilesDaily button']]){
   if(game==='bits')await page.evaluate(()=>localStorage.setItem('huba:hud:v1','panel'));
   await page.goto(base+'/jogos/'+game+'/');
-  await page.getByRole('button',{name:'Switch to Hubdle 1.0'}).waitFor();
-  assert.equal(await page.locator('.visual-2-title').isVisible(),true);
+  assert.equal(await page.locator('.game-brand').isVisible(),true);
   await page.locator(tile).first().click();
   const toolbar=page.locator(':is(.bits-game-head,.musical-play-header,.w-gtop) > .huba-language');
   await toolbar.waitFor();
-  assert.equal(await toolbar.locator('.huba-settings').isVisible(),false);
-  assert.equal(await toolbar.locator('.bits-hud-menu').isVisible(),false);
   for(const width of [320,390,1280]){
    await page.setViewportSize({width,height:844});
    const aligned=await toolbar.evaluate(nav=>{
@@ -260,13 +220,7 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
    });
    assert.ok(aligned,game+' 2.0: título e opções alinhados em '+width+'px');
   }
-  if(game==='bits'){
-   assert.equal(await page.locator('html').getAttribute('data-bits-hud'),'original');
-   await page.getByRole('button',{name:'Switch to Hubdle 1.0'}).click();
-   assert.equal(await page.locator('html').getAttribute('data-bits-hud'),'panel');
-   assert.equal(await toolbar.locator('.bits-hud-menu').isVisible(),true);
-   await page.getByRole('button',{name:'Switch to Hubdle 2.0'}).click();
-  }
+
  }
  await page.setViewportSize({width:390,height:844});
  assert.equal(await page.locator('#wLoadJson,#wResetJson,#wJsonInput,input[type="file"]').count(),0);

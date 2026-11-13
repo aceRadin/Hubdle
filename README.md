@@ -9,7 +9,7 @@ Quatro jogos gratuitos em HTML, CSS e JavaScript: Musical, Bits, Streakal e Word
 - **Streakal:** começa com duas alternativas e até 30 segundos. Cada acerto aumenta a dificuldade, até dez opções e 1,5 segundo. A penalidade automática de alternativa extra não reinicia o debuff; apenas a escolha voluntária de +1 alternativa o reinicia.
 - **Wording:** uma, duas ou quatro palavras, com seis, sete ou nove tentativas. O idioma acompanha o site. Espaço deixa uma posição vazia; Backspace pode apagar até voltar ao início.
 
-O cabeçalho permite escolher HUD, tema, Diário/Treino e idioma. O Musical também tem dificuldade; o Wording tem estatísticas durante a partida. O streak geral conta qualquer partida concluída, independentemente de vitória. Preferências e históricos ficam neste navegador.
+O Hubdle usa o visual 2.0 em todas as páginas. O cabeçalho permite escolher Diário/Treino e idioma. O Musical também tem dificuldade; o Wording tem estatísticas durante a partida. O streak geral conta qualquer partida concluída, independentemente de vitória. Preferências e históricos ficam neste navegador.
 
 ## Diários e salvamento
 

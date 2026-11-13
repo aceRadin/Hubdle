@@ -158,25 +158,6 @@
   line-height: 1;
   text-align: center;
 }
-
-@media (min-width: 740px) {
-  [data-hud="studio"] .lol-play, [data-hud="panel"] .lol-play { max-width: none; }
-  [data-hud="studio"] .lol-layout { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
-  [data-hud="panel"] .lol-layout { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
-  [data-hud="panel"] .lol-play:not(.lol-complete) .lol-puzzle { grid-column: 2; grid-row: 1; }
-  [data-hud="panel"] .lol-controls { grid-column: 1; grid-row: 1; }
-}
-[data-hud="arcade"] .lol .panel { border: 2px solid var(--lol-gold); box-shadow: 0 4px 0 var(--lol-border); }
-[data-hud="terminal"] .lol-layout { font-family: Consolas, monospace; }
-[data-hud="terminal"] .lol .panel { border-radius: 0; border-left: 4px solid var(--lol-gold); }
-[data-hud="editorial"] .lol .panel { border-radius: var(--lol-radius, 0px); border-width: 1px 0; }
-[data-hud="orbit"] .lol .panel { border-radius: var(--lol-radius, 28px); }
-[data-hud="orbit"] .lol-ability { border-radius: var(--lol-radius, 50%); }
-[data-hud="blueprint"] .lol .panel {
-  border: 3px double var(--lol-border);
-  background-image: linear-gradient(#43526133 1px, transparent 1px), linear-gradient(90deg, #43526133 1px, transparent 1px);
-  background-size: 22px 22px;
-}
 @media (prefers-reduced-motion: reduce) {
   .lol-splash img:first-child, .lol-splash-reveal { transition: none; }
 }
@@ -186,8 +167,6 @@
 .lol-top { margin-bottom: 28px; }
 body.has-game-header .lol-top { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
 body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
-.lol-top .huba-settings-content { left: auto; right: 0; top: calc(100% + 10px); bottom: auto; }
-.lol-playing .lol-top .bits-hud-menu { display: block; }
 .lol-heading :is(a, button) {
   display: inline-flex;
   align-items: center;

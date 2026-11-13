@@ -41,3 +41,23 @@ body.has-game-header .huba-game-header>.bits-counter{grid-column:2;grid-row:2;ju
  body.has-game-header .huba-game-header>#wGameStats{grid-column:2;grid-row:4}
  body.has-game-header .huba-game-header>.bits-counter{grid-column:1/-1;grid-row:4}
 }
+
+
+.huba-mode>summary::-webkit-details-marker{display:none}
+@media(min-width:851px){
+ body.has-game-header #play .musical-play-header.huba-game-header{grid-template-columns:minmax(300px,1fr) minmax(0,2fr) minmax(300px,1fr)}
+}
+
+#bitsGame #backGame{justify-self:start;align-self:center;width:auto;flex:none;padding:8px 12px}
+#bitsGame{--bits-card-width:780px}
+#bitsGame .bits-play-card{max-width:var(--bits-card-width)}
+#bitsGame #gameCatalogCount{max-width:var(--bits-card-width);margin:8px auto 0;text-align:right}
+
+#home #summary{max-width:520px;margin:8px auto 0;text-align:right}
+#play>#gameCatalogCount{margin:8px auto 0;text-align:right}
+@media(max-width:420px){
+ .huba-language{max-width:100%;flex-wrap:wrap;justify-content:flex-end;row-gap:6px}
+ .huba-language .huba-mode>summary{padding-inline:5px}
+}
+
+.huba-language :is(.huba-mode,.huba-locale,.huba-difficulty)>summary,.w-gtop>.huba-language #wGameStats{display:grid;place-items:center;box-sizing:border-box;width:36px;height:36px;padding:2px;border:1px solid var(--line);border-radius:10px;line-height:1;font-size:1.05rem}

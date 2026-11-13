@@ -295,7 +295,7 @@ document.addEventListener('keydown',function(e){
   }
   if(!w||w.done||$('#wgame').classList.contains('hidden')||$('#wStats').open)return;
   if(e.ctrlKey||e.metaKey||e.altKey)return;
-  if(e.target.closest&&e.target.closest('.huba-settings, .huba-support-footer, .huba-language'))return;
+  if(e.target.closest&&e.target.closest('.huba-support-footer, .huba-language'))return;
   if(e.target.closest&&e.target.closest('.w-key')&&(e.key==='Enter'||e.key===' '))return;
   var k=e.key;
   var ae=document.activeElement; if(ae&&ae!==document.body&&ae.tagName==='BUTTON')ae.blur();

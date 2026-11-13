@@ -1,0 +1,172 @@
+:root :is(.panel, .game-column, .gcard, .bits-category-panel, .bits-play-card,
+  .bits-history-line, .bits-play-card input[type="search"], .w-result, #wStats,
+  button, .huba-language, .huba-language summary) {
+  border-radius: 4px;
+}
+
+:root:root body :is(.landing-top, #home .hub-top.huba-game-header,
+  .w-top.huba-game-header, .bits-top.huba-game-header, .w-gtop.huba-game-header,
+  .bits-game-head.huba-game-header, #play .musical-play-header.huba-game-header) {
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 24px;
+  border: 0;
+}
+
+body :is(.landing-top, #home .hub-top.huba-game-header, .w-top.huba-game-header, .bits-top.huba-game-header),
+:root:root body :is(#play .musical-play-header.huba-game-header, .w-gtop.huba-game-header, .bits-game-head.huba-game-header) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+  position: relative;
+  align-items: center;
+}
+
+body :is(.landing-top, #home .hub-top.huba-game-header, .w-top.huba-game-header, .bits-top.huba-game-header) > .huba-language,
+:root:root body .huba-game-header > .huba-language {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  box-shadow: none;
+}
+
+body :is(.landing-top, #home .hub-top.huba-game-header, .w-top.huba-game-header, .bits-top.huba-game-header) > h1 {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
+  text-align: center;
+}
+
+body :is(.landing-top, #home .hub-top.huba-game-header, .w-top.huba-game-header, .bits-top.huba-game-header) > .daily-streak {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: center;
+}
+
+:root :is(.landing-top h1, .game-brand, #playTitle, #gameTitle, #wTitle) {
+  font: 700 clamp(1.5rem, 4vw, 2.5rem)/1.1 Georgia, serif;
+  letter-spacing: -.03em;
+  overflow-wrap: anywhere;
+}
+
+:root :is(.landing-top h1, .game-brand)::after {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 1px;
+  margin: 6px auto 0;
+  background: var(--accent);
+}
+
+:root body :is(.landing-top, #home .hub-top.huba-game-header, .w-top, .bits-top) > .daily-streak {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+}
+
+:root .game-brand { display: inline-block; }
+:root :is(#home .hub-top h1, .w-top h1, .bits-top h1) :is(.brand-back, .bits-back) {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  min-height: 40px;
+  align-content: center;
+  color: var(--muted);
+  font: 600 .8125rem/1.3 system-ui, sans-serif;
+  letter-spacing: normal;
+}
+
+:root :is(.brand-back, .bits-back):hover { color: var(--accent); }
+
+:root .landing-grid { --landing-gap: 10px; max-width: 740px; }
+:root .gcard { min-height: 116px; }
+:root .gcard .gname { font: 700 1.25rem/1.2 Georgia, serif; }
+:root .gcard .gstreaks .gstreak strong { color: var(--accent); font-size: 1rem; }
+
+:root .huba-support-footer {
+  max-width: 540px;
+  border-color: #bfa67a60;
+}
+:root .huba-support-footer a { font-size: .75rem; }
+
+:root :is(#home .hub-grid, #word .hub-grid, #bitsHome .bits-columns) { max-width: 540px; }
+:root :is(.game-column, .bits-category-panel) h2 { color: var(--accent); font: 700 1.5rem/1.2 Georgia, serif; }
+:root :is(.game-column .tile, .bits-tile) { border-radius: 4px; min-height: 52px; }
+
+:root #play { max-width: 920px; }
+:root :is(#play .musical-play-header #backBtn, #bitsGame #backGame, #wgame #wBack) {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+  margin: 0;
+  padding-inline: 0;
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+:root body :is(#play .musical-play-header.huba-game-header > .musical-play-heading,
+  .bits-game-head.huba-game-header > div, .w-gtop.huba-game-header > h2) {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
+  min-width: 0;
+  text-align: center;
+}
+:root #play .musical-play-heading #playTitle { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+:root body .bits-game-head.huba-game-header > .bits-counter {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: center;
+}
+:root :is(.bits-instruction, .bits-finish h2, .w-result h3, .streakal-upgrade h3) {
+  color: var(--accent);
+  font-family: Georgia, serif;
+}
+:root .bits-play-card { max-width: 680px; }
+:root #wgame { --ok: #267556; --warn: #896316; --abs: #485767; }
+:root #play > .panel { padding: clamp(12px, 3vw, 24px); }
+:root #play .musical-audio-row {
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--bg);
+}
+:root #play #playBtn { min-height: 44px; }
+:root #play .musical-option,
+:root #play .musical-cover,
+:root #play #result .musical-recap-card { border-radius: 4px; }
+:root #play #resultTitle { color: var(--accent); font-family: Georgia, serif; }
+
+@media (max-width: 620px) {
+  :root #play:not(:has(.streakal-upgrade)) .opts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  :root #play.musical-hard .opts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  :root #play .musical-option-title { font-size: .8125rem; }
+  :root #play .musical-option-artist { font-size: .75rem; }
+}
+
+@media (max-width: 850px) {
+  body :is(.landing-top, #home .hub-top.huba-game-header, .w-top.huba-game-header,
+    .bits-top.huba-game-header),
+  :root:root body :is(#play .musical-play-header.huba-game-header, .w-gtop.huba-game-header, .bits-game-head.huba-game-header) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+  }
+  body :is(.landing-top, #home .hub-top.huba-game-header, .w-top.huba-game-header,
+    .bits-top.huba-game-header) > .huba-language,
+  :root:root body .huba-game-header > .huba-language {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+  }
+  body :is(.landing-top, #home .hub-top.huba-game-header, .w-top.huba-game-header, .bits-top.huba-game-header) > h1,
+  :root body :is(#play .musical-play-header.huba-game-header > .musical-play-heading,
+    .bits-game-head.huba-game-header > div, .w-gtop.huba-game-header > h2) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  body :is(.landing-top, #home .hub-top.huba-game-header, .w-top.huba-game-header, .bits-top.huba-game-header) > .daily-streak,
+  :root body .bits-game-head.huba-game-header > .bits-counter {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+}

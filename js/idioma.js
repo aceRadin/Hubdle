@@ -6,7 +6,7 @@ var lang='pt', originals=new WeakMap(),attributes=new WeakMap();
 try{if(localStorage.getItem('huba:language:v1')==='en')lang='en'}catch(e){}
 var phrases={
  'Jogos':'Games','Streak diário do Hubdle':'Hubdle daily streak','dias de streak diário':'daily streak days','dias seguidos':'days in a row','dia seguido':'day in a row',
- 'Configurações do Hubdle':'Hubdle settings','Configurações':'Settings','Tema do site':'Site theme','Tema':'Theme','Automático':'Automatic','Claro':'Light','Escuro':'Dark','Oceano':'Ocean','Floresta':'Forest','Pôr do sol':'Sunset','Rosa':'Rose','Café':'Coffee','Meia-noite':'Midnight','Ametista':'Amethyst','Grafite':'Graphite',
+ 'Configurações do Hubdle':'Hubdle settings','Configurações':'Settings',
  'Diário':'Daily','Aleatório':'Random','Desafiador':'Challenging','Dificuldade do Musical':'Musical difficulty','Dificuldade':'Difficulty','Desafio do dia':'Daily challenge','Jogue quantas vezes quiser':'Play as often as you like','Uma música por categoria a cada dia.':'One song per category each day.',
  'Voltar à tela inicial':'Back to the home page','Voltar aos jogos':'Back to games','Voltar':'Back','Nova rodada':'New round','Outra música':'Another song','Jogar de novo':'Play again','Próxima':'Next','Ver resultado':'See results',
  'Gostou do Hubdle?':'Enjoying Hubdle?','Ajude a manter os jogos gratuitos e a criar novidades!':'Help keep the games free and support new ones!','Apoio opcional · Todos os jogos continuam gratuitos.':'Optional support · All games remain free.','Apoie o desenvolvimento do Hubdle':'Support Hubdle development','Apoiar Hubdle':'Support Hubdle','Configure o endereço em js/apoio-config.js':'Set the address in js/apoio-config.js','Mostrar apoio ao Hubdle':'Show Hubdle support','Recolher apoio ao Hubdle':'Collapse Hubdle support','Mostrar doações':'Show donations','Recolher doações':'Collapse donations',
@@ -44,7 +44,7 @@ phrases['Configurar as fontes em jogos/bits/playlists.js.']='Configure sources i
 phrases['Trecho 5% menor na próxima rodada']='Clip 5% shorter next round';
 phrases['Português']='Portuguese';
 phrases['Areia']='Sand';
-phrases['Temas escuros']='Dark themes';phrases['Temas claros']='Light themes';
+
 phrases['Treino']='Training';phrases['Modo de jogo']='Game mode';phrases['Rodada de treino.']='Training round.';
 phrases['Você pode tentar outra música no modo Treino.']='You can try another song in Training mode.';
 phrases['Não foi possível carregar a lista de palavras deste idioma. Atualize a página para tentar novamente.']='Could not load the word list for this language. Refresh the page to try again.';
@@ -180,13 +180,6 @@ function setLanguage(value){
 }
 function build(){
  var nav=document.createElement('nav');nav.className='huba-language';nav.setAttribute('aria-label','Configurações do Hubdle');
- var theme=document.querySelector('.huba-settings');if(theme){nav.appendChild(theme);var themeTitle=theme.querySelector('summary');themeTitle.textContent='🎨';themeTitle.title='Tema';themeTitle.setAttribute('aria-label','Tema')}
- if(theme)theme.querySelector('details').addEventListener('toggle',function(){
-   if(!this.open)return;
-   var panel=theme.querySelector('.huba-settings-content'),rect=themeTitle.getBoundingClientRect(),width=Math.min(270,innerWidth-24);
-   panel.style.position='fixed';panel.style.left=Math.max(12,Math.min(rect.left,innerWidth-width-12))+'px';panel.style.top=(rect.bottom+8)+'px';panel.style.width=width+'px';
-   panel.style.maxHeight='calc(100dvh - '+(rect.bottom+24)+'px)';
- });
  var difficulty=document.getElementById('difficultyTool');
  if(difficulty){
    var oldTools=difficulty.parentElement,picker=document.createElement('details');picker.className='huba-difficulty';
@@ -218,7 +211,7 @@ function build(){
  languageMenu.appendChild(languageOptions);nav.appendChild(languageMenu);updateLanguage();document.addEventListener('huba:language',updateLanguage);
  languageMenu.addEventListener('keydown',function(e){if(e.key==='Escape'){languageMenu.open=false;languageTitle.focus();e.stopPropagation();e.preventDefault()}});
  document.addEventListener('click',function(e){
-   // Inclui o HUD, inserido depois: só o menu que contém o clique fica aberto.
+   // Só o menu que contém o clique fica aberto.
    nav.querySelectorAll('details[open]').forEach(function(menu){if(!menu.contains(e.target))menu.open=false});
  });
  var header=document.querySelector('.landing-top');
