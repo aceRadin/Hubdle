@@ -12,6 +12,7 @@
   toolbar.appendChild(button);
 
   let legacyHud;
+  let legacyBitsHud;
   function updateLabel() {
     const version = root.dataset.visual === '2' ? '1.0' : '2.0';
     const english = window.HUBA_I18N?.language === 'en';
@@ -24,10 +25,13 @@
   function apply(useNewVisual) {
     if (useNewVisual && root.dataset.visual !== '2') {
       legacyHud = root.dataset.hud;
+      legacyBitsHud = root.dataset.bitsHud;
       root.dataset.hud = 'original';
+      root.dataset.bitsHud = 'original';
       root.dataset.visual = '2';
     } else if (!useNewVisual && root.dataset.visual === '2') {
       root.dataset.hud = legacyHud;
+      root.dataset.bitsHud = legacyBitsHud;
       delete root.dataset.visual;
     }
     updateLabel();

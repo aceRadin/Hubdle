@@ -67,8 +67,9 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  assert.equal(await page.locator('.huba-locale>summary').getAttribute('title'),'English');
  assert.equal(await page.locator('[data-site-lang="pt"]').getAttribute('aria-label'),'Português');
  await page.setViewportSize({width:1280,height:900});
- const centers=await page.locator('.landing-top').evaluate(header=>Array.from(header.children).map(el=>{const r=el.getBoundingClientRect();return r.y+r.height/2}));
- assert.ok(Math.max(...centers)-Math.min(...centers)<2,'nome, streak e idioma alinhados no computador');
+ const centers=await page.locator('.landing-top').evaluate(header=>Array.from(header.children).map(el=>el.getBoundingClientRect()));
+ assert.ok(Math.abs(centers[0].x+centers[0].width/2-centers[1].x-centers[1].width/2)<1&&centers[0].bottom<=centers[1].top,'título centralizado acima do streak');
+ assert.ok(Math.abs(centers[0].y+centers[0].height/2-centers[2].y-centers[2].height/2)<1,'título e opções na mesma altura no computador');
  const streakCenters=await page.locator('.global-streak').evaluate(el=>Array.from(el.children).map(n=>{const r=n.getBoundingClientRect();return r.y+r.height/2}));
  assert.ok(Math.max(...streakCenters)-Math.min(...streakCenters)<1,'número e texto do streak alinhados');
  assert.deepEqual(await page.locator('#landingGrid > a .gname').allTextContents(),['Musical','Wording','Bits','Streakal','LoLdle']);
@@ -200,16 +201,53 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  await language('pt');
  assert.equal(await page.getByRole('link',{name:'Apoiar o Hubdle'}).isVisible(),true);
  await page.getByRole('button',{name:'Mudar para Hubdle 2.0'}).click();
+ for(const width of [320,390,1280]){
+  await page.setViewportSize({width,height:844});
+  const offset=await page.locator('.landing-top').evaluate(header=>{
+   const title=header.querySelector('h1').getBoundingClientRect();
+   const streak=header.querySelector('.daily-streak').getBoundingClientRect();
+   return title.bottom<=streak.top&&Math.abs(title.x+title.width/2-streak.x-streak.width/2)<1;
+  });
+  assert.ok(offset,'Hubdle centralizado acima do streak em '+width+'px');
+ }
  await page.locator('.gcard-musical').click();
  await page.getByRole('button',{name:'Mudar para Hubdle 1.0'}).waitFor();
  assert.equal(await page.locator('html').getAttribute('data-visual'),'2');
- assert.equal(await page.locator('.visual-2-musical-title').isVisible(),true);
+ assert.equal(await page.locator('.visual-2-title').isVisible(),true);
  await page.reload();
  await page.getByRole('button',{name:'Mudar para Hubdle 1.0'}).waitFor();
  assert.equal(await page.locator('html').getAttribute('data-visual'),'2');
  await language('en');
- await page.goto(base+'/jogos/wording/');
- assert.equal(await page.locator('.huba-visual-toggle').count(),0);
+ for(const [game,tile] of [['bits','#dailyTiles button'],['streakal','#tilesDaily button'],['wording','#wTilesDaily button']]){
+  if(game==='bits')await page.evaluate(()=>localStorage.setItem('huba:hud:v1','panel'));
+  await page.goto(base+'/jogos/'+game+'/');
+  await page.getByRole('button',{name:'Switch to Hubdle 1.0'}).waitFor();
+  assert.equal(await page.locator('.visual-2-title').isVisible(),true);
+  await page.locator(tile).first().click();
+  const toolbar=page.locator(':is(.bits-game-head,.musical-play-header,.w-gtop) > .huba-language');
+  await toolbar.waitFor();
+  assert.equal(await toolbar.locator('.huba-settings').isVisible(),false);
+  assert.equal(await toolbar.locator('.bits-hud-menu').isVisible(),false);
+  for(const width of [320,390,1280]){
+   await page.setViewportSize({width,height:844});
+   const aligned=await toolbar.evaluate(nav=>{
+    const title=nav.parentElement.querySelector('.musical-play-heading,#gameTitle,#wTitle');
+    const a=nav.getBoundingClientRect(),b=title.getBoundingClientRect();
+    const bounds=nav.parentElement.getBoundingClientRect();
+    const separated=a.bottom<=b.top||b.right<=a.left;
+    return separated&&Math.abs(b.x+b.width/2-bounds.x-bounds.width/2)<1&&document.documentElement.scrollWidth<=innerWidth;
+   });
+   assert.ok(aligned,game+' 2.0: título e opções alinhados em '+width+'px');
+  }
+  if(game==='bits'){
+   assert.equal(await page.locator('html').getAttribute('data-bits-hud'),'original');
+   await page.getByRole('button',{name:'Switch to Hubdle 1.0'}).click();
+   assert.equal(await page.locator('html').getAttribute('data-bits-hud'),'panel');
+   assert.equal(await toolbar.locator('.bits-hud-menu').isVisible(),true);
+   await page.getByRole('button',{name:'Switch to Hubdle 2.0'}).click();
+  }
+ }
+ await page.setViewportSize({width:390,height:844});
  assert.equal(await page.locator('#wLoadJson,#wResetJson,#wJsonInput,input[type="file"]').count(),0);
  await page.evaluate(text=>{localStorage.setItem('playhub:word:files:v2',JSON.stringify({'words.json':text}));HUBA_I18N.setLanguage('en')},await fs.readFile(path.join(root,'dados/words.json'),'utf8'));
  await context.route('**/dados/words.json',r=>r.fulfill({status:404,body:'Not found'}));
