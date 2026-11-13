@@ -99,7 +99,7 @@ function selectMode(next, focus = false) {
   byId('feedback').textContent = '';
   renderClue();
   renderRound();
-  if (focus && !byId('guess').disabled) byId('guess').focus();
+  if (focus) (byId('guess').disabled ? byId('mode-title') : byId('guess')).focus();
 }
 
 function renderClue() {
@@ -227,6 +227,20 @@ function renderSplash(won) {
 function renderRound() {
   const won = guesses.includes(answer.id);
   if (won && HUBA.isDaily) HUBA.recordDailyStreak('loldle', day);
+  byId('play').classList.toggle('lol-complete', won);
+  byId('finish-actions').hidden = !won;
+  if (won) {
+    const order = Object.keys(modes);
+    const next = order.slice(order.indexOf(mode) + 1)
+      .find(id => id !== 'quote' || quoteRoster.length);
+    const nextButton = byId('next-mode');
+    nextButton.hidden = !next;
+    byId('finish-hub').hidden = !!next;
+    if (next) {
+      nextButton.textContent = 'Próximo modo · ' + modes[next][0];
+      nextButton.onclick = () => selectMode(next, true);
+    }
+  }
   byId('next-round').hidden = !won || HUBA.isDaily;
   updateStreak();
   byId('result').hidden = !won;

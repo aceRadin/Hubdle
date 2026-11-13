@@ -13,7 +13,7 @@ var phrases={
  'Tocar trecho':'Play clip','Parar':'Stop','Ouvir trecho':'Play clip','Ouvir novamente':'Listen again','Silenciar':'Mute','Ativar som':'Unmute','Volume do áudio':'Audio volume','Volume do Bits':'Bits volume','Progresso do trecho':'Clip progress','Trocar somente a música que falhou':'Replace only the song that failed',
  'Qual música tocou?':'Which song played?','Qual é a música?':'What is the song?','Reconhece este trecho?':'Recognize this clip?','Reconheça a música pelo começo. São até seis tentativas: cada erro revela um trecho maior.':'Recognize the song from its beginning. You have six guesses: each mistake reveals a longer clip.',
  'Pesquise artista ou nome da música':'Search for an artist or song title','Selecione uma música da lista.':'Select a song from the list.','Confirmar palpite':'Submit guess','Pular (+ trecho)':'Skip (+ longer clip)','Sortear outra música':'Pick another song','Selecionada: ':'Selected: ','Música: ':'Song: ','Seu palpite: ':'Your guess: ',
- 'Finalizado':'Finished','Concluído':'Completed','Pulou a tentativa':'Skipped guess','Palpite registrado':'Guess recorded','Artista correto — música incorreta':'Correct artist — wrong song','Fim das tentativas':'No guesses left',
+ 'Finalizado':'Finished','Concluído':'Completed','Falhou':'Failed','Pulou a tentativa':'Skipped guess','Palpite registrado':'Guess recorded','Artista correto — música incorreta':'Correct artist — wrong song','Fim das tentativas':'No guesses left',
  'Você acertou todas!':'You got them all!','Você acertou!':'You got it!','Não foi dessa vez':'Not this time','Acertou!':'Correct!','Errou. A resposta era a marcada em verde.':'Incorrect. The correct answer is marked in green.','Acertou':'Correct','Errou':'Incorrect',
  'Você pode ouvir o trecho quantas vezes quiser antes de responder.':'You can replay the clip as often as you like before answering.','Você já tentou essa música. Escolha outra.':'You already guessed this song. Choose another.','Tentativa pulada. Agora o trecho ficou maior.':'Guess skipped. A longer clip is now available.','Não foi dessa vez. Ouça um trecho maior!':'Not quite. Listen to a longer clip!','Você pode tentar outra música no modo Aleatório.':'You can try another song in Random mode.','A lista continua carregando.':'The list is still loading.',
  'Nenhuma música encontrada.':'No songs found.','Busca incompleta: retome o carregamento no contador de músicas.':'Incomplete search: resume loading using the song counter.','Buscando nas músicas que ainda estão chegando…':'Searching songs that are still loading…',
@@ -68,6 +68,8 @@ if(document.body?.classList.contains('lol-page')) Object.assign(phrases,{
  'Escolha um modo':'Choose a mode',
  'Modos de jogo':'Game modes',
  'Clássico':'Classic',
+ 'Próximo modo':'Next mode',
+ 'Voltar ao Hubdle':'Back to Hubdle',
  'Falas':'Quotes',
  'Habilidade':'Ability',
  'Encontre o campeão comparando sete pistas.':'Find the champion by comparing seven clues.',
@@ -122,6 +124,7 @@ function translate(text){
  var out=text.replace(/[\w/-]+\.(?:js|json|html|css)\b/g,function(file){files.push(file);return '\uE000'+(files.length-1)+'\uE001'})
  .replace(/Você acertou (\d+) de (\d+)/g,'You got $1 out of $2 correct')
  .replace(/Acertou em (\d+) de (\d+) tentativas\./g,'Correct in $1 out of $2 guesses.')
+ .replace(/Acertou em (\d+) segundos?/g,function(_,n){return 'Correct in '+n+(n==='1'?' second':' seconds')})
  .replace(/Pergunta (\d+) de (\d+)/g,'Question $1 of $2')
  .replace(/Ouça o trecho de ([\d,]+) segundos e escolha qual música tocou\. São (\d+) perguntas\./g,'Listen to the $1-second clip and choose the song. There are $2 questions.')
  .replace(/Em (\d+) tentativas?\./g,function(_,n){return 'In '+n+(n==='1'?' guess.':' guesses.')})

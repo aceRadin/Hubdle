@@ -20,13 +20,21 @@ function renderStats(){$('streakValue').textContent=HUBA.currentStreak('bits')}
 function dailyKey(cat,date){return 'huba:bits:daily:v5:artists5:'+(date||HUBA.dayKey())+':'+cat}
 function dailySave(){if(!active||!active.daily)return;storageSet(dailyKey(active.cat,active.date),JSON.stringify({id:active.song.id,guessIds:active.guesses,finished:active.finished,won:active.won,replacements:active.replacements,unavailableSongs:unavailableSongs}))}
 function dailyRead(cat){try{return JSON.parse(storageGet(dailyKey(cat)))}catch(e){return null}}
+function clipLengthAt(index){return lengths[Math.max(0,Math.min(index,maxAttempts-1))]}
 function drawTiles(){
  ['daily'].forEach(function(mode){var daily=HUBA.isDaily,parent=$(mode+'Tiles');parent.textContent='';
- cats.forEach(function(cat){var list=byCat[cat]||[], prev=dailyRead(cat), btn=document.createElement('button');
- btn.type='button';btn.className='bits-tile';if(daily&&prev&&prev.finished)btn.classList.add('completed');
+ cats.forEach(function(cat){var prev=daily?dailyRead(cat):null, btn=document.createElement('button');
+ var loading=!!(musicLoading&&loadingChoice&&loadingChoice.cat===cat&&loadingChoice.daily===daily);
+ btn.type='button';btn.className='bits-tile';
  var name=document.createElement('span'),small=document.createElement('small');name.textContent=labels[cat];
- small.textContent=musicLoading&&loadingChoice&&loadingChoice.cat===cat&&loadingChoice.daily===(daily)?'Carregando gênero…':(daily&&prev&&prev.finished?(prev.won?'Concluído ✓':'Finalizado'):'');
- btn.append(name,small);btn.disabled=!!(musicLoading&&loadingChoice&&loadingChoice.cat===cat&&loadingChoice.daily===(daily));btn.onclick=function(){enterCategory(cat,daily)};parent.appendChild(btn);
+ if(prev&&prev.finished){
+   btn.classList.add(prev.won?'won':'failed');
+   if(prev.won){
+     var seconds=clipLengthAt((prev.guessIds?.length||1)-1);
+     small.textContent='Acertou em '+seconds+(seconds===1?' segundo':' segundos');
+   }else small.textContent='Falhou';
+ }else if(loading)small.textContent='Carregando gênero…';
+ btn.append(name,small);btn.disabled=loading;btn.onclick=function(){enterCategory(cat,daily)};parent.appendChild(btn);
  });
  });
 }
@@ -117,7 +125,7 @@ function prepareAudio(song,recovered){
  audioUrl=song.file?URL.createObjectURL(song.file):null;
  audio.preload='metadata';audio.src=audioUrl||song.url;audio.load();updateTimeline();
 }
-function clipDuration(){return lengths[Math.min(active.guesses.length,lengths.length-1)]}
+function clipDuration(){return clipLengthAt(active.guesses.length)}
 function audioFailed(){
  if(!active||active.finished||$('bitsGame').classList.contains('hidden'))return;
  if(recoveringSong)return;

@@ -9,11 +9,11 @@
   <link rel="stylesheet" href="../../css/style.css?v=20">
   <link rel="stylesheet" href="../../css/huds.css">
   <link rel="stylesheet" href="../../css/cabecalhos.css?v=6">
-  <link rel="stylesheet" href="loldle.css?v=22">
+  <link rel="stylesheet" href="loldle.css?v=23">
   <script defer src="../../js/comum.js"></script>
-  <script defer src="../../js/idioma.js?v=19"></script>
+  <script defer src="../../js/idioma.js?v=21"></script>
   <script defer src="../../js/huds.js"></script>
-  <script defer src="loldle.js?v=13"></script>
+  <script defer src="loldle.js?v=14"></script>
   <script defer src="../../js/apoio-config.js"></script>
   <script defer src="../../js/apoio.js?v=4"></script>
 </head>
@@ -55,7 +55,7 @@
     <p id="loading" class="note" role="status">Carregando campeões…</p>
   </section>
   <section id="play" class="lol-play hidden" aria-labelledby="mode-title">
-    <h2 id="mode-title" class="lol-round-title"></h2>
+    <h2 id="mode-title" class="lol-round-title" tabindex="-1"></h2>
     <div class="lol-layout">
       <div class="panel lol-puzzle">
         <p id="prompt"></p>
@@ -71,9 +71,13 @@
           </div>
           <ul id="champions" class="lol-suggestions" aria-label="Sugestões de campeões" hidden></ul>
         </form>
-        <button id="next-round" class="primary" type="button" hidden>Jogar de novo</button>
         <p id="feedback" class="note" role="status"></p>
         <p id="count" class="note"></p>
+        <div class="lol-finish-actions" id="finish-actions" hidden>
+          <button class="lol-finish-link" id="next-mode" type="button"></button>
+          <a class="lol-finish-link" id="finish-hub" href="../../index.html">Voltar ao Hubdle</a>
+          <button id="next-round" class="primary" type="button" hidden>Jogar de novo</button>
+        </div>
       </div>
       <section class="lol-history" aria-label="Histórico de palpites">
         <div id="classic-history" hidden>

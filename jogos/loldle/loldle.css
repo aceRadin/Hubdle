@@ -45,6 +45,33 @@
 .lol-result { margin: 14px 0 0; font-weight: 750; color: #8bd6b6; text-align: center; }
 .lol-controls label { display: block; margin-bottom: 6px; font-size: .875rem; font-weight: 700; }
 .lol-controls #count { color: var(--lol-gold); }
+.lol-complete .lol-controls #count {
+  margin: 0;
+  font: 700 clamp(1.5rem, 5vw, 2rem)/1.2 Georgia, serif;
+  text-align: center;
+}
+.lol-finish-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 16px;
+  margin-top: 8px;
+}
+.lol-finish-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--lol-gold);
+  font-size: .875rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.lol-finish-link:hover { color: var(--lol-menu-text); }
 .lol-controls #feedback:empty { display: none; }
 .lol-input-row { display: flex; flex-wrap: wrap; gap: 8px; }
 .lol-input-row input {

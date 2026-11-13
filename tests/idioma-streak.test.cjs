@@ -157,10 +157,31 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  await page.locator('.huba-mode>summary').click();await page.locator('[data-game-mode="daily"]').click();assert.equal(await page.locator('#bitsHome').isVisible(),true);assert.equal(await page.locator('[data-mode-title]').textContent(),'Daily');
  await page.locator('#dailyTiles button').filter({hasText:'Pop'}).click();await page.waitForSelector('#guessInput:visible');
  for(let i=0;i<6;i++)await page.locator('#skipGuess').click();await page.locator('#finishBack').click();
+ const popTile=page.locator('#dailyTiles .bits-tile').filter({hasText:'Pop'});
+ assert.equal(await popTile.locator('small').textContent(),'Failed');
+ assert.equal(await popTile.evaluate(el=>el.matches('.failed')&&getComputedStyle(el).borderTopColor===getComputedStyle(el.querySelector('small')).color),true);
  await page.locator('.huba-mode>summary').click();await page.locator('[data-game-mode="training"]').click();await page.locator('#dailyTiles button').filter({hasText:'Pop'}).click();assert.equal(await page.locator('#guessArea').isVisible(),true);
  await page.locator('.huba-mode>summary').click();await page.locator('[data-game-mode="daily"]').click();await page.locator('#dailyTiles button').filter({hasText:'Pop'}).click();assert.equal(await page.locator('#finish').isVisible(),true,'retoma diário concluído após treino');
  await page.locator('.huba-mode>summary').click();await page.locator('[data-game-mode="training"]').click();
  assert.deepEqual(await audit(),[],'Bits: seleção em inglês');
+ await page.evaluate(()=>{
+  for(const [genre,guesses] of [['rock',['dz-1']],['rap',['__skip__','__skip__','dz-1']]]){
+   localStorage.setItem('huba:bits:daily:v5:artists5:'+HUBA.dayKey()+':'+genre,JSON.stringify({
+    id:'dz-1',guessIds:guesses,finished:true,won:true
+   }));
+  }
+  HUBA.setMode('daily');
+ });
+ const rockTile=page.locator('#dailyTiles .bits-tile.won').filter({hasText:'Rock'});
+ const rapTile=page.locator('#dailyTiles .bits-tile.won').filter({hasText:'Rap'});
+ assert.equal(await rockTile.locator('small').textContent(),'Correct in 1 second');
+ assert.equal(await rapTile.locator('small').textContent(),'Correct in 4 seconds');
+ assert.notEqual(await rockTile.evaluate(el=>getComputedStyle(el).borderTopColor),await popTile.evaluate(el=>getComputedStyle(el).borderTopColor));
+ await language('pt');
+ assert.equal(await rockTile.locator('small').textContent(),'Acertou em 1 segundo');
+ assert.equal(await popTile.locator('small').textContent(),'Falhou');
+ await language('en');
+ await page.evaluate(()=>HUBA.setMode('training'));
  await page.goto(base+'/jogos/streakal/');await page.locator('#tilesDaily button').first().click();await page.waitForFunction(()=>testAudio[0].src);
  const id=await page.evaluate(()=>/\/(\d+)$/.exec(testAudio[0].src)[1]);await page.locator('#opts button').filter({hasNot:page.locator('[unused]')}).evaluateAll((buttons,id)=>buttons.find(b=>!b.getAttribute('aria-label').startsWith('Artista '+id+' - ')).click(),id);
  await page.waitForSelector('#result:visible');assert.equal(await page.evaluate(()=>HUBA.currentStreak('huba')),1);
