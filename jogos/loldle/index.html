@@ -9,11 +9,11 @@
   <link rel="stylesheet" href="../../css/style.css?v=20">
   <link rel="stylesheet" href="../../css/huds.css">
   <link rel="stylesheet" href="../../css/cabecalhos.css?v=6">
-  <link rel="stylesheet" href="loldle.css?v=24">
+  <link rel="stylesheet" href="loldle.css?v=25">
   <script defer src="../../js/comum.js"></script>
-  <script defer src="../../js/idioma.js?v=21"></script>
+  <script defer src="../../js/idioma.js?v=23"></script>
   <script defer src="../../js/huds.js"></script>
-  <script defer src="loldle.js?v=14"></script>
+  <script defer src="loldle.js?v=15"></script>
   <script defer src="../../js/apoio-config.js"></script>
   <script defer src="../../js/apoio.js?v=4"></script>
 </head>
@@ -59,8 +59,19 @@
     <div class="lol-layout">
       <div class="panel lol-puzzle">
         <p id="prompt"></p>
+        <div id="result" class="lol-result" role="status" hidden>
+          <img id="result-portrait" width="76" height="76" alt="">
+          <div>
+            <p class="lol-result-label">Acertou!</p>
+            <h3 id="result-champion" data-no-translate></h3>
+          </div>
+        </div>
         <div id="clue" class="lol-clue" hidden></div>
-        <p id="result" class="lol-result" hidden></p>
+        <div class="lol-finish-actions" id="finish-actions" hidden>
+          <button class="lol-finish-link" id="next-mode" type="button"></button>
+          <a class="lol-finish-link" id="finish-hub" href="../../index.html">Voltar ao Hubdle</a>
+          <button id="next-round" class="primary" type="button" hidden>Jogar de novo</button>
+        </div>
       </div>
       <div class="panel lol-controls">
         <form id="guess-form" autocomplete="off">
@@ -73,20 +84,21 @@
         </form>
         <p id="feedback" class="note" role="status"></p>
         <p id="count" class="note"></p>
-        <div class="lol-finish-actions" id="finish-actions" hidden>
-          <button class="lol-finish-link" id="next-mode" type="button"></button>
-          <a class="lol-finish-link" id="finish-hub" href="../../index.html">Voltar ao Hubdle</a>
-          <button id="next-round" class="primary" type="button" hidden>Jogar de novo</button>
-        </div>
       </div>
       <section class="lol-history" aria-label="Histórico de palpites">
         <div id="classic-history" hidden>
-          <p class="note lol-legend">✓ Igual · ◐ Parcial · × Diferente · ↑ Ano posterior · ↓ Ano anterior</p>
-          <div class="lol-scroll" tabindex="0" aria-label="Tabela de comparação dos campeões">
-            <table>
-              <thead><tr><th scope="col">Campeão</th><th scope="col">Gênero</th><th scope="col">Posição</th><th scope="col">Espécie</th><th scope="col">Recurso</th><th scope="col">Alcance</th><th scope="col">Região</th><th scope="col">Ano</th></tr></thead>
-              <tbody id="comparison"></tbody>
-            </table>
+          <button id="history-toggle" type="button" aria-expanded="false" aria-controls="classic-guesses">
+            <span class="lol-history-show">Ver palpites</span>
+            <span class="lol-history-hide">Ocultar palpites</span>
+          </button>
+          <div id="classic-guesses">
+            <p class="note lol-legend">✓ Igual · ◐ Parcial · × Diferente · ↑ Ano posterior · ↓ Ano anterior</p>
+            <div class="lol-scroll" tabindex="0" aria-label="Tabela de comparação dos campeões">
+              <table>
+                <thead><tr><th scope="col">Campeão</th><th scope="col">Gênero</th><th scope="col">Posição</th><th scope="col">Espécie</th><th scope="col">Recurso</th><th scope="col">Alcance</th><th scope="col">Região</th><th scope="col">Ano</th></tr></thead>
+                <tbody id="comparison"></tbody>
+              </table>
+            </div>
           </div>
         </div>
         <ul id="guess-history" class="recap" hidden></ul>

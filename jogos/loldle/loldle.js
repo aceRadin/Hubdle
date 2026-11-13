@@ -97,6 +97,7 @@ function selectMode(next, focus = false) {
   byId('guess').value = '';
   renderSuggestions();
   byId('feedback').textContent = '';
+  byId('history-toggle').setAttribute('aria-expanded', 'false');
   renderClue();
   renderRound();
   if (focus) (byId('guess').disabled ? byId('mode-title') : byId('guess')).focus();
@@ -237,18 +238,22 @@ function renderRound() {
     nextButton.hidden = !next;
     byId('finish-hub').hidden = !!next;
     if (next) {
-      nextButton.textContent = 'Próximo modo · ' + modes[next][0];
+      nextButton.textContent = 'Jogar ' + modes[next][0] + ' ›';
       nextButton.onclick = () => selectMode(next, true);
     }
+    byId('result-portrait').src = answer.portrait;
+    byId('result-champion').textContent = answer.name;
   }
   byId('next-round').hidden = !won || HUBA.isDaily;
   updateStreak();
   byId('result').hidden = !won;
-  byId('result').textContent = won ? 'Acertou! O campeão é ' + answer.name + '.' : '';
-  byId('result').setAttribute('role', 'status');
+  byId('prompt').hidden = won;
   byId('guess-form').hidden = won;
   byId('guess').disabled = won;
-  byId('count').textContent = guesses.length === 1 ? '1 palpite' : guesses.length + ' palpites';
+  const count = byId('count');
+  count.textContent = guesses.length === 1 ? '1 palpite' : guesses.length + ' palpites';
+  if (won) byId('finish-actions').before(count);
+  else byId('feedback').after(count);
   const assetName = byId('asset-name');
   if (assetName) assetName.textContent = won ? assetName.dataset.name : '';
   if (mode === 'splash') renderSplash(won);
@@ -374,6 +379,10 @@ async function init() {
     }
   });
   byId('next-round').addEventListener('click', () => selectMode(mode, true));
+  const historyToggle = byId('history-toggle');
+  historyToggle.addEventListener('click', () => {
+    historyToggle.setAttribute('aria-expanded', String(historyToggle.getAttribute('aria-expanded') !== 'true'));
+  });
   document.addEventListener('huba:language', () => {
     if (mode === 'quote' && !byId('play').classList.contains('hidden')) {
       renderClue();

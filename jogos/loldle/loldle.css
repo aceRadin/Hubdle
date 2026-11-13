@@ -42,12 +42,17 @@
 .lol-splash img { position: absolute; inset: 0; height: 100%; object-fit: cover; }
 .lol-splash img:first-child { filter: blur(var(--splash-blur, 32px)); transition: filter .3s; }
 .lol-splash-reveal { clip-path: inset(50%); transition: clip-path .3s; }
-.lol-result { margin: 14px 0 0; font-weight: 750; color: #8bd6b6; text-align: center; }
+.lol-complete .lol-controls { display: none; }
+.lol-complete .lol-puzzle { grid-column: 1 / -1; }
+.lol-result { display: flex; align-items: center; justify-content: center; gap: 14px; }
+.lol-result img { flex: none; border: 1px solid var(--lol-gold); border-radius: var(--lol-radius); }
+.lol-result-label { margin: 0 0 3px; color: #8bd6b6; font-size: .875rem; font-weight: 700; }
+.lol-result h3 { color: var(--lol-menu-text); font: 700 clamp(1.375rem, 5vw, 2rem)/1.15 Georgia, serif; }
 .lol-controls label { display: block; margin-bottom: 6px; font-size: .875rem; font-weight: 700; }
-.lol-controls #count { color: var(--lol-gold); }
-.lol-complete .lol-controls #count {
-  margin: 0;
-  font: 700 clamp(1.5rem, 5vw, 2rem)/1.2 Georgia, serif;
+#count { color: var(--lol-gold); }
+.lol-complete #count {
+  margin: 14px 0 0;
+  font: 700 clamp(1.125rem, 4vw, 1.5rem)/1.2 Georgia, serif;
   text-align: center;
 }
 .lol-finish-actions {
@@ -56,22 +61,37 @@
   align-items: center;
   justify-content: center;
   gap: 6px 16px;
-  margin-top: 8px;
+  margin-top: 14px;
 }
 .lol-finish-link {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding: 0 4px;
-  border: 0;
-  background: transparent;
-  color: var(--lol-gold);
+  padding: 8px 16px;
+  border: 1px solid var(--lol-gold);
+  border-radius: var(--lol-radius);
+  background: var(--lol-gold);
+  color: #181f28;
   font-size: .875rem;
   font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration: none;
 }
-.lol-finish-link:hover { color: var(--lol-menu-text); }
+.lol-finish-link:hover { background: #f2d399; }
+.lol-finish-actions #next-round { background: var(--lol-surface); color: var(--lol-menu-text); }
+#history-toggle { display: none; }
+@media (max-width: 640px) {
+  .lol-complete #history-toggle {
+    display: block;
+    margin: 0 auto 8px;
+    min-height: 44px;
+    background: var(--lol-surface);
+    color: var(--lol-menu-text);
+    border-color: var(--lol-border);
+  }
+  .lol-complete #history-toggle[aria-expanded="false"] + #classic-guesses,
+  #history-toggle[aria-expanded="false"] .lol-history-hide,
+  #history-toggle[aria-expanded="true"] .lol-history-show { display: none; }
+}
 .lol-controls #feedback:empty { display: none; }
 .lol-input-row { display: flex; flex-wrap: wrap; gap: 8px; }
 .lol-input-row input {
@@ -143,7 +163,7 @@
   [data-hud="studio"] .lol-play, [data-hud="panel"] .lol-play { max-width: none; }
   [data-hud="studio"] .lol-layout { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
   [data-hud="panel"] .lol-layout { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
-  [data-hud="panel"] .lol-puzzle { grid-column: 2; grid-row: 1; }
+  [data-hud="panel"] .lol-play:not(.lol-complete) .lol-puzzle { grid-column: 2; grid-row: 1; }
   [data-hud="panel"] .lol-controls { grid-column: 1; grid-row: 1; }
 }
 [data-hud="arcade"] .lol .panel { border: 2px solid var(--lol-gold); box-shadow: 0 4px 0 var(--lol-border); }
