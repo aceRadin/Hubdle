@@ -250,8 +250,12 @@ function renderRound() {
       history.append(renderComparison(champion));
     } else {
       const item = document.createElement('li');
-      item.className = id === answer.id ? 'ok' : 'no';
-      item.textContent = (id === answer.id ? '✓ ' : '× ') + champion.name;
+      const correct = id === answer.id;
+      item.className = correct ? 'ok' : 'no';
+      const mark = document.createElement('span');
+      mark.className = 'lol-guess-mark';
+      mark.textContent = correct ? '✓' : '×';
+      item.append(mark, ' ' + champion.name);
       history.append(item);
     }
   }

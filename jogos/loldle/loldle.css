@@ -91,9 +91,26 @@
 .lol-partial { background: #584522; }
 .lol-miss { background: #552f3c; }
 .lol-history .recap { margin: 0; }
-.lol-history .recap li { background: var(--lol-surface); border-radius: var(--lol-radius); font-size: .875rem; }
-.lol-history .recap li.ok { border-color: #50b18e; }
-.lol-history .recap li.no { border-color: #b9686e; }
+.lol-history .recap li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-width: 2px;
+  border-color: var(--lol-guess-color);
+  background: var(--lol-surface);
+  border-radius: var(--lol-radius);
+  font-size: .875rem;
+}
+.lol-history .recap li.ok { --lol-guess-color: #7ce2ad; }
+.lol-history .recap li.no { --lol-guess-color: #ff8795; }
+.lol-guess-mark {
+  flex: 0 0 1.5rem;
+  color: var(--lol-guess-color);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+}
 
 @media (min-width: 740px) {
   [data-hud="studio"] .lol-play, [data-hud="panel"] .lol-play { max-width: none; }
