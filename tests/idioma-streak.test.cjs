@@ -175,6 +175,19 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
   await page.locator('.huba-difficulty>summary').click();await page.locator(mode==='#clipHard'?'#clipCasual':'#clipHard').click();
   assert.equal(await page.locator('#home').isVisible(),true,'trocar dificuldade não altera perguntas em andamento');
   await page.locator('.huba-difficulty>summary').click();await page.locator(mode).click();await page.locator('#tilesDaily button').first().click();
+  const original = await page.locator('html').evaluate(el=>({theme:el.dataset.theme,hud:el.dataset.hud}));
+  const options = await page.locator('#opts button').evaluateAll(buttons=>buttons.map(button=>button.getAttribute('aria-label')));
+  await page.getByRole('button',{name:'Switch to Hubdle 2.0'}).click();
+  assert.equal(await page.locator('html').getAttribute('data-visual'),'2');
+  assert.equal(await page.locator('html').getAttribute('data-hud'),'original');
+  assert.equal(await page.locator('.huba-settings').isVisible(),false);
+  assert.equal(await page.locator('.bits-hud-menu').isVisible(),false);
+  assert.equal(await page.locator('.huba-difficulty>summary').isVisible(),true);
+  await page.getByRole('button',{name:'Switch to Hubdle 1.0'}).click();
+  assert.deepEqual(await page.locator('html').evaluate(el=>({theme:el.dataset.theme,hud:el.dataset.hud})),original);
+  assert.equal(await page.locator('.huba-settings').isVisible(),true);
+  assert.equal(await page.locator('.bits-hud-menu').isVisible(),true);
+  assert.deepEqual(await page.locator('#opts button').evaluateAll(buttons=>buttons.map(button=>button.getAttribute('aria-label'))),options);
   await page.locator('#playBtn').click();await page.locator('#playBtn').click();assert.equal(await page.locator('#playBtn').textContent(),'Play clip');
   for(let i=0;i<5;i++){await page.locator('#opts button').first().click();await page.locator('#nextBtn').click()}
   assert.equal(await page.evaluate(()=>HUBA.currentStreak('musicle')),1);assert.equal(await page.evaluate(()=>HUBA.currentStreak('huba')),1);
@@ -186,8 +199,17 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  assert.equal(await support.getAttribute('href'),'https://buymeacoffee.com/aceradin');
  await language('pt');
  assert.equal(await page.getByRole('link',{name:'Apoiar o Hubdle'}).isVisible(),true);
+ await page.getByRole('button',{name:'Mudar para Hubdle 2.0'}).click();
+ await page.locator('.gcard-musical').click();
+ await page.getByRole('button',{name:'Mudar para Hubdle 1.0'}).waitFor();
+ assert.equal(await page.locator('html').getAttribute('data-visual'),'2');
+ assert.equal(await page.locator('.visual-2-musical-title').isVisible(),true);
+ await page.reload();
+ await page.getByRole('button',{name:'Mudar para Hubdle 1.0'}).waitFor();
+ assert.equal(await page.locator('html').getAttribute('data-visual'),'2');
  await language('en');
  await page.goto(base+'/jogos/wording/');
+ assert.equal(await page.locator('.huba-visual-toggle').count(),0);
  assert.equal(await page.locator('#wLoadJson,#wResetJson,#wJsonInput,input[type="file"]').count(),0);
  await page.evaluate(text=>{localStorage.setItem('playhub:word:files:v2',JSON.stringify({'words.json':text}));HUBA_I18N.setLanguage('en')},await fs.readFile(path.join(root,'dados/words.json'),'utf8'));
  await context.route('**/dados/words.json',r=>r.fulfill({status:404,body:'Not found'}));

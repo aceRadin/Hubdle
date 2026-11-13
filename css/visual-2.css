@@ -1,0 +1,136 @@
+.huba-language .huba-visual-toggle {
+  min-width: 40px;
+  min-height: 36px;
+  font-variant-numeric: tabular-nums;
+}
+
+:root:not([data-visual="2"]) .visual-2-musical-title { display: none; }
+
+:root[data-visual="2"] {
+  color-scheme: dark;
+  --bg: #0b1420;
+  --card: #101b2a;
+  --fg: #f6f3ec;
+  --muted: #d0d9e3;
+  --accent: #e3be78;
+  --accent-fg: #181f28;
+  --line: #435261;
+  --seg: #354557;
+  --ok: #7ce2ad;
+  --bad: #ff8795;
+}
+
+[data-visual="2"] .huba-language :is(.huba-settings, .bits-hud-menu) {
+  display: none !important;
+}
+
+[data-visual="2"] :is(.panel, .game-column, .gcard, button, .huba-language, .huba-language summary) {
+  border-radius: 4px;
+}
+
+[data-visual="2"] body :is(.landing-top, #home .hub-top.huba-game-header, #play .musical-play-header.huba-game-header) {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 12px;
+  margin-bottom: 24px;
+  border: 0;
+}
+
+[data-visual="2"] body :is(.landing-top, .huba-game-header) > .huba-language {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  box-shadow: none;
+}
+
+[data-visual="2"] :is(.landing-top, #home .hub-top.huba-game-header) > h1,
+[data-visual="2"] #play .musical-play-header.huba-game-header > .musical-play-heading {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  justify-self: center;
+  text-align: center;
+}
+
+[data-visual="2"] :is(.landing-top h1, .visual-2-musical-title, #playTitle) {
+  font: 700 clamp(2rem, 5vw, 3rem)/1.1 Georgia, serif;
+  letter-spacing: -.03em;
+}
+
+[data-visual="2"] :is(.landing-top h1, .visual-2-musical-title, #playTitle)::after {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 1px;
+  margin: 10px auto 0;
+  background: var(--accent);
+}
+
+[data-visual="2"] :is(.landing-top, #home .hub-top.huba-game-header) > .daily-streak {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  justify-self: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+}
+
+[data-visual="2"] #home .hub-top { position: relative; }
+
+[data-visual="2"] #home .hub-top h1 .brand-back {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  min-height: 40px;
+  color: var(--muted);
+  font: 600 .875rem/1.3 system-ui, sans-serif;
+  letter-spacing: normal;
+}
+
+[data-visual="2"] #home .hub-top h1 .brand-back:hover { color: var(--accent); }
+
+[data-visual="2"] .landing-grid { --landing-gap: 10px; max-width: 740px; }
+[data-visual="2"] .gcard { min-height: 116px; }
+[data-visual="2"] .gcard .gname { font: 700 1.25rem/1.2 Georgia, serif; }
+[data-visual="2"] .gcard .gstreaks .gstreak strong { color: var(--accent); font-size: 1rem; }
+
+[data-visual="2"] .huba-support-footer {
+  max-width: 540px;
+  border-color: #bfa67a60;
+}
+[data-visual="2"] .huba-support-footer a { font-size: .75rem; }
+
+[data-visual="2"] #home .hub-grid { max-width: 540px; }
+[data-visual="2"] .game-column h2 { color: var(--accent); font: 700 1.5rem/1.2 Georgia, serif; }
+[data-visual="2"] .game-column .tile { border-radius: 4px; min-height: 52px; }
+
+[data-visual="2"] #play { max-width: 920px; }
+[data-visual="2"] #play .musical-play-header.huba-game-header #backBtn {
+  grid-column: 1;
+  grid-row: 1;
+  padding-inline: 0;
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+[data-visual="2"] #play .musical-play-header.huba-game-header #backBtn:hover { color: var(--accent); }
+[data-visual="2"] #play .musical-play-heading #playTitle { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+[data-visual="2"] #play > .panel { padding: clamp(12px, 3vw, 24px); }
+[data-visual="2"] #play .musical-audio-row {
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--bg);
+}
+[data-visual="2"] #play #playBtn { min-height: 44px; }
+[data-visual="2"] #play .musical-option,
+[data-visual="2"] #play .musical-cover,
+[data-visual="2"] #play #result .musical-recap-card { border-radius: 4px; }
+[data-visual="2"] #play #resultTitle { color: var(--accent); font-family: Georgia, serif; }
+
+@media (max-width: 620px) {
+  [data-visual="2"] #play .opts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  [data-visual="2"] #play.musical-hard .opts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  [data-visual="2"] #play .musical-option-title { font-size: .8125rem; }
+  [data-visual="2"] #play .musical-option-artist { font-size: .75rem; }
+}
