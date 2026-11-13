@@ -91,7 +91,8 @@ function selectMode(next, focus = false) {
   document.querySelectorAll('[data-mode]').forEach(button => {
     button.setAttribute('aria-pressed', String(button.dataset.mode === mode));
   });
-  byId('play').setAttribute('aria-label', modes[mode][0]);
+  byId('play').dataset.lolMode = mode;
+  byId('mode-title').textContent = modes[mode][0];
   byId('prompt').textContent = modes[mode][1];
   byId('guess').value = '';
   renderSuggestions();
@@ -239,8 +240,8 @@ function renderRound() {
   if (mode === 'splash') renderSplash(won);
 
   const classic = mode === 'classic';
-  byId('classic-history').hidden = !classic;
-  byId('guess-history').hidden = classic;
+  byId('classic-history').hidden = !classic || !guesses.length;
+  byId('guess-history').hidden = classic || !guesses.length;
   const history = classic ? byId('comparison') : byId('guess-history');
   history.replaceChildren();
   for (const id of guesses.slice().reverse()) {

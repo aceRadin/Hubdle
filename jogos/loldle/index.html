@@ -9,11 +9,11 @@
   <link rel="stylesheet" href="../../css/style.css?v=20">
   <link rel="stylesheet" href="../../css/huds.css">
   <link rel="stylesheet" href="../../css/cabecalhos.css?v=6">
-  <link rel="stylesheet" href="loldle.css?v=18">
+  <link rel="stylesheet" href="loldle.css?v=19">
   <script defer src="../../js/comum.js"></script>
   <script defer src="../../js/idioma.js?v=19"></script>
   <script defer src="../../js/huds.js"></script>
-  <script defer src="loldle.js?v=11"></script>
+  <script defer src="loldle.js?v=12"></script>
   <script defer src="../../js/apoio-config.js"></script>
   <script defer src="../../js/apoio.js?v=4"></script>
 </head>
@@ -54,7 +54,8 @@
     </nav>
     <p id="loading" class="note" role="status">Carregando campeões…</p>
   </section>
-  <section id="play" class="hidden" aria-label="Partida">
+  <section id="play" class="lol-play hidden" aria-labelledby="mode-title">
+    <h2 id="mode-title" class="lol-round-title"></h2>
     <div class="lol-layout">
       <div class="panel lol-puzzle">
         <p id="prompt"></p>

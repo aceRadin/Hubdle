@@ -1,65 +1,116 @@
 .lol { max-width: 1020px; }
 .lol-round-head { margin: 20px 0 10px; }
+.lol-play { max-width: 540px; margin-inline: auto; color: var(--lol-menu-text); }
+.lol-play[data-lol-mode="classic"] { max-width: none; }
+.lol-round-title {
+  margin-bottom: 14px;
+  color: var(--lol-gold);
+  font: 700 clamp(1.375rem, 4vw, 1.75rem)/1.2 Georgia, serif;
+  text-align: center;
+}
 .lol-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.lol-layout > .panel {
+  width: min(100%, 540px);
+  margin-inline: auto;
+  padding: clamp(12px, 3vw, 20px);
+  border-color: var(--lol-border);
+  background-color: var(--lol-surface);
+  color: var(--lol-menu-text);
+}
+.lol-play .note { color: var(--lol-menu-muted); font-size: .8125rem; }
+.lol-play :focus-visible { outline-color: var(--lol-gold); }
 .lol-history { grid-column: 1 / -1; min-width: 0; }
 .lol-puzzle, .lol-controls { min-width: 0; }
-.lol-puzzle p:first-child { margin: 0; }
+.lol-puzzle #prompt { margin: 0; text-align: center; font-size: .875rem; color: var(--lol-menu-muted); }
 .lol-clue { text-align: center; margin-top: 14px; }
-.lol-clue blockquote { font-size: clamp(1.15rem, 4vw, 1.6rem); font-weight: 700; margin: 8px 0 16px; }
-.lol-clue audio { max-width: 100%; }
-.lol-media { margin: 0 auto; overflow: hidden; border: 1px solid var(--line); border-radius: var(--lol-radius, 12px); }
+.lol-clue blockquote {
+  margin: 8px 0 16px;
+  overflow-wrap: anywhere;
+  font: 700 clamp(1.25rem, 4vw, 1.625rem)/1.3 Georgia, serif;
+}
+.lol-clue audio { max-width: 100%; color-scheme: dark; }
+.lol-media { margin: 0 auto; overflow: hidden; border: 1px solid var(--lol-border); border-radius: var(--lol-radius); }
 .lol-media img { display: block; width: 100%; }
-.lol-ability { width: 106px; }
+.lol-ability { width: 106px; border-color: var(--lol-gold); }
 .lol-splash {
   position: relative;
   box-sizing: content-box;
   max-width: 540px;
   aspect-ratio: 1215 / 717;
-  background: var(--bg);
+  background: var(--lol-field);
 }
 .lol-splash img { position: absolute; inset: 0; height: 100%; object-fit: cover; }
 .lol-splash img:first-child { filter: blur(var(--splash-blur, 32px)); transition: filter .3s; }
 .lol-splash-reveal { clip-path: inset(50%); transition: clip-path .3s; }
-.lol-result { margin: 14px 0 0; font-weight: 750; color: var(--ok); }
-.lol-controls label { display: block; margin-bottom: 6px; font-weight: 700; }
+.lol-result { margin: 14px 0 0; font-weight: 750; color: #8bd6b6; text-align: center; }
+.lol-controls label { display: block; margin-bottom: 6px; font-size: .875rem; font-weight: 700; }
+.lol-controls #count { color: var(--lol-gold); }
+.lol-controls #feedback:empty { display: none; }
 .lol-input-row { display: flex; flex-wrap: wrap; gap: 8px; }
 .lol-input-row input {
-  flex: 1 1 170px;
+  flex: 1 1 145px;
   min-width: 0;
+  min-height: 44px;
   font: inherit;
+  font-size: 1rem;
   padding: 10px;
-  background: var(--bg);
-  color: var(--fg);
-  border: 1px solid var(--line);
-  border-radius: var(--lol-radius, 10px);
+  background: var(--lol-field);
+  color: var(--lol-menu-text);
+  border: 1px solid var(--lol-border);
+  border-radius: var(--lol-radius);
 }
-.lol-legend { margin: 0 0 8px; }
-.lol-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--lol-radius, 12px); background: var(--card); }
+.lol-input-row input::placeholder { color: #a8b7c6; }
+.lol-controls button.primary {
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--lol-gold);
+  border-radius: var(--lol-radius);
+  background: var(--lol-gold);
+  color: #181f28;
+  font-size: .875rem;
+}
+.lol-controls button.primary:hover { background: #f2d399; }
+@media (max-width: 360px) {
+  .lol-input-row input { flex-basis: 100%; }
+  .lol-input-row button { margin-left: auto; }
+}
+.lol-play .lol-legend { margin: 0; padding: 10px 12px; background: var(--lol-surface); }
+.lol-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--lol-border);
+  border-radius: var(--lol-radius);
+  background: var(--lol-surface);
+}
 .lol-scroll table { width: 100%; border-collapse: separate; border-spacing: 3px; }
 .lol-scroll th, .lol-scroll td { padding: 8px; text-align: center; font-size: .84rem; }
+.lol-scroll thead th { color: var(--lol-gold); }
 .lol-scroll tbody th { position: relative; min-width: 155px; height: 76px; padding-left: 84px; }
 .lol-scroll tbody img { position: absolute; inset: 0 auto 0 0; width: 76px; height: 100%; object-fit: cover; border-radius: 6px; }
 .lol-scroll td { border-radius: 6px; min-width: 69px; }
-.lol-match { background: color-mix(in srgb, var(--ok) 28%, var(--card)); }
-.lol-partial { background: color-mix(in srgb, #de9b18 33%, var(--card)); }
-.lol-miss { background: color-mix(in srgb, var(--bad) 24%, var(--card)); }
+.lol-match { background: #214d43; }
+.lol-partial { background: #584522; }
+.lol-miss { background: #552f3c; }
+.lol-history .recap { margin: 0; }
+.lol-history .recap li { background: var(--lol-surface); border-radius: var(--lol-radius); font-size: .875rem; }
+.lol-history .recap li.ok { border-color: #50b18e; }
+.lol-history .recap li.no { border-color: #b9686e; }
 
 @media (min-width: 740px) {
+  [data-hud="studio"] .lol-play, [data-hud="panel"] .lol-play { max-width: none; }
   [data-hud="studio"] .lol-layout { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
   [data-hud="panel"] .lol-layout { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
   [data-hud="panel"] .lol-puzzle { grid-column: 2; grid-row: 1; }
   [data-hud="panel"] .lol-controls { grid-column: 1; grid-row: 1; }
 }
-[data-hud="arcade"] .lol .panel { border: 2px solid var(--accent); box-shadow: 0 4px 0 var(--line); }
+[data-hud="arcade"] .lol .panel { border: 2px solid var(--lol-gold); box-shadow: 0 4px 0 var(--lol-border); }
 [data-hud="terminal"] .lol-layout { font-family: Consolas, monospace; }
-[data-hud="terminal"] .lol .panel { border-radius: var(--lol-radius, 0px); border-left: 4px solid var(--accent); }
-[data-hud="editorial"] .lol-round-head h2 { font-family: Georgia, serif; font-size: 1.8rem; }
+[data-hud="terminal"] .lol .panel { border-radius: 0; border-left: 4px solid var(--lol-gold); }
 [data-hud="editorial"] .lol .panel { border-radius: var(--lol-radius, 0px); border-width: 1px 0; }
 [data-hud="orbit"] .lol .panel { border-radius: var(--lol-radius, 28px); }
 [data-hud="orbit"] .lol-ability { border-radius: var(--lol-radius, 50%); }
 [data-hud="blueprint"] .lol .panel {
-  border: 3px double var(--line);
-  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  border: 3px double var(--lol-border);
+  background-image: linear-gradient(#43526133 1px, transparent 1px), linear-gradient(90deg, #43526133 1px, transparent 1px);
   background-size: 22px 22px;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -117,14 +168,14 @@ body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
   gap: 14px;
   min-height: 70px;
   padding: 9px 14px;
-  border: 1px solid #435261;
-  border-radius: 4px;
-  background: #101b2a;
+  border: 1px solid var(--lol-border);
+  border-radius: var(--lol-radius);
+  background: var(--lol-surface);
   color: var(--lol-menu-text);
   text-align: left;
 }
 .lol-modes button:hover:not(:disabled),
-.lol-modes button:focus-visible { border-color: var(--lol-gold); background: #182638; }
+.lol-modes button:focus-visible { border-color: var(--lol-gold); background: var(--lol-hover); }
 .lol-modes button:focus-visible { outline: 2px solid var(--lol-gold); outline-offset: 2px; }
 .lol-modes strong { display: block; font-size: 1.125rem; line-height: 1.25; }
 .lol-modes small { display: block; margin-top: 4px; color: var(--lol-menu-muted); font-size: .8125rem; font-weight: 400; }
@@ -188,8 +239,9 @@ body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
   padding: 4px;
   max-height: 240px;
   overflow-y: auto;
-  border: 1px solid var(--line);
-  border-radius: var(--lol-radius, 10px);
+  border: 1px solid var(--lol-border);
+  border-radius: var(--lol-radius);
+  background: var(--lol-field);
 }
 .lol-suggestions button {
   display: flex;
@@ -199,7 +251,11 @@ body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
   width: 100%;
   padding: 5px 8px;
   border-color: transparent;
+  background: transparent;
+  color: var(--lol-menu-text);
+  font-size: .875rem;
 }
+.lol-suggestions button:hover { border-color: var(--lol-gold); background: var(--lol-hover); }
 .lol-suggestions img { object-fit: cover; border-radius: 5px; }
 
 /* Ajustes visuais do LoLdle. */
@@ -213,26 +269,24 @@ body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
   background-attachment: fixed;
 }
 .lol-page .lol { max-width: var(--lol-width, 1020px); font-size: var(--lol-text, 16px); }
-.lol-page .lol-layout { gap: var(--lol-gap, 12px); }
-.lol-page .lol-layout .panel { padding: var(--lol-padding, 18px); }
-.lol-page .lol-clue blockquote { font-size: var(--lol-title, clamp(1.15rem, 4vw, 1.6rem)); }
 .lol-page .lol-ability { width: var(--lol-icon, 106px); max-width: 100%; }
 .lol-page .lol-splash { max-width: var(--lol-splash, 540px); }
 .lol-page .lol-scroll :is(th, td) { padding-block: var(--lol-cell, 8px); }
 .lol-page .lol-suggestions { max-height: var(--lol-suggestions, 240px); }
-.lol .panel { border-radius: var(--lol-radius, 14px); }
+.lol-layout > .panel { border-radius: var(--lol-radius); }
 
 /* Aparência escolhida para o menu e todas as partidas do LoLdle. */
 body.lol-page {
   --lol-width: 831px;
   --lol-gold: #e3be78;
+  --lol-border: #435261;
+  --lol-surface: #101b2a;
+  --lol-hover: #182638;
+  --lol-field: #0b1420;
   --lol-menu-text: #f6f3ec;
   --lol-menu-muted: #d0d9e3;
-  --lol-gap: 19px;
-  --lol-padding: 4px;
-  --lol-radius: 0px;
+  --lol-radius: 4px;
   --lol-text: 20px;
-  --lol-title: 25px;
   --lol-shade: 0.6;
   --lol-fit: cover;
   --lol-position: center bottom;
