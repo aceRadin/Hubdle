@@ -188,6 +188,34 @@ test('Deezer: carregamento, partidas, falhas e diários', { timeout: 180000 }, a
     assert.equal(await f.page.locator('#result').isVisible(), true); assert.equal(f.errors.length, 0); await f.context.close();
   });
 
+  await t.test('Musical: mostra o resultado diário no menu antes de carregar o gênero', async () => {
+    const f = await fixture();
+    await choose(f, 'musicle', true);
+    for (let i = 0; i < 5; i++) {
+      await f.page.locator('#opts button').first().click();
+      await f.page.locator('#nextBtn').click();
+    }
+    const result = await f.page.locator('#resultTitle').textContent();
+    const score = /Você acertou (\d) de 5/.exec(result)[1];
+    await f.page.locator('#backBtn2').click();
+    const rock = f.page.locator('#tilesDaily button').filter({ hasText: 'Rock' });
+    assert.match(await rock.innerText(), new RegExp('feito: ' + score + '/5'));
+
+    await choose(f, 'musicle', true, 'Pop');
+    await f.page.locator('#opts button').first().click();
+    const requests = f.requests.length;
+    await f.page.reload();
+    assert.match(await rock.innerText(), new RegExp('feito: ' + score + '/5'));
+    assert.equal(await f.page.locator('#tilesDaily .tile.done').count(), 1);
+    assert.equal(f.requests.length, requests, 'menu não carrega catálogos');
+    await f.page.evaluate(() => HUBA.setMode('training'));
+    assert.equal(await f.page.locator('#tilesDaily .tile.done').count(), 0);
+    await f.page.evaluate(() => HUBA.setMode('daily'));
+    assert.match(await rock.innerText(), new RegExp('feito: ' + score + '/5'));
+    assert.equal(f.errors.length, 0);
+    await f.context.close();
+  });
+
   await t.test('troca rápida descarta o gênero anterior ainda em carregamento', async () => {
     const f = await fixture({ latency: 450 });
     await f.page.evaluate(() => HUBA.setMode('training'));

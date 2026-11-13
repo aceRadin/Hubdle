@@ -117,20 +117,20 @@ function renderHome(){
     var keys=configuredGenres();
     keys.forEach(function(g){
       var b=document.createElement('button'); b.className='tile';
-      var n=poolOf(g).length, small='';
-      if(musicLoading && loadingChoice && loadingChoice.genre===g && loadingChoice.daily===daily) small='Carregando gênero…';
-      else if(!loadedGenres[g]) small='';
-      else if(loadedGenres[g] && n<optionCount()) small='precisa de '+optionCount()+'+ músicas';
-      else if(daily){
-        var st=readState(g);
-        if(st&&st.p&&st.p.length>=nq(poolOf(g))){small='feito: '+st.s+'/'+nq(poolOf(g)); b.classList.add('done')}
-        else small='';
-      } else small='';
+      var pool=poolOf(g), small='';
+      var loading=musicLoading&&loadingChoice&&loadingChoice.genre===g&&loadingChoice.daily===daily;
+      var st=daily?readState(g):null;
+      var total=st&&Array.isArray(st.questions)?st.questions.length:loadedGenres[g]?nq(pool):0;
+      var done=total>0&&st&&Array.isArray(st.p)&&st.p.length>=total;
+      if(done)b.classList.add('done');
+      if(loading)small='Carregando gênero…';
+      else if(done)small='feito: '+st.s+'/'+total;
+      else if(loadedGenres[g]&&pool.length<optionCount())small='precisa de '+optionCount()+'+ músicas';
       b.innerHTML='<span class="tname"><span class="tn"></span><em class="tacc"></em></span><small></small>';
       b.querySelector('.tn').textContent=gName(g);
       b.querySelector('.tacc').textContent='precisão '+genreAcc(g);
       b.lastChild.textContent=small;
-      b.disabled=!!(musicLoading && loadingChoice && loadingChoice.genre===g && loadingChoice.daily===daily);
+      b.disabled=!!loading;
       b.onclick=function(){enterGenre(daily,g)};
       box.appendChild(b);
     });
