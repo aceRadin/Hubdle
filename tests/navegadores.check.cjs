@@ -44,7 +44,7 @@ for(const engine of ['chromium','firefox','webkit'])test('fluxos essenciais em '
      else{await page.locator('#opts button').first().click();assert.ok((await page.locator('#qhint').textContent()).length>0)}
    }
    await page.evaluate(()=>HUBA_I18N.setLanguage('en'));assert.equal(await page.locator('html').getAttribute('lang'),'en');
-   await page.locator('.bits-hud-menu>summary').click();await page.locator('[data-bits-hud-choice="orbit"]').click();
+   assert.equal(await page.locator('.bits-hud-menu, .huba-settings, .huba-visual-toggle').count(),0,'visual único em '+game);
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'sem overflow em '+game);
  }
  assert.deepEqual(errors,[]);
