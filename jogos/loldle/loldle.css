@@ -145,20 +145,6 @@ body.has-game-header .lol-top > .huba-language { grid-column: 3; grid-row: 1; }
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
-/* Faixa atrás do conteúdo, com bordas suaves e fim acima do logo. */
-.lol-backdrop-shade {
-  position: fixed;
-  z-index: 0;
-  pointer-events: none;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(calc(100% - 32px), var(--lol-width, 831px));
-  height: 68vh;
-  background: linear-gradient(to right, transparent, #000f 8%, #000f 92%, transparent);
-  mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 75%, transparent);
-}
-.lol-page > .lol { position: relative; z-index: 1; }
 .lol-page .lol { max-width: var(--lol-width, 1020px); font-size: var(--lol-text, 16px); }
 .lol-page #mode-selection { max-width: var(--lol-menu-width, 580px); }
 .lol-page :is(.lol-modes, .lol-layout) { gap: var(--lol-gap, 12px); }
@@ -186,6 +172,6 @@ body.lol-page {
   --lol-title: 25px;
   --lol-shade: 0.6;
   --lol-fit: cover;
-  --lol-position: center;
+  --lol-position: center bottom;
   --lol-photo: url("images/leagueoflegends-1794531139681-1713.jpg");
 }
