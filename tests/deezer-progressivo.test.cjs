@@ -111,7 +111,7 @@ test('Deezer: carregamento, partidas, falhas e diários', { timeout: 180000 }, a
     const page = await context.newPage();
     page.setDefaultTimeout(8000);
     page.on('pageerror', e => errors.push(e.message));
-    await page.goto(base + `/jogos/${game}/`);
+    await page.goto(base + `/jogos/${game}/`); await page.locator('#huba-tutorial .primary').click();
     await page.waitForSelector(game === 'bits' ? '#dailyTiles button' : '#tilesDaily button');
     return { context, page, requests, errors, max: () => maxInflight };
   }

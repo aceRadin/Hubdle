@@ -23,7 +23,7 @@ test('diários: meia-noite, reservas persistidas e retomada do Streakal',{timeou
  const expose={musicle:'get:()=>cur,replaceFailedSong,showAudioFailure,answer,goHome,enterGenre',streakal:'get:()=>cur,answerQuestion,upgrade,goHome,enterGenre',wording:'get:()=>w,wKey,startWord',bits:'get:()=>active,showAudioFailure,replaceAudio,back,enterCategory,submit'};
  for(const [game,functions] of Object.entries(expose))await context.route('**/'+game+'.js*',async r=>{const code=await fs.readFile(path.join(root,'jogos',game,game+'.js'),'utf8'),i=code.lastIndexOf('})();');await r.fulfill({contentType:'application/javascript',body:code.slice(0,i)+'window.audit={'+functions+'};'+code.slice(i)})});
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto(base+'/jogos/musicle/index.html');assert.equal(await page.evaluate(()=>HUBA.dayKey()),'2026-10-29','mesmo dia em São Paulo mesmo acessando do Japão');
+ await page.goto(base+'/jogos/musicle/index.html'); await page.locator('#huba-tutorial .primary').click();assert.equal(await page.evaluate(()=>HUBA.dayKey()),'2026-10-29','mesmo dia em São Paulo mesmo acessando do Japão');
  await page.locator('#tilesDaily button').click();await page.waitForFunction(()=>audit.get()?.qs);
  const changed=await page.evaluate(()=>{audit.showAudioFailure();audit.replaceFailedSong();const q=audit.get().qs[0];audit.answer(q.a);return {id:audit.get().pool[q.a].id,start:q.start,opts:q.opts.map(i=>audit.get().pool[i].id)}});
  await page.reload();await page.locator('#tilesDaily button').click();await page.waitForFunction(()=>audit.get()?.qi===1);
@@ -32,7 +32,7 @@ test('diários: meia-noite, reservas persistidas e retomada do Streakal',{timeou
  await page.evaluate(()=>{auditNow+=120000;audit.answer(audit.get().qs[1].a)});
  assert.equal(await page.evaluate(()=>Object.keys(localStorage).some(k=>k.startsWith('musicle4:2026-10-30'))),false);
 
- await page.goto(base+'/jogos/streakal/index.html');await page.locator('#tilesDaily button').click();await page.waitForFunction(()=>audit.get()?.options.length);
+ await page.goto(base+'/jogos/streakal/index.html'); await page.locator('#huba-tutorial .primary').click();await page.locator('#tilesDaily button').click();await page.waitForFunction(()=>audit.get()?.options.length);
  await page.evaluate(()=>{audit.answerQuestion(audit.get().answer);audit.upgrade('shorter');audit.answerQuestion(audit.get().answer)});
  const run=await page.evaluate(()=>{const c=audit.get();return {score:c.score,clip:c.clip,round:c.round,consecutive:c.consecutiveShorter,answer:c.answer,options:c.options,random:c.rng.getState()}});
  await page.reload();await page.locator('#tilesDaily button').click();await page.waitForSelector('#upgradePanel:visible');
@@ -45,7 +45,7 @@ test('diários: meia-noite, reservas persistidas e retomada do Streakal',{timeou
  assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('huba:streakal:daily:2026-10-29:rock')).done),true);
  assert.equal(await page.evaluate(()=>localStorage.getItem('huba:streakal:daily:2026-10-30:rock')),null);
 
- await page.goto(base+'/jogos/bits/index.html');await page.locator('#dailyTiles button').filter({hasText:'Rock'}).click();await page.waitForSelector('#guessInput:visible');
+ await page.goto(base+'/jogos/bits/index.html'); await page.locator('#huba-tutorial .primary').click();await page.locator('#dailyTiles button').filter({hasText:'Rock'}).click();await page.waitForSelector('#guessInput:visible');
  const reserve=await page.evaluate(()=>{audit.showAudioFailure();audit.replaceAudio();return audit.get().song.id});
  await page.reload();await page.locator('#dailyTiles button').filter({hasText:'Rock'}).click();await page.waitForSelector('#guessInput:visible');
  assert.equal(await page.evaluate(()=>audit.get().song.id),reserve);
@@ -56,7 +56,7 @@ test('diários: meia-noite, reservas persistidas e retomada do Streakal',{timeou
  await page.reload();await page.locator('#dailyTiles button').filter({hasText:'Rock'}).click();await page.waitForSelector('#guessInput:visible');
  assert.equal(await page.evaluate(()=>{audit.showAudioFailure();audit.replaceAudio();return audit.get().song.id}),reserve);
 
- await page.goto(base+'/jogos/wording/index.html');await page.locator('#wTilesDaily button').first().click();
+ await page.goto(base+'/jogos/wording/index.html'); await page.locator('#huba-tutorial .primary').click();await page.locator('#wTilesDaily button').first().click();
  await page.evaluate(()=>{const target=audit.get().targets[0].n;auditNow+=120000;for(const c of target)audit.wKey(c);audit.wKey('enter')});
  assert.equal(await page.evaluate(()=>Object.keys(localStorage).some(k=>k.startsWith('word2:2026-10-30'))),false);
  assert.equal(await page.evaluate(()=>Object.keys(localStorage).some(k=>k.startsWith('word2:2026-10-29'))),true);

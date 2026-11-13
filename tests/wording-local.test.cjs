@@ -16,7 +16,7 @@ test('Wording funciona abrindo index.html diretamente, sem fetch nem upload',asy
   const page=await browser.newPage(),errors=[],jsonRequests=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(/\.json(?:\?|$)/.test(r.url()))jsonRequests.push(r.url())});
   await page.route('https://fonts.googleapis.com/**',r=>r.abort());await page.route('https://fonts.gstatic.com/**',r=>r.abort());
-  await page.goto(pathToFileURL(path.join(root,'jogos/wording/index.html')).href);
+  await page.goto(pathToFileURL(path.join(root,'jogos/wording/index.html')).href); await page.locator('#huba-tutorial .primary').click();
   await page.waitForFunction(()=>document.querySelectorAll('#wTilesDaily button').length===3&&!document.querySelector('#wTilesDaily button').disabled);
   assert.equal(await page.locator('#wLoadJson,#wResetJson,input[type=file]').count(),0);
   for(const lang of ['pt','en']){
@@ -31,6 +31,9 @@ test('Wording funciona abrindo index.html diretamente, sem fetch nem upload',asy
   await page.evaluate(()=>HUBA.setMode('training'));await page.locator('#wTilesDaily button').first().click();
   const words=JSON.parse(await fs.readFile(path.join(root,'dados/words.json'),'utf8'));const word=Array.isArray(words)?words[0]:words.en.words[0];
   await page.locator('#wTitle').click();for(let i=0;i<6&&!(await page.locator('#wResult').isVisible());i++){await page.keyboard.type(word);await page.keyboard.press('Enter')}
+  assert.equal(await page.locator('#wResult').isVisible(),true);
+  await page.getByRole('button',{name:'How to play'}).click();
+  await page.getByRole('button',{name:'Got it'}).press('Escape');
   assert.equal(await page.locator('#wResult').isVisible(),true);
   assert.equal(await page.locator('#wNext').textContent(),'Next game');
   await page.locator('#wNext').press('Enter');

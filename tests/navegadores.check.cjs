@@ -29,7 +29,7 @@ for(const engine of ['chromium','firefox','webkit'])test('fluxos essenciais em '
  page.setDefaultTimeout(12000);
  for(const game of ['musicle','streakal','bits','wording']){
    console.log(engine+': '+game);
-   await page.goto(base+'/jogos/'+game+'/index.html');
+   await page.goto(base+'/jogos/'+game+'/index.html'); await page.locator('#huba-tutorial .primary').click();
    await page.evaluate(()=>HUBA_I18N.setLanguage('pt'));
    await page.locator(game==='bits'?'#dailyTiles button':game==='wording'?'#wTilesDaily button':'#tilesDaily button').first().click();
    if(game==='wording'){

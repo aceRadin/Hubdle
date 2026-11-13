@@ -78,7 +78,7 @@ test('Musical e Streakal usam só o arquivo escolhido, com alternativas, diário
      return r.fulfill({contentType:'application/javascript',body:url.searchParams.get('callback')+'('+JSON.stringify({...song(Number(id)),preview:'https://audio.huba.test/fresh/'+id})+')'});
    });
    const page=await context.newPage();page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));
-   await page.goto(pathToFileURL(resolve('jogos/'+game+'/index.html')).href);
+   await page.goto(pathToFileURL(resolve('jogos/'+game+'/index.html')).href); await page.locator('#huba-tutorial .primary').click();
    return {context,page,files,api,errors};
  }
  async function choose(p,genre='Rock'){await p.locator('#tilesDaily button').filter({hasText:genre}).click();await p.waitForSelector('#play:visible')}

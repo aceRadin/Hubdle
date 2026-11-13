@@ -54,7 +54,7 @@ test('navegador usa arquivos por gênero, 5/15 separados e diário consistente s
      return r.fulfill({contentType:'application/javascript',body:await readFile(join(f.root,'dados/bits-artistas',name),'utf8')});
    });
    const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
-   await page.goto(pathToFileURL(resolve('jogos/bits/index.html')).href);
+   await page.goto(pathToFileURL(resolve('jogos/bits/index.html')).href); await page.locator('#huba-tutorial .primary').click();
    return {context,page,requests,api,errors};
  }
  const a=await open(80);t.after(()=>a.context.close());assert.deepEqual(a.requests,['config.js']);

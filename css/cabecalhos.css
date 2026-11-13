@@ -24,6 +24,36 @@
 .huba-back:hover{color:var(--accent)}
 .huba-back:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .huba-game-header>.huba-back{grid-column:1;grid-row:1;justify-self:start}
+.huba-language .huba-help {
+ display:grid;
+ place-items:center;
+ width:36px;
+ height:36px;
+ padding:0;
+ background:transparent;
+ color:var(--accent);
+ font-size:1rem;
+}
+.huba-tutorial {
+ width:min(32rem, calc(100% - 24px));
+ max-height:calc(100dvh - 24px);
+ margin:auto;
+ padding:clamp(16px, 4vw, 28px);
+ overflow:auto;
+ border:1px solid var(--line);
+ border-radius:4px;
+ background:var(--card);
+ color:var(--fg);
+}
+.huba-tutorial::backdrop{background:rgb(0 0 0 / .7)}
+.huba-tutorial h2{margin:0 0 8px;color:var(--accent);font:700 1.65rem/1.2 Georgia,serif}
+.huba-tutorial p{margin:0;color:var(--muted)}
+.huba-tutorial ul{list-style:none;margin:16px 0;padding:0}
+.huba-tutorial li{display:grid;gap:2px;padding:9px 0;border-top:1px solid var(--line)}
+.huba-tutorial li span{color:var(--muted);font-size:.875rem}
+.huba-tutorial form{display:flex;justify-content:space-between;gap:8px}
+.huba-tutorial button{min-height:44px}
+.huba-tutorial button:focus-visible,.huba-help:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .huba-difficulty{position:relative}
 .huba-difficulty>summary{list-style:none;display:grid;place-items:center;box-sizing:border-box;width:34px;height:34px;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-size:1rem}
 .huba-difficulty>summary::-webkit-details-marker{display:none}

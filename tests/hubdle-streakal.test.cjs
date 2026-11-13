@@ -29,12 +29,25 @@ test('Hubdle em PT/EN mantém dados antigos; Streakal limita a dez e só reseta 
  for(const file of ['index.html','jogos/bits/index.html','jogos/musicle/index.html','jogos/wording/index.html','jogos/loldle/index.html','jogos/streakal/index.html']){
    await page.goto(pathToFileURL(path.join(root,file)).href);
    assert.ok((await page.title()).startsWith('Hubdle'));
+   const tutorial=page.getByRole('dialog');
+   await tutorial.waitFor();
    for(const lang of ['pt','en']){
      await page.evaluate(lang=>HUBA_I18N.setLanguage(lang),lang);
+     assert.match(await tutorial.locator('h2').textContent(),lang==='pt'?/^(Boas-vindas|Como jogar)/:/^(Welcome|How to play)/);
      assert.ok(!/\bHUBA\b/.test(await page.locator('body').innerText()),'marca antiga não aparece em '+file+' '+lang);
      const support=page.locator('main > .huba-support-footer').getByRole('link',{name:lang==='pt'?'Apoiar o Hubdle':'Support Hubdle'});
      assert.equal(await support.getAttribute('href'),'https://buymeacoffee.com/aceradin');
    }
+   await tutorial.getByRole('button',{name:'Português'}).click();
+   assert.equal(await tutorial.getAttribute('lang'),'pt-BR');
+   assert.equal(await page.locator('html').getAttribute('lang'),'en');
+   await tutorial.getByRole('button',{name:'Entendi'}).click();
+   await page.waitForFunction(()=>document.activeElement?.classList.contains('huba-help'));
+   await page.reload();
+   assert.equal(await tutorial.isVisible(),false);
+   await page.getByRole('button',{name:'How to play'}).click();
+   await tutorial.getByRole('button',{name:'Got it'}).press('Escape');
+   await tutorial.waitFor({state:'hidden'});
    if(file==='index.html')assert.equal(await page.locator('#globalStreak').textContent(),'7');
  }
  await page.evaluate(()=>HUBA_I18N.setLanguage('pt'));

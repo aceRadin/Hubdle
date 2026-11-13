@@ -24,7 +24,7 @@ test('Bits por artistas funciona via file://, limita a quinze e não busca catá
   const requests=[],errors=[];
   await context.route('https://api.deezer.com/**',r=>{const u=new URL(r.request().url());requests.push(u.href);const artist=/\/artist\/(\d+)\/top/.exec(u.pathname)?.[1];assert.ok(artist,'consulta direta ao Top do artista');assert.equal(u.searchParams.get('limit'),'15');const data=Array.from({length:20},(_,i)=>({id:Number(artist)*100+i,title:'Faixa '+(Number(artist)*100+i),artist:{id:i===1?0:Number(artist),name:i===1?'Unlisted Artist':'Artist '+artist},preview:'https://audio.test/'+(Number(artist)*100+i)}));return r.fulfill({contentType:'application/javascript',body:u.searchParams.get('callback')+'('+JSON.stringify({data,next:'https://api.deezer.com/artist/'+artist+'/top?index=15&limit=15'})+');'})});
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));const files=[];page.on('request',r=>{if(r.url().includes('/bits-us/')||r.url().includes('/chart/'))files.push(r.url())});
-  await page.goto(pathToFileURL(path.join(root,'jogos/bits/index.html')).href);assert.equal(requests.length,0);
+  await page.goto(pathToFileURL(path.join(root,'jogos/bits/index.html')).href); await page.locator('#huba-tutorial .primary').click();assert.equal(requests.length,0);
   await page.locator('#dailyTiles button').filter({hasText:'Rock'}).click();await page.waitForSelector('#guessInput:visible');
   assert.ok(requests.every(u=>rock.has(/\/artist\/(\d+)/.exec(u)[1])));
   const id=await page.evaluate(()=>Number(testAudio[0].src.split('/').pop()));
@@ -49,7 +49,7 @@ test('Diário usa cinco, Treino quinze e cache diário sobrevive ao reload sem m
   });
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   async function setup(){await page.evaluate(()=>{window.HUBA_BITS_ARTISTAS={rock:[{id:1,name:'A'},{id:2,name:'B'}],pop:[{id:3,name:'C'}],rap:[{id:4,name:'D'}]};window.profileTest=HUBA_BITS_CATALOGO.create({onUpdate(){}})})}
-  await page.goto(pathToFileURL(path.join(root,'jogos/bits/index.html')).href);await setup();
+  await page.goto(pathToFileURL(path.join(root,'jogos/bits/index.html')).href); await page.locator('#huba-tutorial .primary').click();await setup();
   const cold=await page.evaluate(async()=>{const t=performance.now(),s=await profileTest.select('rock',1,true);return {ms:Math.round(performance.now()-t),count:s.songs.length}});
   assert.equal(cold.count,10);assert.equal(requests.length,2);assert.ok(requests.every(r=>r.limit===5));
   await page.evaluate(async()=>{profileTest.pause();await profileTest.select('rock',31,false)});

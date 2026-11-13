@@ -49,7 +49,7 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  }
  async function audit(){return page.evaluate(()=>{const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),out=[];let n;while(n=w.nextNode()){const el=n.parentElement;if(!el||!el.getClientRects().length||el.closest('script,style,.huba-language,#wLang,.w-tile,.musical-option-title,.musical-option-artist,.bits-choice,.bits-history-line,#finishSong'))continue;const text=n.nodeValue.trim();if(/[ãçõ]|Diário|Aleatório|tentativas|Carregando|Próxima/.test(text))out.push(text)}return out})}
  await context.addInitScript(()=>{localStorage.setItem('huba:theme:v1','rose');localStorage.setItem('huba:hud:v1','panel');localStorage.setItem('huba:visual-version','1')});
- await page.goto(base);assert.equal(await page.locator('.huba-settings,.bits-hud-menu,.huba-visual-toggle').count(),0);assert.equal(await page.locator('html').evaluate(el=>getComputedStyle(el).getPropertyValue('--bg').trim()),'#0b1420');await language('en');assert.equal(await page.locator('#globalStreak').textContent(),'0');
+ await page.goto(base); await page.locator('#huba-tutorial .primary').click();assert.equal(await page.locator('.huba-settings,.bits-hud-menu,.huba-visual-toggle').count(),0);assert.equal(await page.locator('html').evaluate(el=>getComputedStyle(el).getPropertyValue('--bg').trim()),'#0b1420');await language('en');assert.equal(await page.locator('#globalStreak').textContent(),'0');
  assert.equal(await page.locator('.huba-mode>summary').textContent(),'📅');
  assert.equal(await page.locator('[data-game-mode="daily"]').isVisible(),false,'nomes de modo ficam no dropdown fechado');
  assert.equal(await page.locator('.landing-top .huba-language').count(),1);
@@ -96,7 +96,7 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  assert.equal(await page.locator('.gcard .gstreak small').count(),0);
  assert.deepEqual(await page.locator('.gcard .gstreak-fire').allTextContents(),['🔥','🔥','🔥','🔥','🔥']);
  for(const game of ['bits','musicle','streakal','wording']){
-  await page.goto(base+'/jogos/'+game+'/');assert.equal(await page.locator('html').getAttribute('lang'),'en');
+  await page.goto(base+'/jogos/'+game+'/'); await page.locator('#huba-tutorial .primary').click();assert.equal(await page.locator('html').getAttribute('lang'),'en');
   for(const selector of ['.huba-locale','.huba-mode']){
    await page.locator(selector+'>summary').click();assert.equal(await page.locator(selector).evaluate(el=>el.open),true);
    await page.locator('main').click({position:{x:2,y:2}});assert.equal(await page.locator(selector).evaluate(el=>el.open),false,'clique fora fecha '+selector+' em '+game);
