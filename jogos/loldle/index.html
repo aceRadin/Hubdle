@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../../css/style.css?v=20">
   <link rel="stylesheet" href="../../css/huds.css">
   <link rel="stylesheet" href="../../css/cabecalhos.css?v=6">
-  <link rel="stylesheet" href="loldle.css?v=17">
+  <link rel="stylesheet" href="loldle.css?v=18">
   <script defer src="../../js/comum.js"></script>
   <script defer src="../../js/idioma.js?v=19"></script>
   <script defer src="../../js/huds.js"></script>
@@ -24,14 +24,33 @@
       <a id="hub-link" href="../../index.html">‹ Hubdle</a>
       <button id="back-modes" type="button" hidden>‹ Modos</button>
     </div>
-    <div class="daily-streak" aria-live="polite"><strong id="statDailyStreak">0</strong><span>dias de streak diário</span></div>
+    <div class="lol-brand">
+      <h1>LoLdle</h1>
+      <div class="daily-streak" aria-live="polite"><strong id="statDailyStreak">0</strong><span>dias de streak diário</span></div>
+    </div>
   </header>
   <section id="mode-selection" aria-label="Escolha um modo">
     <nav class="lol-modes" aria-label="Modos de jogo">
-      <button type="button" data-mode="classic" disabled><span class="lol-mode-icon" aria-hidden="true">◈</span><span><strong>Clássico</strong><small>Encontre o campeão comparando sete pistas.</small></span><span aria-hidden="true">›</span></button>
-      <button type="button" data-mode="quote" disabled><span class="lol-mode-icon" aria-hidden="true">❝</span><span><strong>Falas</strong><small>Reconheça o campeão pela frase e pela voz.</small></span><span aria-hidden="true">›</span></button>
-      <button type="button" data-mode="ability" disabled><span class="lol-mode-icon" aria-hidden="true">✦</span><span><strong>Habilidade</strong><small>Um ícone. Uma habilidade. Qual campeão?</small></span><span aria-hidden="true">›</span></button>
-      <button type="button" data-mode="splash" disabled><span class="lol-mode-icon" aria-hidden="true">▧</span><span><strong>Splash art</strong><small>Revele a arte a cada palpite.</small></span><span aria-hidden="true">›</span></button>
+      <button type="button" data-mode="classic" disabled>
+        <span class="lol-mode-preview lol-preview-classic" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span><strong>Clássico</strong><small>Encontre o campeão comparando sete pistas.</small></span>
+        <span class="lol-mode-arrow" aria-hidden="true">›</span>
+      </button>
+      <button type="button" data-mode="quote" disabled>
+        <span class="lol-mode-preview lol-preview-quote" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        <span><strong>Falas</strong><small>Reconheça o campeão pela frase e pela voz.</small></span>
+        <span class="lol-mode-arrow" aria-hidden="true">›</span>
+      </button>
+      <button type="button" data-mode="ability" disabled>
+        <span class="lol-mode-preview lol-preview-ability" aria-hidden="true"></span>
+        <span><strong>Habilidade</strong><small>Um ícone. Uma habilidade. Qual campeão?</small></span>
+        <span class="lol-mode-arrow" aria-hidden="true">›</span>
+      </button>
+      <button type="button" data-mode="splash" disabled>
+        <span class="lol-mode-preview lol-preview-splash" aria-hidden="true"></span>
+        <span><strong>Splash art</strong><small>Revele a arte a cada palpite.</small></span>
+        <span class="lol-mode-arrow" aria-hidden="true">›</span>
+      </button>
     </nav>
     <p id="loading" class="note" role="status">Carregando campeões…</p>
   </section>
