@@ -33,12 +33,6 @@ let guesses = [];
 let suggestions = [];
 const lastTrainingAnswers = new Map();
 
-async function loadJson(path) {
-  const response = await fetch(path);
-  if (!response.ok) throw new Error(path);
-  return response.json();
-}
-
 function normalize(value) {
   return HUBA.norm(String(value)).replace(/♀/g, 'f').replace(/♂/g, 'm').replace(/[^a-z0-9]/g, '');
 }
@@ -420,7 +414,8 @@ async function init() {
   updateStreak();
   window.addEventListener('pageshow', updateStreak);
   window.addEventListener('storage', updateStreak);
-  roster = await loadJson('pokemon.json');
+  roster = window.HUBA_POKEDEX;
+  if (!Array.isArray(roster) || !roster.length) throw new Error('Catálogo do Pokédle ausente.');
   const regions = ['', 'Kanto', 'Johto', 'Hoenn', 'Sinnoh', 'Unova', 'Kalos', 'Alola', 'Galar', 'Paldea'];
   roster.forEach(pokemon => {
     pokemon.region = pokemon.id >= 899 && pokemon.id <= 905 ? 'Hisui' :
@@ -470,6 +465,6 @@ async function init() {
 
 init().catch(error => {
   console.error(error);
-  byId('loading').textContent = 'Não foi possível carregar os Pokémon. Abra o jogo por um servidor local e recarregue a página.';
+  byId('loading').textContent = 'Não foi possível carregar o catálogo do Pokédle. Recarregue a página e confira se o arquivo pokemon.js está na pasta do jogo.';
 });
 

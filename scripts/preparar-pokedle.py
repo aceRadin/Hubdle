@@ -76,9 +76,10 @@ def main():
     assert all(not mentions.search(row["description"]) for row in roster if row["description"])
     output = ROOT / "jogos/pokedle"
     output.mkdir(parents=True, exist_ok=True)
-    temporary = output / "pokemon.json.tmp"
-    temporary.write_text(json.dumps(roster, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
-    temporary.replace(output / "pokemon.json")
+    temporary = output / "pokemon.js.tmp"
+    catalog = json.dumps(roster, ensure_ascii=False, separators=(",", ":"))
+    temporary.write_text("window.HUBA_POKEDEX = " + catalog + ";\n", encoding="utf-8")
+    temporary.replace(output / "pokemon.js")
     print(json.dumps({"species": len(roster), "descriptions": sum(bool(p["description"]) for p in roster),
                       "card_species": sum(bool(p["cards"]) for p in roster)}))
 

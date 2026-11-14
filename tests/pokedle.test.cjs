@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const http = require('node:http');
+const { pathToFileURL } = require('node:url');
 const { chromium } = require(process.env.HUBA_PLAYWRIGHT_MODULE || 'playwright');
 
 test('Pokédle mantém pistas, progresso diário e revelação nos quatro modos', { timeout: 60000 }, async t => {
@@ -114,5 +115,9 @@ test('Pokédle mantém pistas, progresso diário e revelação nos quatro modos'
   assert.equal(await page.evaluate(() => guesses.length), 0);
   await page.goto(base + '/index.html');
   assert.equal(await page.locator('a.gcard-pokedle').getAttribute('href'), 'jogos/pokedle/index.html');
+  await page.goto(pathToFileURL(path.join(root, 'jogos/pokedle/index.html')).href);
+  await page.locator('[data-generation="4"]').click();
+  await page.click('[data-mode="classic"]');
+  assert.equal(await page.evaluate(() => answer.generation), 4);
   assert.deepEqual(errors, []);
 });
