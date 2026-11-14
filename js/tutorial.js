@@ -57,7 +57,7 @@
     pokedle: {
       pt: ['Como jogar Pokédle', 'Descubra o Pokémon em quatro desafios.', [
         ['Clássico', 'Compare tipos, geração, habitat, cor, evolução, altura e peso. As setas apontam para o valor da resposta. Habitat ausente fica cinza.'],
-        ['Descrição', 'Leia uma entrada original da Pokédex em inglês, filtrada para evitar nomes de Pokémon.'],
+        ['Descrição', 'Leia uma entrada da Pokédex traduzida para português do Brasil e filtrada para evitar nomes de Pokémon.'],
         ['Silhueta', 'O primeiro pedaço aparece na borda. Cada palpite válido abre novos pedaços aleatórios.'],
         ['Cartão', 'Cada palpite válido reduz o desfoque da carta. Palpites repetidos não avançam as pistas.']
       ]],

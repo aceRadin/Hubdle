@@ -62,7 +62,14 @@ test('Pokédle mantém pistas, progresso diário e revelação nos quatro modos'
       }), true);
     }
     if (mode === 'quote') {
-      assert.ok((await page.locator('blockquote').textContent()).length > 20);
+      const description = page.locator('blockquote');
+      assert.equal(await description.getAttribute('lang'), 'pt-BR');
+      assert.equal(await description.textContent(), await page.evaluate(() => HUBA_POKEDEX_PT_BR[answer.id].text));
+      await page.evaluate(() => HUBA_I18N.setLanguage('en'));
+      assert.equal(await description.getAttribute('lang'), 'en');
+      assert.equal(await description.textContent(), await page.evaluate(() => answer.description));
+      assert.equal(await page.evaluate(() => guesses.length), 1);
+      await page.evaluate(() => HUBA_I18N.setLanguage('pt'));
     }
     if (mode === 'ability') assert.equal(await page.locator('canvas').getAttribute('data-revealed'), '4');
     if (mode === 'splash') assert.equal(await page.locator('.poke-card').evaluate(el => el.style.filter), 'blur(21px)');

@@ -3,7 +3,7 @@
 const byId = id => document.getElementById(id);
 const modes = {
   classic: ['Clássico', 'Compare os atributos para encontrar o Pokémon.'],
-  quote: ['Descrição', 'Qual Pokémon é descrito nesta entrada da Pokédex? Texto original em inglês.'],
+  quote: ['Descrição', 'Qual Pokémon é descrito nesta entrada da Pokédex?'],
   ability: ['Silhueta', 'A cada palpite, novos pedaços da silhueta são revelados.'],
   splash: ['Cartão', 'A carta fica mais nítida a cada palpite válido.']
 };
@@ -152,8 +152,12 @@ function renderClue() {
   if (mode === 'quote') {
     const quote = document.createElement('blockquote');
     quote.dataset.noTranslate = '';
-    quote.lang = 'en';
-    quote.textContent = answer.description;
+    const translation = window.HUBA_I18N?.language === 'en'
+      ? null : window.HUBA_POKEDEX_PT_BR?.[answer.id];
+    // Só use a tradução quando ela corresponder à entrada atual do catálogo.
+    const localized = translation?.source === answer.description;
+    quote.lang = localized ? 'pt-BR' : 'en';
+    quote.textContent = localized ? translation.text : answer.description;
     clue.append(quote);
     return;
   }
