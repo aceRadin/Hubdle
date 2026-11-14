@@ -124,7 +124,10 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  assert.equal(await page.locator('.huba-language #wGameStats').count(),1);
  await page.locator('#wGameStats').click();assert.equal(await page.locator('#wStats').evaluate(el=>el.open),true);assert.ok(await page.locator('#wStatsBody .w-sblock').count()>0);await page.locator('#wStatsClose').click();
  await page.locator('#wTitle').click();await page.keyboard.type('ab');await page.keyboard.press('Space');
- const input=await page.locator('#wBoards .w-row').first().textContent();await language('pt');assert.doesNotMatch(await page.locator('#wTitle').textContent(),/English/);await language('en');assert.match(await page.locator('#wTitle').textContent(),/English/);assert.equal(await page.locator('#wBoards .w-row').first().textContent(),input);
+ const input=await page.locator('#wBoards .w-row').first().textContent();
+ await language('pt');assert.equal(await page.locator('#wTitle').textContent(),'Wording · Treino');
+ await language('en');assert.equal(await page.locator('#wTitle').textContent(),'Wording · Training');
+ assert.equal(await page.locator('#wBoards .w-row').first().textContent(),input);
  assert.deepEqual(await audit(),[],'Wording: instruções em inglês');
  await page.locator('#wTitle').click();for(let i=0;i<8;i++)await page.keyboard.press('Backspace');
  const words=JSON.parse(await fs.readFile(path.join(root,'dados/words.json'),'utf8'));const word=Array.isArray(words)?words[0]:words.en.words[0];

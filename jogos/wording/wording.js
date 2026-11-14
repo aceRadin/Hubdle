@@ -150,7 +150,7 @@ function startWord(mode,daily,preserve){
 function showWordGame(){
   var M=w.M,daily=w.daily;
   $('#word').classList.add('hidden'); $('#wgame').classList.remove('hidden');
-  $('#wTitle').textContent=M.name+' · '+(daily?'Diário':'Treino')+(WLANG==='en'?' · English':'');
+  $('#wTitle').textContent=M.name+' · '+(daily?'Diário':'Treino');
   $('#wMsg').textContent='';
   wBuildKb(); renderWord();
 }
@@ -167,14 +167,12 @@ function wKey(k){
   w.flip=-1;
   if(k==='enter')return wSubmit();
   if(k==='back'){
-    // Apaga a casa selecionada; se estiver vazia, procura uma letra antes.
-    // Se o cursor voltou ao início com letras à direita, apaga a última delas.
     var target=w.pos;
-    if(!w.slots[target]||w.slots[target]===' '){
-      target=-1;
-      for(var j=w.pos-1;j>=0;j--)if(w.slots[j]&&w.slots[j]!==' '){target=j;break}
-      if(target<0)for(var j=4;j>w.pos;j--)if(w.slots[j]&&w.slots[j]!==' '){target=j;break}
-      if(target<0){for(var j=4;j>=0;j--)if(w.slots[j]===' '){target=j;break}}
+    if(!w.slots[target]){
+      // Recuar uma casa também vale quando ela foi pulada com a seta.
+      if(target>0)target--;
+      // No início, ainda é possível apagar o conteúdo à direita.
+      else target=w.slots.findLastIndex(Boolean);
     }
     if(target>=0){w.slots[target]='';w.pos=target}
     // Depois de limpar a palavra (inclusive placeholders), recomeça na primeira casa.

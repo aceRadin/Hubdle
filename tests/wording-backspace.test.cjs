@@ -24,6 +24,23 @@ test('Backspace repetido remove letras e placeholders e permanece no início',()
  assert.equal(ctx.w.slots.join(''),'');assert.equal(ctx.w.pos,0);
  ctx.wKey('x');assert.equal(ctx.w.slots[0],'x');
 });
+test('Backspace apaga letras e espaços na ordem das casas',()=>{
+ const ctx=game(['','','','',''],0);
+ for(const key of ['a','space','b','space'])ctx.wKey(key);
+ for(const [slot, remaining] of [[3,'a b'],[2,'a '],[1,'a'],[0,'']]){
+  ctx.wKey('back');
+  assert.equal(ctx.w.pos,slot);
+  assert.equal(ctx.w.slots.join(''),remaining);
+ }
+});
+test('Backspace recua uma casa vazia criada pela seta',()=>{
+ const ctx=game(['','','','',''],0);
+ for(const key of ['a','right','b','back','back'])ctx.wKey(key);
+ assert.equal(ctx.w.pos,1);
+ assert.equal(ctx.w.slots[0],'a');
+ ctx.wKey('back');
+ assert.equal(ctx.w.slots.join(''),'');
+});
 test('linha vazia com cursor no meio volta à primeira casa',()=>{
  const ctx=game(['','','','',''],3);ctx.wKey('back');assert.equal(ctx.w.pos,0);
 });
