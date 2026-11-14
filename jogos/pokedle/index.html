@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quatro desafios diários sobre os Pokémon.">
+  <title>Hubdle — Pokédle</title>
+  <link rel="icon" href="../../favicon.svg">
+  <link rel="stylesheet" href="../../css/style.css?v=31">
+  <link rel="stylesheet" href="../../css/cabecalhos.css?v=32">
+  <link rel="stylesheet" href="../loldle/loldle.css?v=31">
+  <link rel="stylesheet" href="pokedle.css?v=1">
+  <script defer src="../../js/comum.js?v=30"></script>
+  <script defer src="../../js/idioma.js?v=31"></script>
+  <script src="../../js/tutorial.js?v=3" defer></script>
+  <script defer src="pokedle.js?v=1"></script>
+  <script defer src="../../js/apoio-config.js"></script>
+  <script defer src="../../js/apoio.js?v=4"></script>
+</head>
+<body data-tutorial="pokedle" class="has-game-header lol-page poke-page">
+<main class="lol">
+  <header class="lol-top huba-game-header">
+    <div class="lol-heading">
+      <a id="hub-link" class="huba-back" href="../../index.html">Hubdle</a>
+      <button id="back-modes" type="button" class="huba-back" hidden>Modos</button>
+    </div>
+    <div class="lol-brand">
+      <h1>Pokédle</h1>
+      <div class="daily-streak" aria-live="polite"><strong id="statDailyStreak">0</strong><span>dias de streak diário</span></div>
+    </div>
+  </header>
+  <section id="mode-selection" aria-label="Escolha um modo">
+    <nav class="lol-modes" aria-label="Modos de jogo">
+      <button type="button" data-mode="classic" disabled>
+        <span class="lol-mode-preview lol-preview-classic" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span><strong>Clássico</strong><small>Encontre o Pokémon comparando tipos, geração, habitat, cor, evolução, altura e peso.</small></span>
+        <span class="lol-mode-arrow" aria-hidden="true">›</span>
+      </button>
+      <button type="button" data-mode="quote" disabled>
+        <span class="lol-mode-preview lol-preview-quote" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        <span><strong>Descrição</strong><small>Descubra o Pokémon pela descrição da Pokédex.</small></span>
+        <span class="lol-mode-arrow" aria-hidden="true">›</span>
+      </button>
+      <button type="button" data-mode="ability" disabled>
+        <span class="lol-mode-preview lol-preview-ability" aria-hidden="true"></span>
+        <span><strong>Silhueta</strong><small>Abra novos pedaços da silhueta a cada palpite.</small></span>
+        <span class="lol-mode-arrow" aria-hidden="true">›</span>
+      </button>
+      <button type="button" data-mode="splash" disabled>
+        <span class="lol-mode-preview lol-preview-splash" aria-hidden="true"></span>
+        <span><strong>Cartão</strong><small>A carta fica mais nítida a cada palpite.</small></span>
+        <span class="lol-mode-arrow" aria-hidden="true">›</span>
+      </button>
+    </nav>
+    <p id="loading" class="note" role="status">Carregando Pokémon…</p>
+  </section>
+  <section id="play" class="lol-play hidden" aria-labelledby="mode-title">
+    <h2 id="mode-title" class="lol-round-title" tabindex="-1"></h2>
+    <div class="lol-layout">
+      <div class="panel lol-puzzle">
+        <p id="prompt"></p>
+        <div id="result" class="lol-result" role="status" hidden>
+          <img id="result-portrait" width="76" height="76" alt="">
+          <div>
+            <p class="lol-result-label">Acertou!</p>
+            <h3 id="result-champion" data-no-translate></h3>
+          </div>
+        </div>
+        <div id="clue" class="lol-clue" hidden></div>
+        <div class="lol-finish-actions" id="finish-actions" hidden>
+          <button class="lol-finish-link" id="next-mode" type="button"></button>
+          <a class="lol-finish-link" id="finish-hub" href="../../index.html">Voltar ao Hubdle</a>
+          <button id="next-round" class="primary" type="button" hidden>Jogar de novo</button>
+        </div>
+      </div>
+      <div class="panel lol-controls">
+        <form id="guess-form" autocomplete="off">
+          <label for="guess">Seu palpite</label>
+          <div class="lol-input-row">
+            <input id="guess" aria-controls="champions" placeholder="Digite o nome do Pokémon" required>
+            <button class="primary" type="submit">Enviar</button>
+          </div>
+          <ul id="champions" class="lol-suggestions" aria-label="Sugestões de Pokémon" hidden></ul>
+        </form>
+        <p id="feedback" class="note" role="status"></p>
+        <p id="count" class="note"></p>
+      </div>
+      <section class="lol-history" aria-label="Histórico de palpites">
+        <div id="classic-history" hidden>
+          <button id="history-toggle" type="button" aria-expanded="false" aria-controls="classic-guesses">
+            <span class="lol-history-show">Ver palpites</span>
+            <span class="lol-history-hide">Ocultar palpites</span>
+          </button>
+          <div id="classic-guesses">
+            <p class="note lol-legend">✓ Igual · ◐ Parcial · × Diferente · ↑ Maior · ↓ Menor · — Sem dados</p>
+            <div class="lol-scroll" tabindex="0" aria-label="Tabela de comparação dos Pokémon">
+              <table>
+                <thead><tr><th scope="col">Pokémon</th><th scope="col">Tipo 1</th><th scope="col">Tipo 2</th><th scope="col">Geração</th><th scope="col">Região de estreia</th><th scope="col">Habitat</th><th scope="col">Cor</th><th scope="col">Evolução</th><th scope="col">Altura</th><th scope="col">Peso</th></tr></thead>
+                <tbody id="comparison"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <ul id="guess-history" class="recap" hidden></ul>
+      </section>
+    </div>
+  </section>
+  <footer class="lol-footer">Pokémon pertence a Nintendo, Game Freak e Creatures. Dados da <a href="https://pokeapi.co/">PokéAPI</a> e cartas do <a href="https://tcgdex.dev/">TCGdex</a>.</footer>
+</main>
+</body>
+</html>
+

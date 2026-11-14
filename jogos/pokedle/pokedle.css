@@ -1,0 +1,37 @@
+body.poke-page {
+  --lol-photo: none;
+  background: var(--bg, #0b1420);
+}
+.poke-page .lol { --lol-width: 1100px; }
+.poke-page .lol-modes { max-width: 640px; margin-inline: auto; }
+.poke-page .lol-preview-quote { font: 700 22px Georgia, serif; }
+.poke-page .lol-preview-quote::after { content: '“…”'; }
+.poke-page .lol-preview-quote i { display: none; }
+.poke-page .lol-preview-ability { background: #101b2a; border: 1px solid #e3be78; }
+.poke-page .lol-preview-ability::after { content: '?'; color: #e3be78; font-size: 24px; }
+.poke-page .lol-preview-splash { background: linear-gradient(130deg, #e3be78, #365a8b); filter: blur(2px); }
+.poke-silhouette {
+  display: block;
+  width: min(100%, 360px);
+  height: auto;
+  margin: auto;
+  background: #f0eee5;
+  border-radius: var(--lol-radius);
+}
+.poke-card {
+  display: block;
+  width: min(100%, 260px);
+  aspect-ratio: 600 / 825;
+  object-fit: contain;
+  margin: 20px auto;
+  transition: filter .3s;
+}
+.poke-page .lol-clue { overflow: hidden; }
+.poke-page .lol-scroll table { min-width: 1050px; }
+.poke-page .lol-scroll tbody th { min-width: 80px; width: 80px; padding: 0; }
+.poke-page .lol-scroll th img { object-fit: contain; background: #dbe5ed; border-radius: 4px; }
+.poke-page .lol-unknown { background: #414b58; }
+.poke-page .lol-suggestions img, .poke-page .lol-result img { object-fit: contain; background: #dbe5ed; }
+@media (prefers-reduced-motion: reduce) {
+  .poke-card { transition: none; }
+}

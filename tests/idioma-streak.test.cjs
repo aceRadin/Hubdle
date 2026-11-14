@@ -69,7 +69,7 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  assert.ok(Math.abs(centers[0].y+centers[0].height/2-centers[2].y-centers[2].height/2)<1,'título e opções na mesma altura no computador');
  const streakCenters=await page.locator('.global-streak').evaluate(el=>Array.from(el.children).map(n=>{const r=n.getBoundingClientRect();return r.y+r.height/2}));
  assert.ok(Math.max(...streakCenters)-Math.min(...streakCenters)<1,'número e texto do streak alinhados');
- assert.deepEqual(await page.locator('#landingGrid > a .gname').allTextContents(),['Musical','Wording','Bits','Streakal','LoLdle']);
+ assert.deepEqual(await page.locator('#landingGrid > a .gname').allTextContents(),['Musical','Wording','Bits','Streakal','LoLdle','Pokédle']);
  assert.equal(await page.locator('#landingGrid > :not(a), .huba-support').count(),0);
  for(const [width,columns] of [[1280,3],[320,2],[390,2]]){
   await page.setViewportSize({width,height:844});
@@ -94,7 +94,7 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  }
  assert.equal(await page.locator('.gcard').filter({hasText:'Musical'}).locator('.gstreak').count(),1);
  assert.equal(await page.locator('.gcard .gstreak small').count(),0);
- assert.deepEqual(await page.locator('.gcard .gstreak-fire').allTextContents(),['🔥','🔥','🔥','🔥','🔥']);
+ assert.deepEqual(await page.locator('.gcard .gstreak-fire').allTextContents(),['🔥','🔥','🔥','🔥','🔥','🔥']);
  for(const game of ['bits','musicle','streakal','wording']){
   await page.goto(base+'/jogos/'+game+'/'); await page.locator('#huba-tutorial .primary').click();assert.equal(await page.locator('html').getAttribute('lang'),'en');
   for(const selector of ['.huba-locale','.huba-mode']){

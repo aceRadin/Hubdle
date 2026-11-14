@@ -54,6 +54,20 @@
         ['Read the colors', 'Green means the right letter in the right spot. Yellow means the letter belongs elsewhere. Gray means it is absent.']
       ]]
     },
+    pokedle: {
+      pt: ['Como jogar Pokédle', 'Descubra o Pokémon em quatro desafios.', [
+        ['Clássico', 'Compare tipos, geração, habitat, cor, evolução, altura e peso. As setas apontam para o valor da resposta. Habitat ausente fica cinza.'],
+        ['Descrição', 'Leia uma entrada original da Pokédex em inglês, filtrada para evitar nomes de Pokémon.'],
+        ['Silhueta', 'O primeiro pedaço aparece na borda. Cada palpite válido abre novos pedaços aleatórios.'],
+        ['Cartão', 'Cada palpite válido reduz o desfoque da carta. Palpites repetidos não avançam as pistas.']
+      ]],
+      en: ['How to play Pokédle', 'Guess the Pokémon in four challenges.', [
+        ['Classic', 'Compare types, generation, habitat, color, evolution stage, height and weight. Arrows point toward the answer. Missing habitats are gray.'],
+        ['Description', 'Read an original English Pokédex entry, filtered to avoid Pokémon names.'],
+        ['Silhouette', 'Start at the edge. Each valid guess reveals more random pieces.'],
+        ['Card', 'Each valid guess reduces the blur. Repeated guesses do not reveal more.']
+      ]]
+    },
     loldle: {
       pt: ['Como jogar LoLdle', 'Descubra o campeão de League of Legends em quatro modos.', [
         ['Clássico', 'Compare os atributos de cada palpite com os do campeão secreto.'],

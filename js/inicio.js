@@ -4,7 +4,8 @@
   {name:'Wording',path:'jogos/wording/index.html',cardClass:'gcard-wording',streaks:[{id:'word',label:''}]},
   {name:'Bits',path:'jogos/bits/index.html',cardClass:'gcard-bits',streaks:[{id:'bits',label:''}]},
   {name:'Streakal',path:'jogos/streakal/index.html',cardClass:'gcard-streakal',streaks:[{id:'streakal',label:''}]},
-  {name:'LoLdle',path:'jogos/loldle/index.html',cardClass:'gcard-loldle',streaks:[{id:'loldle',label:''}]}
+  {name:'LoLdle',path:'jogos/loldle/index.html',cardClass:'gcard-loldle',streaks:[{id:'loldle',label:''}]},
+  {name:'Pokédle',path:'jogos/pokedle/index.html',cardClass:'gcard-pokedle',streaks:[{id:'pokedle',label:''}]}
  ];
  var grid=document.getElementById('landingGrid');
  games.forEach(function(g){
