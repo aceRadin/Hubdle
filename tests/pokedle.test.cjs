@@ -78,6 +78,32 @@ test('Pokédle mantém pistas, progresso diário e revelação nos quatro modos'
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
     await page.click('#back-modes');
   }
+  await page.click('[data-generation="1"]');
+  await page.click('[data-generation="4"]');
+  for (const mode of ['classic', 'quote', 'ability', 'splash']) {
+    await page.click('[data-mode="' + mode + '"]');
+    assert.ok([1, 4].includes(await page.evaluate(() => answer.generation)));
+    assert.equal(await page.evaluate(() => guesses.length), 0);
+    await page.fill('#guess', 'Sprigatito');
+    assert.equal(await page.locator('#champions button').count(), 0);
+    await page.click('#guess-form button[type="submit"]');
+    assert.equal(await page.evaluate(() => guesses.length), 0);
+    await page.click('#back-modes');
+  }
+  await page.click('[data-mode="classic"]');
+  const filteredGuess = await page.evaluate(() => answer.id === 1 ? '4' : '1');
+  await page.fill('#guess', filteredGuess);
+  await page.click('#guess-form button[type="submit"]');
+  await page.reload();
+  assert.equal(await page.locator('[data-generation="1"]').getAttribute('aria-pressed'), 'true');
+  assert.equal(await page.locator('[data-generation="4"]').getAttribute('aria-pressed'), 'true');
+  await page.click('[data-mode="classic"]');
+  assert.deepEqual(await page.evaluate(() => guesses), [Number(filteredGuess)]);
+  await page.click('#back-modes');
+  await page.click('[data-generation="0"]');
+  await page.click('[data-mode="classic"]');
+  assert.equal(await page.locator('#result').isVisible(), true);
+  await page.click('#back-modes');
   await page.evaluate(() => HUBA.setMode('training'));
   await page.click('[data-mode="classic"]');
   const first = await page.evaluate(() => answer.id);

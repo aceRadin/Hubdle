@@ -24,7 +24,9 @@ let clueVersion = 0;
 let day = HUBA.dayKey();
 let roster;
 let champions;
-let quoteRoster;
+let filteredRoster;
+let generationKey = '';
+const generationPreference = 'huba:pokedle:generations:v1';
 let mode;
 let answer;
 let guesses = [];
@@ -42,7 +44,52 @@ function normalize(value) {
 }
 
 function storageKey() {
-  return 'huba:pokedle:v1:' + day + ':' + mode;
+  return 'huba:pokedle:v1:' + day + ':' + mode + generationKey;
+}
+
+function eligiblePokemon(modeId) {
+  if (modeId === 'quote') return filteredRoster.filter(pokemon => pokemon.description);
+  if (modeId === 'splash') return filteredRoster.filter(pokemon => pokemon.cards.length);
+  return filteredRoster;
+}
+
+function initGenerationFilter(regions) {
+  const generations = [...new Set(roster.map(pokemon => pokemon.generation))].sort((a, b) => a - b);
+  let selected = new Set();
+  try {
+    const saved = JSON.parse(localStorage.getItem(generationPreference));
+    if (Array.isArray(saved)) selected = new Set(saved.filter(value => generations.includes(value)));
+  } catch {}
+  const options = byId('generation-options');
+  function updateFilter() {
+    if (selected.size === generations.length) selected.clear();
+    const active = generations.filter(generation => selected.has(generation));
+    generationKey = active.length ? ':gen:' + active.join(',') : '';
+    filteredRoster = active.length ? roster.filter(pokemon => selected.has(pokemon.generation)) : roster;
+    for (const button of options.children) {
+      const generation = Number(button.dataset.generation);
+      button.setAttribute('aria-pressed', String(generation ? selected.has(generation) : !selected.size));
+    }
+    document.querySelectorAll('[data-mode]').forEach(button => {
+      button.disabled = !eligiblePokemon(button.dataset.mode).length;
+    });
+  }
+  for (const generation of [0, ...generations]) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.dataset.generation = generation;
+    button.textContent = generation ? generation + 'ª · ' + regions[generation] : 'Todas';
+    button.onclick = () => {
+      if (!generation) selected.clear();
+      else if (selected.has(generation)) selected.delete(generation);
+      else selected.add(generation);
+      updateFilter();
+      try { localStorage.setItem(generationPreference, JSON.stringify([...selected])); } catch {}
+    };
+    options.append(button);
+  }
+  updateFilter();
+  byId('generation-filter').hidden = false;
 }
 
 function restoreGuesses() {
@@ -68,6 +115,8 @@ function pickRandom(items) {
 }
 
 function selectMode(next, focus = false) {
+  const eligible = eligiblePokemon(next);
+  if (!eligible.length) return;
   day = HUBA.dayKey();
   mode = next;
   byId('mode-selection').hidden = true;
@@ -75,12 +124,8 @@ function selectMode(next, focus = false) {
   byId('back-modes').hidden = false;
   byId('hub-link').hidden = true;
   document.body.classList.add('lol-playing');
-  const eligible = mode === 'quote' ? quoteRoster : roster.filter(champion => {
-    if (mode === 'splash') return champion.cards.length;
-    return true;
-  });
   if (HUBA.isDaily) {
-    answer = pickDaily(eligible, mode);
+    answer = pickDaily(eligible, mode + generationKey);
     guesses = restoreGuesses();
   } else {
     const available = eligible.filter(champion => champion.id !== lastTrainingAnswers.get(mode));
@@ -268,7 +313,7 @@ function renderRound() {
   if (won) {
     const order = Object.keys(modes);
     const next = order.slice(order.indexOf(mode) + 1)
-      .find(id => id !== 'quote' || quoteRoster.length);
+      .find(id => eligiblePokemon(id).length);
     const nextButton = byId('next-mode');
     nextButton.hidden = !next;
     byId('finish-hub').hidden = !!next;
@@ -321,7 +366,7 @@ function renderSuggestions() {
   const query = normalize(byId('guess').value);
   const list = byId('champions');
   list.replaceChildren();
-  suggestions = query ? roster
+  suggestions = query ? filteredRoster
     .filter(entry => !guesses.includes(entry.id) && normalize(entry.name).startsWith(query))
     .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
     .slice(0, 8) : [];
@@ -350,7 +395,7 @@ function submitGuess(event) {
   if (guesses.includes(answer.id)) return;
   const input = byId('guess');
   const value = normalize(input.value);
-  const exact = value && roster.find(entry =>
+  const exact = value && filteredRoster.find(entry =>
     normalize(entry.name) === value || normalize(entry.id) === value
   );
   const firstSuggestion = byId('champions').hidden ? null : suggestions[0];
@@ -382,7 +427,7 @@ async function init() {
       [808, 809].includes(pokemon.id) ? 'Desconhecida' : regions[pokemon.generation];
   });
   champions = new Map(roster.map(champion => [champion.id, champion]));
-  quoteRoster = roster.filter(champion => champion.description);
+  initGenerationFilter(regions);
   const form = byId('guess-form');
   byId('guess').addEventListener('input', renderSuggestions);
   form.addEventListener('focusout', event => {
@@ -409,8 +454,6 @@ async function init() {
   });
   byId('guess-form').addEventListener('submit', submitGuess);
   document.querySelectorAll('[data-mode]').forEach(button => {
-    if (button.dataset.mode === 'quote' && !quoteRoster.length) return;
-    button.disabled = false;
     button.addEventListener('click', () => selectMode(button.dataset.mode, true));
   });
   byId('back-modes').addEventListener('click', () => {

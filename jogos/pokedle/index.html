@@ -9,11 +9,11 @@
   <link rel="stylesheet" href="../../css/style.css?v=31">
   <link rel="stylesheet" href="../../css/cabecalhos.css?v=32">
   <link rel="stylesheet" href="../loldle/loldle.css?v=31">
-  <link rel="stylesheet" href="pokedle.css?v=1">
+  <link rel="stylesheet" href="pokedle.css?v=2">
   <script defer src="../../js/comum.js?v=30"></script>
   <script defer src="../../js/idioma.js?v=31"></script>
   <script src="../../js/tutorial.js?v=3" defer></script>
-  <script defer src="pokedle.js?v=1"></script>
+  <script defer src="pokedle.js?v=2"></script>
   <script defer src="../../js/apoio-config.js"></script>
   <script defer src="../../js/apoio.js?v=4"></script>
 </head>
@@ -30,6 +30,10 @@
     </div>
   </header>
   <section id="mode-selection" aria-label="Escolha um modo">
+    <fieldset id="generation-filter" class="poke-generations" hidden>
+      <legend>Gerações</legend>
+      <div id="generation-options"></div>
+    </fieldset>
     <nav class="lol-modes" aria-label="Modos de jogo">
       <button type="button" data-mode="classic" disabled>
         <span class="lol-mode-preview lol-preview-classic" aria-hidden="true"><i></i><i></i><i></i></span>
