@@ -16,7 +16,6 @@
 #play .musical-play-header {display:grid;grid-template-columns: minmax(90px,1fr) minmax(0,5fr) minmax(90px,1fr);align-items:start;gap:12px;margin-bottom:18px}
 #play .musical-play-heading {min-width:0;text-align:center}
 #play .musical-play-heading #playTitle {font-size:clamp(1.5rem,3.2vw,2.3rem);overflow-wrap:anywhere}
-#play .musical-play-heading #playSub {margin:8px 0 0;text-align:center}
 #play .musical-audio-row {display:flex;align-items:center;gap:16px;margin:14px 0}
 #play .musical-audio-row .vol {display:flex;flex:0 0 auto;gap:7px;align-items:center;margin:0}
 #play .musical-audio-row .vol input[type=range] {width:clamp(75px,11vw,135px);max-width:none;flex:0 0 auto;min-width:0}

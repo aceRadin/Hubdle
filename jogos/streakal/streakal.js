@@ -81,7 +81,7 @@ function openGame(daily,g){
   musicLoader.select(g,2,daily).catch(function(){});waitingCatalog=false;
   $('#gameCatalogCount').textContent=poolOf(g).length.toLocaleString('pt-BR')+' músicas carregadas neste gênero';
   $('#home').classList.add('hidden');$('#play').classList.remove('hidden');$('#play').classList.remove('is-result');
-  $('#playTitle').textContent='Streakal · '+gName(g);$('#playSub').textContent=(daily?'Desafio diário':'Treino')+' · Acerte até errar. Cada acerto exige uma escolha de dificuldade permanente.';
+  $('#playTitle').textContent='Streakal · '+gName(g);
   cur=newRun(daily,g);invalidSongs={};audioFailures=0;updateLimitDisplay();
   // Desafios diários concluídos não podem reiniciar o placar nesse dia.
   var prev=daily?readJSON(dailyKey(g),null):null;

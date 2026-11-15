@@ -43,7 +43,6 @@ function gName(g){return cap(g)}
   function optionCount(){return CLIP===1.5?5:4}
   function modeOf(){return CLIP===1.5?'hard':'casual'}
   function modeName(){return CLIP===1.5?'Desafiador':'Casual'}
-  function fmtSec(n){return String(n).replace('.',',')}
   function readStats(){try{return JSON.parse(localStorage.getItem(STATS_KEY))||{games:0}}catch(e){return {games:0}}}
   function saveStats(st){try{localStorage.setItem(STATS_KEY,JSON.stringify(st))}catch(e){}}
   function renderStats(){
@@ -155,7 +154,6 @@ function openGame(daily,g){
   $('#home').classList.add('hidden'); $('#play').classList.remove('hidden');
   $('#play').classList.toggle('musical-hard',CLIP===1.5);
   $('#playTitle').textContent='Musical · '+gName(g)+' · '+modeName();
-  $('#playSub').textContent=(daily?'Rodada do dia. ':'Rodada aleatória. ')+'Ouça o trecho de '+fmtSec(CLIP)+' segundos e escolha qual música tocou. São '+nq(pool)+' perguntas.';
   cur={pool:pool,genre:g,daily:daily,date:dayKey(),replacements:0,statsRecorded:false};
   failedAnswers={};
   newRound();
