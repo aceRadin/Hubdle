@@ -151,6 +151,37 @@ test('Deezer: carregamento, partidas, falhas e diários', { timeout: 180000 }, a
     assert.equal(f.errors.length+second.errors.length,0);await f.context.close();await second.context.close();
   });
 
+  await t.test('Bits: busca por música e artista no catálogo extra sem alterar o diário', async () => {
+    const f = await fixture({ game: 'bits', latency: 5 });
+    try {
+      const { artists } = JSON.parse(await fs.readFile(path.join(root, 'dados/bits-sugestoes.json'), 'utf8'));
+      const artist = artists.find(entry => entry.name === 'ABBA');
+      const song = artist.tracks[0];
+      const option = f.page.getByRole('option', { name: artist.name + ' - ' + song.title, exact: true });
+      await choose(f, 'bits', true, 'Rock');
+      const originalSrc = await f.page.evaluate(() => testAudio[0].src);
+      const catalog = f.page.waitForResponse('**/dados/bits-sugestoes.json');
+      await f.page.locator('#guessInput').fill(artist.name);
+      assert.equal((await catalog).ok(), true);
+      await option.waitFor();
+      await f.page.locator('#guessInput').fill(song.title);
+      await option.click();
+      await f.page.locator('#submitGuess').click();
+      assert.match(await f.page.locator('#history').textContent(), /ABBA - /);
+      assert.equal(await f.page.locator('#finish').isVisible(), false);
+      assert.equal(await f.page.evaluate(() => testAudio[0].src), originalSrc);
+      await f.page.reload();
+      await choose(f, 'bits', true, 'Rock');
+      assert.match(await f.page.locator('#history').textContent(), /ABBA - /);
+      await f.page.locator('#guessInput').fill(artist.name);
+      await f.page.getByRole('option').first().waitFor();
+      assert.equal(await option.count(), 0);
+      assert.deepEqual(f.errors, []);
+    } finally {
+      await f.context.close();
+    }
+  });
+
   for (const game of ['musicle', 'streakal']) await t.test(game + ': entra antes do fim, cresce sem duplicar e reutiliza cache', async () => {
     const f = await fixture({ game, latency: 180 });
     assert.equal(f.requests.length, 0, 'não consulta playlists ao abrir a página');

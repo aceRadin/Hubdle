@@ -6,6 +6,7 @@ var cats=['top','pop','rock','rap'];
 var labels={top:'Top',pop:'Pop',rock:'Rock',rap:'Rap'};
 var lengths=[1,2,4,7,11,16], maxAttempts=lengths.length;
 var byCat={}, active=null, selected=null, roundId=0;
+var extraGuesses=[], guessCatalogRequest=null;
 var audio=new Audio(), audioUrl=null, loadToken=0, musicLoading=true, loadingChoice=null;
 var unavailableSongs={};
 var audioToken=0,recoveredSong=false,recoveringSong=false;
@@ -18,7 +19,7 @@ function getStats(){try{return JSON.parse(storageGet(statsKey))||{games:0,wins:0
 function saveStats(st){storageSet(statsKey,JSON.stringify(st))}
 function renderStats(){$('streakValue').textContent=HUBA.currentStreak('bits')}
 function dailyKey(cat,date){return 'huba:bits:daily:v5:artists5:'+(date||HUBA.dayKey())+':'+cat}
-function dailySave(){if(!active||!active.daily)return;storageSet(dailyKey(active.cat,active.date),JSON.stringify({id:active.song.id,guessIds:active.guesses,finished:active.finished,won:active.won,replacements:active.replacements,unavailableSongs:unavailableSongs}))}
+function dailySave(){if(!active||!active.daily)return;storageSet(dailyKey(active.cat,active.date),JSON.stringify({id:active.song.id,guessIds:active.guesses,guessDetails:active.guessDetails,finished:active.finished,won:active.won,replacements:active.replacements,unavailableSongs:unavailableSongs}))}
 function dailyRead(cat){try{return JSON.parse(storageGet(dailyKey(cat)))}catch(e){return null}}
 function clipLengthAt(index){return lengths[Math.max(0,Math.min(index,maxAttempts-1))]}
 function drawTiles(){
@@ -83,8 +84,8 @@ function start(cat,daily){
  var list=byCat[cat]||[];if(!list.length){setStatus('Carregue músicas antes de jogar.');return}
  stopAudio();unavailableSongs={};var song=chooseSong(cat,daily);if(!song)return;
  $('gameCatalogCount').textContent=list.length.toLocaleString('pt-BR')+' músicas carregadas neste gênero';
- active={cat:cat,daily:daily,date:HUBA.dayKey(),replacements:0,pool:daily?(byCat[cat]||[]).slice().sort(HUBADeezer.compare):null,song:song,guesses:[],finished:false,won:false,recorded:false};
- if(daily){var old=dailyRead(cat);if(old&&old.id===song.id){active.guesses=Array.isArray(old.guessIds)?old.guessIds.slice(0,maxAttempts):[];active.finished=!!old.finished;active.won=!!old.won;active.recorded=active.finished;active.replacements=old.replacements||0;unavailableSongs=old.unavailableSongs||{}}}
+ active={cat:cat,daily:daily,date:HUBA.dayKey(),replacements:0,pool:daily?(byCat[cat]||[]).slice().sort(HUBADeezer.compare):null,song:song,guesses:[],guessDetails:{},finished:false,won:false,recorded:false};
+ if(daily){var old=dailyRead(cat);if(old&&old.id===song.id){active.guesses=Array.isArray(old.guessIds)?old.guessIds.slice(0,maxAttempts):[];active.guessDetails=old.guessDetails||{};active.finished=!!old.finished;active.won=!!old.won;active.recorded=active.finished;active.replacements=old.replacements||0;unavailableSongs=old.unavailableSongs||{}}}
  roundId++;
  $('bitsHome').classList.add('hidden');$('bitsGame').classList.remove('hidden');
  $('gameTitle').textContent='Bits · '+labels[cat];$('gameSubtitle').textContent=daily?'Desafio diário':'Treino';
@@ -153,7 +154,7 @@ function replaceAudio(){
  var song=options[Math.floor(rng()*options.length)];
  stopAudio();active.song=song;
  // Uma música nova exige palpites novos; não contam tentativas ou derrota.
- active.guesses=[];active.finished=false;active.won=false;
+ active.guesses=[];active.guessDetails={};active.finished=false;active.won=false;
  $('finish').classList.add('hidden');$('guessArea').classList.remove('hidden');
  $('replaceAudio').classList.add('hidden');prepareAudio(song);dailySave();renderRound();
  message('Nova música sorteada. Suas tentativas foram reiniciadas sem penalidade.');
@@ -199,13 +200,43 @@ $('muteAudio').onclick=function(){muted=!muted;if(!muted&&volume===0)volume=.5;a
 applyVolume();
 function message(msg){$('message').textContent=msg}
 function guessOptions(){return active.daily?active.pool:(byCat[active.cat]||[])}
+function loadGuessCatalog(){
+ if(guessCatalogRequest||location.protocol==='file:')return;
+ guessCatalogRequest=fetch('../../dados/bits-sugestoes.json').then(function(response){
+   if(!response.ok)throw Error('HTTP '+response.status);
+   return response.json();
+ }).then(function(catalog){
+   extraGuesses=catalog.artists.flatMap(function(artist){
+     return artist.tracks.map(function(track){
+       var label=artist.name+' - '+track.title;
+       return {id:'dz-'+track.id,artist:artist.name,label:label,searchLabel:norm(label),searchArtist:norm(artist.name),searchTitle:norm(track.title)};
+     });
+   });
+   if(active&&!active.finished&&!selected&&$('guessInput').value)showSuggestions();
+ }).catch(function(){
+   // O catálogo da partida continua pesquisável. A próxima digitação tenta novamente.
+   guessCatalogRequest=null;
+ });
+}
 function showSuggestions(){
  var list=$('suggestions');list.replaceChildren();if(!active||active.finished)return;
  var value=norm($('guessInput').value);$('guessInput').setAttribute('aria-expanded','false');
  if(!value){list.classList.remove('open');return}
+ loadGuessCatalog();
  // Não sugere músicas já escolhidas nesta rodada, inclusive em partidas diárias retomadas.
  var tried=new Set(active.guesses.filter(function(id){return id!=='__skip__'}));
- var options=guessOptions().filter(function(s){return !tried.has(s.id)&&norm(s.label).includes(value)}).slice(0,12);
+ var ids=new Set(),labelsSeen=new Set(),matches=[];
+ // Mantém o ID usado no jogo quando a faixa também aparece no catálogo extra.
+ for(var song of guessOptions().concat(extraGuesses)){
+   var label=song.searchLabel||norm(song.label);
+   if(ids.has(song.id)||labelsSeen.has(label))continue;
+   ids.add(song.id);labelsSeen.add(label);
+   if(tried.has(song.id)||!label.includes(value))continue;
+   var artist=song.searchArtist||norm(song.artist),title=song.searchTitle||norm(song.title);
+   var rank=title===value||artist===value?0:title.startsWith(value)||artist.startsWith(value)?1:2;
+   matches.push({song:song,rank:rank});
+ }
+ var options=matches.sort(function(a,b){return a.rank-b.rank}).slice(0,12).map(function(match){return match.song});
  if(!options.length){list.classList.remove('open');var s=musicLoader.state(active.cat);$('selectedText').textContent=s.complete?'Nenhuma música encontrada.':s.error?'Busca incompleta: retome o carregamento no contador de músicas.':'Buscando nas músicas que ainda estão chegando…';return}
  $('selectedText').textContent='Selecione uma música da lista.'+(musicLoader.state(active.cat).complete?'':' A lista continua carregando.');
  options.forEach(function(song){var b=document.createElement('button');b.type='button';b.className='bits-choice';b.setAttribute('role','option');b.textContent=song.label;b.onclick=function(){selected=song;$('guessInput').value=song.label;$('selectedText').textContent='Selecionada: '+song.label;$('submitGuess').disabled=false;list.classList.remove('open');$('guessInput').setAttribute('aria-expanded','false')};list.appendChild(b)});
@@ -218,7 +249,7 @@ function renderRound(){
  $('clipLength').textContent=clipDuration()+' s';
  buildTimeline();
  var box=$('history');box.replaceChildren();active.guesses.forEach(function(id,index){var line=document.createElement('div');line.className='bits-history-line';
- var song=(byCat[active.cat]||[]).find(function(s){return s.id===id});line.textContent=(index+1)+'. '+(id==='__skip__'?'Pulou a tentativa':song?song.label:'Palpite registrado');
+ var song=(byCat[active.cat]||[]).find(function(s){return s.id===id})||active.guessDetails[id];line.textContent=(index+1)+'. '+(id==='__skip__'?'Pulou a tentativa':song?song.label:'Palpite registrado');
  if(id===active.song.id)line.style.borderColor='var(--ok)';
  else if(song&&norm(song.artist)===norm(active.song.artist)){
    line.classList.add('same-artist');
@@ -239,6 +270,7 @@ function submit(skip){
    message('Você já tentou essa música. Escolha outra.');return;
  }
  active.guesses.push(id);
+ if(!skip&&selected.searchLabel)active.guessDetails[id]={label:selected.label,artist:selected.artist};
  // Um pulo ou palpite incorreto amplia o trecho sem reiniciar o áudio.
  // Se o trecho anterior já terminou, a próxima reprodução começa do início.
  if(!skip)pauseAudio();
