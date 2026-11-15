@@ -21,6 +21,17 @@
 .bits-volume button{padding:6px 10px;min-width:44px}
 .bits-volume input{width:min(230px,50vw);accent-color:var(--accent)}
 .bits-volume span{color:var(--muted);font-size:.85rem;min-width:40px}
-.bits-history-line.same-artist{border-color:#d5a320;background:color-mix(in srgb,#efbc36 17%,var(--card))}
+.bits-actions {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  gap:clamp(6px,2vw,12px);
+}
+.bits-actions button{min-width:0;min-height:44px;padding-inline:clamp(6px,2vw,16px);justify-self:start}
+.bits-actions #skipGuess{justify-self:end}
+.bits-actions .bits-counter{font-size:1rem;text-align:center;font-variant-numeric:tabular-nums}
+.bits-history .bits-history-line{padding:12px 14px;font-size:1rem;border-width:2px;overflow-wrap:anywhere}
+.bits-history-line.correct{border-color:var(--ok)}
+.bits-history-line.incorrect{border-color:var(--bad)}
+.bits-history-line.same-artist{background:color-mix(in srgb,#efbc36 17%,var(--card))}
 .bits-history-line.same-artist small{color:var(--fg)}
 @media(max-width:680px){.bits-timeline{order:2;flex:1}.bits-player #clipLength{order:3}.bits-player #playAudio{order:1}}

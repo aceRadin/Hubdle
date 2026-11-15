@@ -250,8 +250,9 @@ function renderRound(){
  buildTimeline();
  var box=$('history');box.replaceChildren();active.guesses.forEach(function(id,index){var line=document.createElement('div');line.className='bits-history-line';
  var song=(byCat[active.cat]||[]).find(function(s){return s.id===id})||active.guessDetails[id];line.textContent=(index+1)+'. '+(id==='__skip__'?'Pulou a tentativa':song?song.label:'Palpite registrado');
- if(id===active.song.id)line.style.borderColor='var(--ok)';
- else if(song&&norm(song.artist)===norm(active.song.artist)){
+ if(id===active.song.id)line.classList.add('correct');
+ else if(id!=='__skip__')line.classList.add('incorrect');
+ if(id!==active.song.id&&song&&norm(song.artist)===norm(active.song.artist)){
    line.classList.add('same-artist');
    var hint=document.createElement('small');hint.textContent='✓ Artista correto — música incorreta';line.appendChild(hint);
  }
