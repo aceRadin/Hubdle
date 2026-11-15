@@ -25,13 +25,13 @@
       ]]
     },
     bits: {
-      pt: ['Como jogar Bits', 'Escolha um gênero e descubra a música em até seis tentativas.', [
-        ['Comece com 1 segundo', 'Ouça o trecho, procure pelo título ou artista e envie seu palpite.'],
-        ['Desbloqueie mais áudio', 'Cada erro ou pulo libera um trecho maior, até 16 segundos.']
+      pt: ['Como jogar Bits', 'Escolha um gênero e descubra a música em até sete tentativas.', [
+        ['Comece com 0,2 segundo', 'Ouça o trecho, procure pelo título ou artista e envie seu palpite.'],
+        ['Desbloqueie mais áudio', 'Cada erro ou pulo libera um trecho maior, até 17 segundos.']
       ]],
-      en: ['How to play Bits', 'Pick a genre and guess the song in six attempts or fewer.', [
-        ['Start with 1 second', 'Listen to the clip, search by title or artist, and submit your guess.'],
-        ['Unlock more audio', 'Each wrong guess or skip unlocks a longer clip, up to 16 seconds.']
+      en: ['How to play Bits', 'Pick a genre and guess the song in seven attempts or fewer.', [
+        ['Start with 0.2 seconds', 'Listen to the clip, search by title or artist, and submit your guess.'],
+        ['Unlock more audio', 'Each wrong guess or skip unlocks a longer clip, up to 17 seconds.']
       ]]
     },
     streakal: {

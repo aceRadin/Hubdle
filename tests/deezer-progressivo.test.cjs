@@ -374,7 +374,12 @@ test('Deezer: carregamento, partidas, falhas e diários', { timeout: 180000 }, a
         await f.page.locator(button).click();
         await f.page.waitForFunction(() => !testAudio[0].paused);
         starts.push(await f.page.evaluate(() => testAudio[0].currentTime));
-        if (game !== 'bits') await f.page.locator(button).click();
+        if (game === 'bits') {
+          await f.page.waitForFunction(() => testAudio[0].paused && testAudio[0].currentTime >= 0.2);
+          assert.ok(await f.page.evaluate(() => testAudio[0].currentTime < 0.35), 'o trecho inicial do Bits dura cerca de 0,2 s');
+        } else {
+          await f.page.locator(button).click();
+        }
       }
       assert.ok(Math.abs(starts[1] - starts[0]) < 0.4, game + ': mesmo segundo do trecho');
       assert.equal(f.errors.length, 0); await f.context.close();

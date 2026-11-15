@@ -4,7 +4,8 @@
 var $=function(id){return document.getElementById(id)};
 var cats=['top','pop','rock','rap'];
 var labels={top:'Top',pop:'Pop',rock:'Rock',rap:'Rap'};
-var lengths=[1,2,4,7,11,16], maxAttempts=lengths.length;
+var lengths=[0.2,2,4,7,11,16,17], maxAttempts=lengths.length;
+var audioFrame=0;
 var byCat={}, active=null, selected=null, roundId=0;
 var extraGuesses=[], guessCatalogRequest=null;
 var audio=new Audio(), audioUrl=null, loadToken=0, musicLoading=true, loadingChoice=null;
@@ -19,9 +20,13 @@ function getStats(){try{return JSON.parse(storageGet(statsKey))||{games:0,wins:0
 function saveStats(st){storageSet(statsKey,JSON.stringify(st))}
 function renderStats(){$('streakValue').textContent=HUBA.currentStreak('bits')}
 function dailyKey(cat,date){return 'huba:bits:daily:v5:artists5:'+(date||HUBA.dayKey())+':'+cat}
-function dailySave(){if(!active||!active.daily)return;storageSet(dailyKey(active.cat,active.date),JSON.stringify({id:active.song.id,guessIds:active.guesses,guessDetails:active.guessDetails,finished:active.finished,won:active.won,replacements:active.replacements,unavailableSongs:unavailableSongs}))}
+function dailySave(){if(!active||!active.daily)return;storageSet(dailyKey(active.cat,active.date),JSON.stringify({id:active.song.id,guessIds:active.guesses,guessDetails:active.guessDetails,finished:active.finished,won:active.won,attemptLimit:active.attemptLimit,replacements:active.replacements,unavailableSongs:unavailableSongs}))}
 function dailyRead(cat){try{return JSON.parse(storageGet(dailyKey(cat)))}catch(e){return null}}
-function clipLengthAt(index){return lengths[Math.max(0,Math.min(index,maxAttempts-1))]}
+function clipLengthAt(index,attemptLimit=maxAttempts){
+ var step=Math.max(0,Math.min(index,attemptLimit-1));
+ return step===0&&attemptLimit===6?1:lengths[step];
+}
+function displaySeconds(seconds){return String(seconds).replace('.',',')}
 function drawTiles(){
  ['daily'].forEach(function(mode){var daily=HUBA.isDaily,parent=$(mode+'Tiles');parent.textContent='';
  cats.forEach(function(cat){var prev=daily?dailyRead(cat):null, btn=document.createElement('button');
@@ -31,8 +36,8 @@ function drawTiles(){
  if(prev&&prev.finished){
    btn.classList.add(prev.won?'won':'failed');
    if(prev.won){
-     var seconds=clipLengthAt((prev.guessIds?.length||1)-1);
-     small.textContent='Acertou em '+seconds+(seconds===1?' segundo':' segundos');
+     var seconds=clipLengthAt((prev.guessIds?.length||1)-1,prev.attemptLimit||6);
+     small.textContent='Acertou em '+displaySeconds(seconds)+(seconds===1?' segundo':' segundos');
    }else small.textContent='Falhou';
  }else if(loading)small.textContent='Carregando gênero…';
  btn.append(name,small);btn.disabled=loading;btn.onclick=function(){enterCategory(cat,daily)};parent.appendChild(btn);
@@ -84,8 +89,15 @@ function start(cat,daily){
  var list=byCat[cat]||[];if(!list.length){setStatus('Carregue músicas antes de jogar.');return}
  stopAudio();unavailableSongs={};var song=chooseSong(cat,daily);if(!song)return;
  $('gameCatalogCount').textContent=list.length.toLocaleString('pt-BR')+' músicas carregadas neste gênero';
- active={cat:cat,daily:daily,date:HUBA.dayKey(),replacements:0,pool:daily?(byCat[cat]||[]).slice().sort(HUBADeezer.compare):null,song:song,guesses:[],guessDetails:{},finished:false,won:false,recorded:false};
- if(daily){var old=dailyRead(cat);if(old&&old.id===song.id){active.guesses=Array.isArray(old.guessIds)?old.guessIds.slice(0,maxAttempts):[];active.guessDetails=old.guessDetails||{};active.finished=!!old.finished;active.won=!!old.won;active.recorded=active.finished;active.replacements=old.replacements||0;unavailableSongs=old.unavailableSongs||{}}}
+ active={cat:cat,daily:daily,date:HUBA.dayKey(),replacements:0,pool:daily?(byCat[cat]||[]).slice().sort(HUBADeezer.compare):null,song:song,guesses:[],guessDetails:{},finished:false,won:false,recorded:false,attemptLimit:maxAttempts};
+ var old=daily?dailyRead(cat):null;
+ if(old&&old.id===song.id){
+   active.guesses=Array.isArray(old.guessIds)?old.guessIds.slice(0,maxAttempts):[];
+   active.guessDetails=old.guessDetails||{};
+   active.finished=!!old.finished;active.won=!!old.won;active.recorded=active.finished;
+   if(active.finished)active.attemptLimit=old.attemptLimit||6;
+   active.replacements=old.replacements||0;unavailableSongs=old.unavailableSongs||{};
+ }
  roundId++;
  $('bitsHome').classList.add('hidden');$('bitsGame').classList.remove('hidden');
  $('gameTitle').textContent='Bits · '+labels[cat];$('gameSubtitle').textContent=daily?'Desafio diário':'Treino';
@@ -103,12 +115,14 @@ function updateTimeline(){
    var end=lengths[i], portion=Math.max(0,Math.min(1,(now-previous)/(end-previous)));
    pieces[i].firstChild.style.transform='scaleX('+portion+')';previous=end;
  }
- $('timeline').setAttribute('aria-valuenow',String(Math.min(16,Math.round(now*10)/10)));
+ $('timeline').setAttribute('aria-valuenow',String(Math.min(lengths[maxAttempts-1],Math.round(now*10)/10)));
 }
 function pauseAudio(){
+ cancelAnimationFrame(audioFrame);audioFrame=0;
  audio.pause();$('playAudio').textContent='▶ Ouvir novamente';updateTimeline();
 }
 function stopAudio(){
+ cancelAnimationFrame(audioFrame);audioFrame=0;
  audio.pause();try{audio.currentTime=0}catch(e){}
  updateTimeline();$('playAudio').textContent='▶ Ouvir trecho';
 }
@@ -170,10 +184,20 @@ function buildTimeline(){
    var fill=document.createElement('i');fill.className='bits-segment-fill';part.appendChild(fill);root.appendChild(part);prev=end;
  });updateTimeline();
 }
-// O tempo real do áudio controla a barra e o limite; pular não interrompe.
-audio.addEventListener('timeupdate',function(){
- updateTimeline();if(active&&!active.finished&&!audio.paused&&audio.currentTime>=durationLimit()-0.015)pauseAudio();
+// timeupdate sozinho pode demorar mais que o primeiro trecho (0,2 s).
+function checkPlayback(){
+ updateTimeline();
+ if(active&&!active.finished&&!audio.paused&&audio.currentTime>=durationLimit())pauseAudio();
+}
+function playbackFrame(){
+ audioFrame=0;
+ checkPlayback();
+ if(active&&!active.finished&&!audio.paused)audioFrame=requestAnimationFrame(playbackFrame);
+}
+audio.addEventListener('playing',function(){
+ if(!audioFrame&&active&&!active.finished)audioFrame=requestAnimationFrame(playbackFrame);
 });
+audio.addEventListener('timeupdate',checkPlayback);
 audio.addEventListener('ended',function(){pauseAudio()});
 function play(){
  if(!active)return;
@@ -246,7 +270,7 @@ function renderRound(){
  if(!active)return;
  var attempts=active.guesses.length;
  $('attemptLabel').textContent=active.finished?'Finalizado':(attempts+1)+' / '+maxAttempts;
- $('clipLength').textContent=clipDuration()+' s';
+ $('clipLength').textContent=displaySeconds(clipDuration())+' s';
  buildTimeline();
  var box=$('history');box.replaceChildren();active.guesses.forEach(function(id,index){var line=document.createElement('div');line.className='bits-history-line';
  var song=(byCat[active.cat]||[]).find(function(s){return s.id===id})||active.guessDetails[id];line.textContent=(index+1)+'. '+(id==='__skip__'?'Pulou a tentativa':song?song.label:'Palpite registrado');
@@ -286,7 +310,7 @@ function showFinish(){$('replaceAudio').classList.add('hidden');stopAudio();$('g
  $('finishTitle').textContent=active.won?'Você acertou! 🎉':'Fim das tentativas';
  $('finishSong').textContent='Música: '+active.song.label;
  $('finishTitle').textContent+=active.daily&&active.replacements?' · Com música reserva':'';
- $('finishDetail').textContent=active.won?'Acertou em '+active.guesses.length+' de '+maxAttempts+' tentativas.':'Você pode tentar outra música no modo Treino.';
+ $('finishDetail').textContent=active.won?'Acertou em '+active.guesses.length+' de '+active.attemptLimit+' tentativas.':'Você pode tentar outra música no modo Treino.';
  $('playAgain').classList.toggle('hidden',active.daily);
 }
 function back(){pauseCatalog();audioToken++;$('replaceAudio').classList.add('hidden');stopAudio();if(audioUrl){URL.revokeObjectURL(audioUrl);audioUrl=null}roundId++;active=null;$('bitsGame').classList.add('hidden');$('bitsHome').classList.remove('hidden');drawTiles();renderStats()}

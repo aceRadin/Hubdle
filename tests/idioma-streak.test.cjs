@@ -136,11 +136,18 @@ test('PT/EN em todas as telas, sem reiniciar partidas e streak por derrota',{tim
  assert.deepEqual(await audit(),[],'Wording: resultado em inglês');
  await page.goto(base+'/jogos/bits/');await page.locator('#dailyTiles button').filter({hasText:'Pop'}).click();await page.waitForSelector('#guessInput:visible');
  await checkHeader();
- for(let i=0;i<6;i++)await page.locator('#skipGuess').click();assert.equal(await page.locator('#finishTitle').textContent(),'No guesses left');assert.equal(await page.evaluate(()=>HUBA.currentStreak('huba')),1);
+ const clipLengths=['0.2','2','4','7','11','16','17'];
+ assert.equal(await page.locator('#timeline .bits-segment').count(),clipLengths.length);
+ for(const [index, seconds] of clipLengths.entries()){
+  assert.equal(await page.locator('#attemptLabel').textContent(),(index+1)+' / 7');
+  assert.equal(await page.locator('#clipLength').textContent(),seconds+' s');
+  await page.locator('#skipGuess').click();
+ }
+ assert.equal(await page.locator('#finishTitle').textContent(),'No guesses left');assert.equal(await page.evaluate(()=>HUBA.currentStreak('huba')),1);
  await page.locator('#playAgain').click();assert.equal(await page.locator('#guessArea').isVisible(),true);assert.equal(await page.evaluate(()=>HUBA.mode),'training');
  await page.locator('.huba-mode>summary').click();await page.locator('[data-game-mode="daily"]').click();assert.equal(await page.locator('#bitsHome').isVisible(),true);assert.equal(await page.locator('[data-mode-title]').textContent(),'Daily');
  await page.locator('#dailyTiles button').filter({hasText:'Pop'}).click();await page.waitForSelector('#guessInput:visible');
- for(let i=0;i<6;i++)await page.locator('#skipGuess').click();await page.locator('#finishBack').click();
+ for(const _ of clipLengths)await page.locator('#skipGuess').click();await page.locator('#finishBack').click();
  const popTile=page.locator('#dailyTiles .bits-tile').filter({hasText:'Pop'});
  assert.equal(await popTile.locator('small').textContent(),'Failed');
  assert.equal(await popTile.evaluate(el=>el.matches('.failed')&&getComputedStyle(el).borderTopColor===getComputedStyle(el.querySelector('small')).color),true);
