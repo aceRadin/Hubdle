@@ -82,7 +82,10 @@ test('Musical e Streakal usam só o arquivo escolhido, com alternativas, diário
    return {context,page,files,api,errors};
  }
  async function choose(p,genre='Rock'){await p.locator('#tilesDaily button').filter({hasText:genre}).click();await p.waitForSelector('#play:visible')}
- async function target(p){return p.evaluate(()=>/\/(\d+)$/.exec(testAudio[0].src)[1])}
+ async function target(p){
+   await p.waitForFunction(()=>testAudio[0].src.includes('/fresh/'));
+   return p.evaluate(()=>/\/(\d+)$/.exec(testAudio[0].src)[1]);
+ }
  for(const game of ['musicle','streakal']){
    const a=await open(game,80);t.after(()=>a.context.close());assert.deepEqual(a.files,['config.js']);
    if(game==='musicle'){await a.page.locator('.huba-difficulty > summary').click();await a.page.locator('#clipHard').click()}
@@ -90,6 +93,11 @@ test('Musical e Streakal usam só o arquivo escolhido, com alternativas, diário
    assert.deepEqual(a.files,['config.js',result.files.rock]);assert.ok(a.api.every(u=>u.includes('/track/')));
    assert.match(await a.page.locator('#gameCatalogCount').textContent(),/^300 músicas/);
    const first=await target(a.page);
+   if(game==='musicle'){
+     assert.equal(a.api.filter(url=>url.includes('/track/')).length,1);
+     assert.equal(await a.page.locator('#qhint').textContent(),'Qual música tocou?');
+     assert.equal(await a.page.locator('#playBtn').isEnabled(),true);
+   }
    const b=await open(game,1);t.after(()=>b.context.close());if(game==='musicle'){await b.page.locator('.huba-difficulty > summary').click();await b.page.locator('#clipHard').click()}await choose(b.page);
    assert.equal(await target(b.page),first,'mesmo alvo com outra latência');
    if(game==='musicle'){

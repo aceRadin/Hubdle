@@ -210,6 +210,7 @@ function stop(){
 }
 function setSong(song,frac,recovered){
   audioToken++;recoveredSong=!!recovered;recoveringSong=false;
+  $('#playBtn').disabled=false;
   if(objUrl)URL.revokeObjectURL(objUrl);
   objUrl=song.file?URL.createObjectURL(song.file):null;
   metadataReady=false;
@@ -223,19 +224,29 @@ function setSong(song,frac,recovered){
   };
   audio.preload='auto'; audio.src=objUrl||song.url;
 }
+function refreshPreview(song,question,readyMessage){
+  var token=++audioToken;
+  recoveredSong=true;recoveringSong=true;
+  $('#playBtn').disabled=true;
+  HUBADeezer.request('https://api.deezer.com/track/'+encodeURIComponent(song.id),null,true).then(function(data){
+    if(token!==audioToken)return;
+    if(!/^https:\/\/[^\s]+$/i.test(data?.preview||''))throw new Error('Prévia indisponível');
+    song.url=data.preview;setSong(song,question.start,true);$('#qhint').textContent=readyMessage;
+  }).catch(function(){
+    if(token!==audioToken)return;
+    recoveringSong=false;showAudioFailure();
+  });
+}
 function failedAudio(){
   if(!cur||$('#play').classList.contains('hidden')||$('#quiz').classList.contains('hidden'))return;
   if(cur.picks.length>cur.qi)return;
   if(recoveringSong)return;
   stop();
-  var q=cur.qs[cur.qi],song=q&&cur.pool[q.a],token=audioToken;
+  var q=cur.qs[cur.qi],song=q&&cur.pool[q.a];
   if(song&&song.id&&!recoveredSong){
-    recoveredSong=true;recoveringSong=true;$('#qhint').textContent='Atualizando a prévia desta música…';
-    HUBADeezer.request('https://api.deezer.com/track/'+encodeURIComponent(song.id),null,true).then(function(data){
-      if(token!==audioToken)return;
-      if(!data||!data.preview)throw new Error('Prévia indisponível');
-      song.url=data.preview;setSong(song,q.start,true);$('#qhint').textContent='Prévia atualizada. Tente tocar novamente.';
-    }).catch(function(){if(token===audioToken){recoveringSong=false;showAudioFailure()}});return;
+    $('#qhint').textContent='Atualizando a prévia desta música…';
+    refreshPreview(song,q,'Prévia atualizada. Tente tocar novamente.');
+    return;
   }
   showAudioFailure();
 }
@@ -332,7 +343,15 @@ function showQuestion(){
   $('#replaceSong').classList.add('hidden');
   $('#nextRow').classList.add('hidden');
   dots();
-  setSong(cur.pool[q.a],q.start);
+  var answerSong=cur.pool[q.a];
+  if(answerSong.id&&!answerSong.file&&window.HUBA_PLAYLISTS_PREPARADO?.enabled){
+    // O catálogo publicado guarda o ID da faixa, mas a URL da prévia pode expirar.
+    $('#qhint').textContent='Carregando prévia da música…';
+    refreshPreview(answerSong,q,'Qual música tocou?');
+    audio.onloadedmetadata=null;
+    audio.removeAttribute('src');
+    audio.load();
+  }else setSong(answerSong,q.start);
   var box=$('#opts'); box.innerHTML='';
   q.opts.forEach(function(i){
     var song=cur.pool[i];
@@ -372,6 +391,7 @@ function finishRound(){
 }
 function answer(i){
   if(!cur||cur.picks.length>cur.qi)return;
+  audioToken++;
   stop();
   var q=cur.qs[cur.qi];
   var ok=i===q.a;
